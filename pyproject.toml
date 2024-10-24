@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "backtest-investment-strategies-poo"
+version = "0.1.0"
+description = "POO Project for backtesting investment strategies"
+authors = ["baptistedfr <bapdufo@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+yfinance = "^0.2.46"
+ipykernel = "^6.29.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
