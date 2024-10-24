@@ -9,6 +9,11 @@ readme = "README.md"
 python = "^3.12"
 yfinance = "^0.2.46"
 ipykernel = "^6.29.5"
+yahoo-fin = "^0.8.9.1"
+pycoingecko = "^3.1.0"
+binance = "^0.3"
+python-binance = "^1.0.21"
+openpyxl = "^3.1.5"
 
 
 [build-system]
