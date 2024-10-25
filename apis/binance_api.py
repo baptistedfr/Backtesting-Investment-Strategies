@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from binance.client import Client
-from functools import cached_property
 import pandas as pd
 
 @dataclass
@@ -11,7 +10,7 @@ class BinanceApi:
     
     binance_client : Client = Client()
 
-    def get_freq(self, frequence):
+    def _get_freq(self, frequence):
         match frequence:
             case "M":
                 return Client.KLINE_INTERVAL_1MONTH
@@ -51,7 +50,7 @@ class BinanceApi:
         '''
         Retrieve the data related to the given tickers from Binance API
         '''
-        freq = self.get_freq(frequence)
+        freq = self._get_freq(frequence)
         data_final = pd.DataFrame()
         for ticker in ticker_list:
 
