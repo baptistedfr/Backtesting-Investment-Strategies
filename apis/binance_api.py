@@ -11,6 +11,9 @@ class BinanceApi:
     binance_client : Client = Client()
 
     def _get_freq(self, frequence):
+        '''
+        Get the Binance frequence corresponding to the user input 
+        '''
         match frequence:
             case "M":
                 return Client.KLINE_INTERVAL_1MONTH
