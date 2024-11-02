@@ -1,78 +1,84 @@
-from dataclasses import dataclass
-from strategy import Strategy
+from dataclasses import dataclass, field
+from strategy import AbstractStrategy
+from typing import Optional
 from results import Results
+from tools import timer
 import pandas as pd
 import numpy as np
-from datetime import datetime
-import yfinance as yf
-import matplotlib.pyplot as plt
 
 @dataclass
 class Backtester:
-    
-    data : pd.DataFrame
-    weight_historic : np.ndarray[np.ndarray[float]] = None
-    asset_values : np.ndarray[np.ndarray[float]] = None
-    value_historic : np.ndarray[float] = None
+
+    """
+    Generic class to backtest strategies from assets prices & a strategy
+
+    Args:
+        df_prices (pd.DataFrame) : assets price historic
+        initial_amount (float) : initial value of the portfolio
+        strategy (AbstractStrategy) : instance of Strategy class with "compute_weights" method
+    """
+
+    """---------------------------------------------------------------------------------------
+    -                                 Class arguments                                        -
+    ---------------------------------------------------------------------------------------"""
+
+    df_prices : pd.DataFrame
+    initial_amount : float
+    strategy : AbstractStrategy
+    initial_weights : Optional[list[float]] = None
+
+    ptf_weights : pd.DataFrame = None
+    ptf_values : pd.Series = None
+
+    """---------------------------------------------------------------------------------------
+    -                               Class computed arguments                                 -
+    ---------------------------------------------------------------------------------------"""
 
     @property
+    def df_returns(self) -> pd.DataFrame:
+        return self.df_prices.pct_change()
+    
+    @property
     def backtest_length(self) -> int:
-        return len(self.data)
+        return len(self.df_returns)
     
     @property
     def nb_assets(self) -> int:
-        return self.data.shape[1]
+        return self.df_returns.shape[1]
     
-    def execute_backtest(self, initial_amount : float, strategy : Strategy) -> Results :
-        
-        '''Initialisation'''
-        initial_weiths = np.full(self.nb_assets, 1/self.nb_assets)
-        self.weight_historic = np.array([initial_weiths])
-        self.asset_values = np.array([initial_weiths * initial_amount])
-        self.value_historic = np.array(initial_amount)
+    @property
+    def initial_weights_value(self) -> np.ndarray:
+        if self.initial_weights is None:
+            return np.full(self.nb_assets, 1 / self.nb_assets)
+        else:
+            return self.initial_weights
 
-        '''Itération pour chaque période du backtest'''
-        for t in range(1, self.backtest_length + 1):
+    """---------------------------------------------------------------------------------------
+    -                                   Class methods                                        -
+    ---------------------------------------------------------------------------------------"""
+
+    @timer
+    def run(self) -> Results :
+
+        """Initialisation"""
+        strat_value = self.initial_amount
+        weights = self.initial_weights_value
+        stored_weights = [weights]
+        stored_values = [strat_value]
+
+        for t in range(1, self.backtest_length):
             
-            previous_weights = self.weight_historic[t-1]
-            daily_returns = np.array(self.data.iloc[t-1,:])
-            
-            new_asset_values = self.asset_values[t-1] * (1 + daily_returns)
-            new_weights = strategy.compute_strat(previous_weights)
+            """Compute the portfolio new value"""
+            daily_returns = np.array(self.df_returns.iloc[t].values)
+            strat_value *= (1 + np.dot(weights, daily_returns))
 
-            self.asset_values = np.vstack([self.asset_values, new_asset_values])
-            self.weight_historic = np.vstack([self.weight_historic, new_weights])
-            self.value_historic = np.vstack([self.value_historic, np.sum(new_asset_values)])
+            """Use Strategy to compute new weights"""
+            weights = self.strategy.compute_weights(weights)
 
+            """Store the new computed values"""
+            stored_weights.append(weights)
+            stored_values.append(strat_value)
 
-
-def get_data(csv_path, start_date):
-
-    df = pd.read_excel(csv_path)
-
-    df_yf = pd.DataFrame()
-    start_date = datetime.strptime(start_date, '%d/%m/%Y').strftime('%Y-%m-%d')
-
-    for index, row in df.iterrows():
-        ticker = row['Stock Ticker']
-        stock_name = row['Stock Name']
-
-        data = yf.download(ticker, start=start_date, progress=False)
-        df_yf[stock_name] = data['Close']
-
-    df_returns = df_yf.pct_change()
-    df_returns = df_returns.drop(df_returns.index[0])
-
-    return df_returns
-
-df_returns = get_data('univers_actions.xlsx','01/01/2020')
-df_returns = df_returns.iloc[200:300,0:5]
-
-backtest = Backtester(df_returns)
-backtest.execute_backtest(1000, Strategy())
-
-perf_strat = list(backtest.value_historic)[1:]
-dates = list(df_returns.index)
-dates = [datetime.strftime(d, "%Y-%m-%d") for d in dates]
-plt.plot(dates, perf_strat)
-plt.show()
+        """Prepare the results"""
+        self.ptf_weights = pd.DataFrame(stored_weights, index=self.df_returns.index, columns=self.df_returns.columns)
+        self.ptf_values = pd.Series(stored_values, index=self.df_returns.index)
