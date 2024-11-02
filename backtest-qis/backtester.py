@@ -58,11 +58,6 @@ class Backtester:
     -                                   Class methods                                        -
     ---------------------------------------------------------------------------------------"""
 
-    def create_output(self) -> Results :
-        results = Results(ptf_values=self.ptf_values, ptf_weights=self.ptf_weights)
-        results.create_plot()
-        return results
-    
     @timer
     def run(self) -> Results :
 
@@ -88,6 +83,5 @@ class Backtester:
         """Prepare the results"""
         self.ptf_weights = pd.DataFrame(stored_weights, index=self.df_returns.index, columns=self.df_returns.columns)
         self.ptf_values = pd.Series(stored_values, index=self.df_returns.index)
-        results = self.create_output()
 
-        return results
+        return Results(ptf_values=self.ptf_values, ptf_weights=self.ptf_weights)
