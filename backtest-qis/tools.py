@@ -28,3 +28,9 @@ def get_data(csv_path, start_date):
         df_yf[stock_name] = data['Close']
 
     return df_yf
+
+def get_benchmark(start_date):
+    start_date = datetime.strptime(start_date, '%d/%m/%Y').strftime('%Y-%m-%d')
+    data = yf.download("^FCHI", start=start_date, progress=False)
+    series_cac40 = pd.Series(data['Close'], name='CAC40')
+    return series_cac40
