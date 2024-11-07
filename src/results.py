@@ -88,7 +88,7 @@ class Results:
 
         strat_values = list(self.ptf_values)
         dates = list(self.ptf_values.index)
-        dates = [datetime.strftime(d, "%Y-%m-%d") for d in dates]
+        dates = [datetime.strptime(date, "%Y-%m-%d") for date in dates]
         
         fig = go.Figure(data=go.Scatter(x=dates, y=strat_values))
         fig.update_layout(
@@ -113,7 +113,7 @@ class Results:
                     y=self.ptf_weights[column],
                     mode='lines',
                     stackgroup='one',
-                    name='Strategy'
+                    name=column
                 ))
 
             fig.update_layout(

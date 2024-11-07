@@ -1,11 +1,12 @@
-from strategy import AbstractStrategy
+from src.strategy import AbstractStrategy
+from src.data_input import DataInput
 from dataclasses import dataclass
+from src.results import Results
+from datetime import datetime
+from src.tools import timer
 from typing import Optional
-from results import Results
-from tools import timer
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
 
 @dataclass
 class Backtester:
@@ -14,7 +15,7 @@ class Backtester:
     Generic class to backtest strategies from assets prices & a strategy
 
     Args:
-        df_prices (pd.DataFrame) : assets price historic
+        data_input (DataInput) : data input object containing assets prices historic
         initial_amount (float) : initial value of the portfolio
         strategy (AbstractStrategy) : instance of Strategy class with "compute_weights" method
         initial_weights (optional list(float)) : initial weights of the strategy, default value is equal weights
@@ -25,7 +26,7 @@ class Backtester:
     -                                 Class arguments                                        -
     ---------------------------------------------------------------------------------------"""
 
-    df_prices : pd.DataFrame
+    data_input : DataInput
     initial_amount : float
 
     strategy : AbstractStrategy
@@ -41,11 +42,24 @@ class Backtester:
     ---------------------------------------------------------------------------------------"""
 
     @property
-    def df_returns(self) -> pd.DataFrame:
-        return self.df_prices.pct_change()
+    def df_prices(self) -> pd.DataFrame:
+        return self.data_input.df_prices
     
     @property
-    def benchmark_returns(self) -> pd.DataFrame:
+    def dates(self) -> list[datetime]:
+        return self.df_prices["Date"]
+    @property
+    def df_returns(self) -> pd.DataFrame:
+        return self.df_prices.iloc[:, 1:].pct_change()
+    
+    @property
+    def benchmark_prices(self) -> pd.Series:
+        if self.data_input.benchmark is not None:
+            return self.data_input.df_benchmark
+        else:
+            return None
+    @property
+    def benchmark_returns(self) -> pd.Series:
         if self.benchmark_prices is not None:
             return self.benchmark_prices.pct_change()
         else:
@@ -53,11 +67,11 @@ class Backtester:
         
     @property
     def backtest_length(self) -> int:
-        return len(self.df_returns)
+        return len(self.df_prices)
     
     @property
     def nb_assets(self) -> int:
-        return self.df_returns.shape[1]
+        return self.df_prices.shape[1] - 1
     
     @property
     def initial_weights_value(self) -> np.ndarray:
@@ -125,15 +139,15 @@ class Backtester:
             Results: A Results object containing statistics and comparison plot for the strategy (& the benchmark if selected)
         """
 
-        self.ptf_weights = pd.DataFrame(stored_weights, index=self.df_returns.index, columns=self.df_returns.columns)
-        self.ptf_values = pd.Series(stored_values, index=self.df_returns.index)
+        self.ptf_weights = pd.DataFrame(stored_weights, index=self.dates, columns=self.df_returns.columns)
+        self.ptf_values = pd.Series(stored_values, index=self.dates)
         results_strat = Results(ptf_values=self.ptf_values, ptf_weights=self.ptf_weights)
         results_strat.get_statistics()
         results_strat.create_plots()
 
         if self.benchmark_prices is not None :
 
-            benchmark_values = pd.Series(stored_benchmark, index=self.df_returns.index)
+            benchmark_values = pd.Series(stored_benchmark, index=self.dates)
             results_bench = Results(ptf_values=benchmark_values)
             results_bench.get_statistics()
             results_bench.create_plots()

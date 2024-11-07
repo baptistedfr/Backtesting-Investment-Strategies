@@ -1,4 +1,4 @@
-from src.tools import InputType, FrequencyType, Index
+from src.tools import InputType, FrequencyType, Index, Benchmark
 from src.binance_api import BinanceDataInput
 from src.custom_input import CustomDataInput
 from src.yahoo_api import YahooDataInput
@@ -20,6 +20,7 @@ class DataInput:
         frequency (optional Enum FrequencyType) : frequency of the Data
         index (optional Enum Index) : asset to extract the composition from
         file_path (optional str) : path of the custom file
+        benchmark (optional Index) : benchmark to compare the performance of the strategy
 
         df_prices (pd.DataFrame) : asset prices
     """
@@ -31,6 +32,7 @@ class DataInput:
     frequency : FrequencyType = None
     index : Index = None
     file_path : str = None
+    benchmark : Benchmark = None
 
     @property
     def df_prices(self) -> pd.DataFrame:
@@ -54,3 +56,17 @@ class DataInput:
                                         start_date=self.start_date,
                                         end_date=self.end_date,
                                         frequency=self.frequency)
+    
+    @property
+    def df_benchmark(self) -> pd.Series:
+        
+        if self.benchmark is not None:
+            ticker_bench = self.benchmark.value
+            df = YahooDataInput().get_data(tickers=ticker_bench,
+                                            start_date=self.start_date,
+                                            end_date=self.end_date,
+                                            frequency=self.frequency)
+            serie_benchmark = df.set_index('Date')[ticker_bench]
+            return serie_benchmark
+        else :
+            return None

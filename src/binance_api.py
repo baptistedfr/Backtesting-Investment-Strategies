@@ -63,7 +63,7 @@ class BinanceDataInput(AbstractDataInput):
         
         return df
 
-    def get_data(self, tickers : list[str], start_date : str = "1 Jan, 2019",  end_date : str = "1 Jan, 2024", 
+    def get_data(self, tickers : list[str], start_date : str = '2023-10-01',  end_date : str = '2024-10-01', 
                  frequency : str = "D", colums_select : list =['Close time','Close']) -> pd.DataFrame :
         """
         Request Binance API to retrieve prices on selected tickers over the selected period
