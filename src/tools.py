@@ -40,9 +40,16 @@ class InputType(Enum):
     CUSTOM = "Custom"
     EQUITY = "Equity"
     CRYPTO = "Crypto"
+    FROM_INDEX_COMPOSITION = "Index"
 
 class FrequencyType(Enum):
     HOURLY = "H"
     DAILY = "D"
     WEEKLY = "W"
     MONTHLY = "M"
+
+class Index(Enum):
+    CAC40 = "cac40"
+    STX50 = "eurostoxx50"
+    NIKKEI = "nikkei"
+    SP500 = "sp500"

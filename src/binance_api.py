@@ -1,13 +1,12 @@
-from dataclasses import dataclass
-from binance.client import Client
-import pandas as pd
-from src.tools import FrequencyType
+from src.abstract_source import AbstractDataInput
 from src.exeptions import FrequencyError
+from src.tools import FrequencyType
+from binance.client import Client
+from dataclasses import dataclass
+import pandas as pd
 
 @dataclass
-class BinanceApi:
-    
-    binance_client : Client = Client()
+class BinanceDataInput(AbstractDataInput):
 
     def _get_freq(self, frequency : str):
         """
@@ -60,7 +59,7 @@ class BinanceApi:
 
         df = df[columns_selected]
         ticker_cleaned = ticker.replace("USDT", "")
-        df.rename(columns={"Close":ticker_cleaned}, inplace = True)
+        df.rename(columns={"Close":ticker_cleaned, "Close Time":"Date"}, inplace = True)
         
         return df
 
@@ -79,16 +78,19 @@ class BinanceApi:
         Returns:
            df (pd.DataFrame) : Retreated prices for selected tickers
         """
+
+        client = Client()
+
         freq = self._get_freq(frequency)
 
         data_final = pd.DataFrame()
         for ticker in tickers:
 
             result_binance = []
-            for k_line in self.binance_client.get_historical_klines_generator(symbol=ticker,
-                                                                              interval=freq,
-                                                                              start_str=start_date, 
-                                                                              end_str=end_date):
+            for k_line in client.get_historical_klines_generator(symbol=ticker,
+                                                                interval=freq,
+                                                                start_str=start_date, 
+                                                                end_str=end_date):
                 result_binance.append(k_line)
 
             results_retreated = self._retreat_results(result_binance, ticker, colums_select)

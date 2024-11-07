@@ -1,11 +1,12 @@
-import pandas as pd
+from src.abstract_source import AbstractDataInput
+from src.exeptions import FrequencyError
+from src.tools import FrequencyType
 from dataclasses import dataclass
 import yfinance as yf
-from src.tools import FrequencyType
-from src.exeptions import FrequencyError
+import pandas as pd
 
 @dataclass
-class YahooFinanceApi:
+class YahooDataInput(AbstractDataInput):
     
     def _get_freq(self, frequency : str) -> str:
         """
