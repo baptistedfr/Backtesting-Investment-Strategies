@@ -1,7 +1,8 @@
 import pandas as pd
 from dataclasses import dataclass
 import yfinance as yf
-from datetime import datetime
+from src.tools import FrequencyType
+from src.exeptions import FrequencyError
 
 @dataclass
 class YahooFinanceApi:
@@ -18,21 +19,18 @@ class YahooFinanceApi:
         """
 
         match frequency:
-            case "3M":
-                return '3mo'
-            case "M":
+            case FrequencyType.MONTHLY:
                 return '1mo'
-            case "W":
+            case FrequencyType.WEEKLY:
                 return '1wk'
-            case "D":
+            case FrequencyType.DAILY:
                 return '1d'
-            case "H":
+            case FrequencyType.HOURLY:
                 return '1h'
             case _:
-                raise ValueError(f"Invalid frequency: {frequency}")
+                raise FrequencyError(f"Invalid frequency: {frequency}")
 
-    def get_data(self, tickers : list[str], start_date : str = '2023-10-01',  end_date : str = '2024-10-01', 
-                 frequency : str = "D") -> pd.DataFrame :
+    def get_data(self, tickers : list[str], frequency : FrequencyType, start_date : str = '2023-10-01',  end_date : str = '2024-10-01') -> pd.DataFrame :
         """
         Retrieve the data related to the given tickers from Yahoo Finance API
 

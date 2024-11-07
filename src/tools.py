@@ -2,6 +2,7 @@ import time
 import pandas as pd
 from datetime import datetime
 import yfinance as yf
+from enum import Enum
 
 def timer(func):
     """Decorator used to compute the execution time of a method"""
@@ -34,3 +35,14 @@ def get_benchmark(start_date):
     data = yf.download("^FCHI", start=start_date, progress=False)
     series_cac40 = pd.Series(data['Close'], name='CAC40')
     return series_cac40
+
+class InputType(Enum):
+    CUSTOM = "Custom"
+    EQUITY = "Equity"
+    CRYPTO = "Crypto"
+
+class FrequencyType(Enum):
+    HOURLY = "H"
+    DAILY = "D"
+    WEEKLY = "W"
+    MONTHLY = "M"

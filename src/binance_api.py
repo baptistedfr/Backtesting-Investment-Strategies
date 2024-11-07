@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from binance.client import Client
 import pandas as pd
+from src.tools import FrequencyType
+from src.exeptions import FrequencyError
 
 @dataclass
 class BinanceApi:
@@ -18,17 +20,16 @@ class BinanceApi:
             frequency : Binance valid data frequency
         """
         match frequency:
-            case "M":
+            case FrequencyType.MONTHLY:
                 return Client.KLINE_INTERVAL_1MONTH
-            case "W":
+            case FrequencyType.WEEKLY:
                 return Client.KLINE_INTERVAL_1WEEK
-            case "D":
+            case FrequencyType.DAILY:
                 return Client.KLINE_INTERVAL_1DAY
-            case "H":
+            case FrequencyType.HOURLY:
                 return Client.KLINE_INTERVAL_1HOUR
-            
             case _:
-                raise ValueError(f"Invalid frequency: {frequency}")
+                raise FrequencyError(f"Invalid frequency: {frequency}")
 
     def _retreat_results(self,  df_binance : pd.DataFrame, ticker : str,
                          columns_selected : list[str] = ['Close time','Close']) -> pd.DataFrame :
@@ -63,7 +64,7 @@ class BinanceApi:
         
         return df
 
-    def get_data(self, ticker_list : list[str], start_date_str : str = "1 Jan, 2019",  end_date_str : str = "1 Jan, 2024", 
+    def get_data(self, tickers : list[str], start_date : str = "1 Jan, 2019",  end_date : str = "1 Jan, 2024", 
                  frequency : str = "D", colums_select : list =['Close time','Close']) -> pd.DataFrame :
         """
         Request Binance API to retrieve prices on selected tickers over the selected period
@@ -81,13 +82,13 @@ class BinanceApi:
         freq = self._get_freq(frequency)
 
         data_final = pd.DataFrame()
-        for ticker in ticker_list:
+        for ticker in tickers:
 
             result_binance = []
             for k_line in self.binance_client.get_historical_klines_generator(symbol=ticker,
                                                                               interval=freq,
-                                                                              start_str=start_date_str, 
-                                                                              end_str=end_date_str):
+                                                                              start_str=start_date, 
+                                                                              end_str=end_date):
                 result_binance.append(k_line)
 
             results_retreated = self._retreat_results(result_binance, ticker, colums_select)
