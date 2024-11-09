@@ -88,7 +88,8 @@ class Results:
 
         strat_values = list(self.ptf_values)
         dates = list(self.ptf_values.index)
-        dates = [datetime.strptime(date, "%Y-%m-%d") for date in dates]
+        if isinstance(all(dates), str):
+            dates = [datetime.strptime(date, "%Y-%m-%d") for date in dates]
         
         fig = go.Figure(data=go.Scatter(x=dates, y=strat_values))
         fig.update_layout(

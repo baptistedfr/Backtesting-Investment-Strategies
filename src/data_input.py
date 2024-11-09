@@ -1,6 +1,7 @@
 from src.tools import InputType, FrequencyType, Index, Benchmark
 from src.binance_api import BinanceDataInput
 from src.custom_input import CustomDataInput
+from src.df_input import DataFrameDataInput
 from src.yahoo_api import YahooDataInput
 from src.exeptions import InputTypeError
 from dataclasses import dataclass
@@ -21,6 +22,7 @@ class DataInput:
         index (optional Enum Index) : asset to extract the composition from
         file_path (optional str) : path of the custom file
         benchmark (optional Index) : benchmark to compare the performance of the strategy
+        custom_df (optional pd.DataFrame) : custom dataframe as a data input
 
         df_prices (pd.DataFrame) : asset prices
     """
@@ -33,13 +35,16 @@ class DataInput:
     index : Index = None
     file_path : str = None
     benchmark : Benchmark = None
+    custom_df : pd.DataFrame = None
 
     @property
     def df_prices(self) -> pd.DataFrame:
         
         match self.data_type:
-            case InputType.CUSTOM:
+            case InputType.FROM_FILE:
                 data_requester = CustomDataInput(self.file_path)
+            case InputType.FROM_DATAFRAME:
+                data_requester = DataFrameDataInput(self.custom_df)
             case InputType.EQUITY:
                 data_requester = YahooDataInput()
             case InputType.CRYPTO:

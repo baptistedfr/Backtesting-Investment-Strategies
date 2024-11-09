@@ -15,10 +15,11 @@ def timer(func):
     return wrapper
 
 class InputType(Enum):
-    CUSTOM = "Custom"
     EQUITY = "Equity"
     CRYPTO = "Crypto"
     FROM_INDEX_COMPOSITION = "Index"
+    FROM_FILE = "File"
+    FROM_DATAFRAME = "DataFrame"
 
 class FrequencyType(Enum):
     HOURLY = "H"

@@ -5,13 +5,13 @@ import pandas as pd
 import os.path
 
 @dataclass
-class CustomDataInput(AbstractDataInput):
+class DataFrameDataInput(AbstractDataInput):
     
-    file_path : str
+    custom_df : pd.DataFrame
 
     def get_data(self, tickers, frequency, start_date : str = None,  end_date : str = None):
         """
-        Load the selected file in a dataframe and run sanitary checks
+        Run sanitary checks of the custom loaded dataframe
 
         Args:
             tickers (_type_): useless parameter, just here to keep the same structure as other AbtractSource Class children
@@ -19,32 +19,20 @@ class CustomDataInput(AbstractDataInput):
             start_date (str, optional): strat date of the backtest
             end_date (str, optional): end date of the backtest
         """
-        if not os.path.exists(self.file_path):
-            raise FileNotFoundError("File doesn't exist in the current folder")
-        
-        file_sufix = self.file_path.split('.')[-1]
-        match file_sufix:
-            case 'csv':
-                df = pd.read_csv(self.file_path, sep=';')
-            case 'xlsx':
-                df = pd.read_excel(self.file_path)
-            case 'parquet':
-                df = pd.read_parquet(self.file_path)
-            case _:
-                raise InvalidFormat('File format not in : [csv, xlsx, parquet]')
+        df = self.custom_df.copy()
 
         if "Date" not in df.columns:
-            raise BadInput("'Date' column not in the selected file")
-        
+            raise BadInput("'Date' column not in the selected dataframe")
+
         if len(df.columns) < 2:
-            raise BadInput("The input file has to store at least one asset serie")
+            raise BadInput("The input dataframe has to store at least one asset serie")
         
         if df.isnull().values.any():
-            raise BadInput("N/A found in selected file")
+            raise BadInput("N/A found in selected dataframe")
         
         if start_date is not None and end_date is not None :
             if start_date not in df["Date"] or end_date not in df["Date"]:
-                raise BadInput("Selected start or end date not present in file")
+                raise BadInput("Selected start or end date not present in dataframe")
             df['Date'] = pd.to_datetime(df['Date'])
             df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
 

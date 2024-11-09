@@ -2,6 +2,7 @@ from src.tools import InputType, FrequencyType, Index, Benchmark
 from src.strategy import RandomFluctuationStrategy, FocusedStrategy
 from src.backtester import Backtester
 from src.data_input import DataInput
+import pandas as pd
 
 # data = DataInput(data_type=InputType.EQUITY,
 #                         tickers=['MC.PA', 'OR.PA'],
@@ -18,6 +19,12 @@ from src.data_input import DataInput
                  
 # data = DataInput(data_type=InputType.CUSTOM,
 #                         file_path='data/custom.xlsx')
+
+# df = pd.read_excel("data/custom.xlsx")
+# data = DataInput(data_type=InputType.FROM_DATAFRAME,
+#                 custom_df=df,
+#                 benchmark=Benchmark.CAC40,
+#                 frequency=FrequencyType.DAILY)
 
 data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
                 index=Index.CAC40,
