@@ -19,14 +19,6 @@ class RandomFluctuationStrategy(AbstractStrategy):
         return new_weights / np.sum(new_weights)
 
 @dataclass
-class RandomFluctuationStrategyTEST(AbstractStrategy):
-    """Return weights with random fluctuations around the previous weights"""
-
-    def compute_weights(self, previous_weights : np.ndarray[float]) -> np.ndarray[float] :
-        new_weights = previous_weights + np.random.random(previous_weights.shape)/4
-        return new_weights / np.sum(new_weights)
-       
-@dataclass
 class FocusedStrategy(AbstractStrategy):
     """
     Strategy fully invested in one asset

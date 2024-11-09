@@ -25,6 +25,7 @@ class Backtester:
 
     data_input : DataInput
     initial_weights : Optional[list[float]] = None
+    custom_name : str = None
 
     ptf_weights : pd.DataFrame = None
     ptf_values : pd.Series = None
@@ -78,7 +79,7 @@ class Backtester:
     ---------------------------------------------------------------------------------------"""
 
     @timer
-    def run(self, strategy : AbstractStrategy, initial_amount : float = 1000.0) -> Results :
+    def run(self, strategy : AbstractStrategy, initial_amount : float = 1000.0, fees : float = 0.001) -> Results :
         """Run the backtest over the asset period (& compare with the benchmark if selected)
         
         Args:
@@ -104,14 +105,18 @@ class Backtester:
             
             """Compute the portfolio & benchmark new value"""
             daily_returns = returns_matrix[t]
-            strat_value *= (1 + np.dot(weights, daily_returns))
+            new_strat_value = strat_value * (1 + np.dot(weights, daily_returns))
 
             """Use Strategy to compute new weights"""
-            weights = strategy.compute_weights(weights)
+            new_weights = strategy.compute_weights(weights)
+
+            """Compute transaction costs"""
+            transaction_costs = strat_value * fees * np.sum(np.abs(new_weights - weights))
+            new_strat_value -= transaction_costs
 
             """Store the new computed values"""
-            stored_weights.append(weights)
-            stored_values.append(strat_value)
+            stored_weights.append(new_weights)
+            stored_values.append(new_strat_value)
 
             """Compute & sotre the new benchmark value"""
             if self.benchmark_prices is not None :
@@ -119,10 +124,14 @@ class Backtester:
                 benchmark_value *= (1 + benchmark_rdt)
                 stored_benchmark.append(benchmark_value)
 
+            weights = new_weights
+            strat_value = new_strat_value
+
         if self.benchmark_prices is None :
             stored_benchmark = None
 
-        return self.output(strategy.__class__.__name__, stored_values, stored_weights, stored_benchmark)
+        strat_name = self.custom_name if self.custom_name is not None else strategy.__class__.__name__
+        return self.output(strat_name, stored_values, stored_weights, stored_benchmark)
             
     @timer
     def output(self, strategy_name : str, stored_values : list[float], stored_weights : list[float], stored_benchmark : list[float] = None) -> Results :
@@ -151,7 +160,6 @@ class Backtester:
             results_bench.get_statistics()
             results_bench.create_plots()
 
-            # results_strat = results_strat.compare_with(results_bench, name_self=strategy_name, name_other="Benchmark")
             results_strat = Results.compare_results([results_strat, results_bench])
 
         return results_strat
