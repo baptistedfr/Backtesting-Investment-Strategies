@@ -122,34 +122,36 @@ class Backtester:
         if self.benchmark_prices is None :
             stored_benchmark = None
 
-        return self.output(stored_values, stored_weights, stored_benchmark)
+        return self.output(strategy.__class__.__name__, stored_values, stored_weights, stored_benchmark)
             
     @timer
-    def output(self, stored_values : list[float], stored_weights : list[float], stored_benchmark : list[float] = None) -> Results :
+    def output(self, strategy_name : str, stored_values : list[float], stored_weights : list[float], stored_benchmark : list[float] = None) -> Results :
         """Create the output for the strategy and its benchmark if selected
         
         Args:
             stored_values (list[float]): Value of the strategy over time
             stored_weights (list[float]): Weights of every asset in the strategy over time
             stored_benchmark (list[float]): Value of the benchmark portfolio over time
-        
+            strategy_name (str) : Name of the current strategy
+
         Returns:
             Results: A Results object containing statistics and comparison plot for the strategy (& the benchmark if selected)
         """
 
         self.ptf_weights = pd.DataFrame(stored_weights, index=self.dates, columns=self.df_returns.columns)
         self.ptf_values = pd.Series(stored_values, index=self.dates)
-        results_strat = Results(ptf_values=self.ptf_values, ptf_weights=self.ptf_weights)
+        results_strat = Results(ptf_values=self.ptf_values, ptf_weights=self.ptf_weights, strategy_name=strategy_name)
         results_strat.get_statistics()
         results_strat.create_plots()
 
         if self.benchmark_prices is not None :
 
             benchmark_values = pd.Series(stored_benchmark, index=self.dates)
-            results_bench = Results(ptf_values=benchmark_values)
+            results_bench = Results(ptf_values=benchmark_values, strategy_name="Benchmark")
             results_bench.get_statistics()
             results_bench.create_plots()
 
-            results_strat = results_strat.compare_with(results_bench, name_self="Strategy", name_other="Benchmark")
+            # results_strat = results_strat.compare_with(results_bench, name_self=strategy_name, name_other="Benchmark")
+            results_strat = Results.compare_results([results_strat, results_bench])
 
         return results_strat

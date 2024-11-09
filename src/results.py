@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Union
 from datetime import datetime
 import plotly.graph_objects as go
 from typing import Optional
@@ -12,6 +13,7 @@ class Results:
 
     Args: 
         ptf_values (pd.Series) : value of the strategy over time
+        strategy_name (str) : name of the used strategy
         ptf_weights (optional pd.DataFrame) : weights of every asset over time
     """
 
@@ -20,12 +22,12 @@ class Results:
     ---------------------------------------------------------------------------------------"""
 
     ptf_values : pd.Series
+    strategy_name : str
     ptf_weights : Optional[pd.DataFrame] = None
 
     df_statistics : pd.DataFrame = None
     ptf_value_plot : go.Figure = None
-    ptf_weights_plot : go.Figure = None
-    other_weights_plot : go.Figure = None
+    ptf_weights_plot : Union[go.Figure, list[go.Figure]] = None
 
     """---------------------------------------------------------------------------------------
     -                                 Generate Statistics                                    -
@@ -69,10 +71,10 @@ class Results:
     def get_statistics(self) -> pd.DataFrame:
         data = {
             "Metrics": ["Annualized Return", "Volatility", "Sharpe Ratio", "Sortino Ratio", "Max Drawn-Down"],
-            "Values": [self.annualized_return, self.annualized_vol, self.sharpe_ratio, self.sortino_ratio, self.max_drawdown]
+            self.strategy_name: [self.annualized_return, self.annualized_vol, self.sharpe_ratio, self.sortino_ratio, self.max_drawdown]
         }
         df = pd.DataFrame(data)
-        df["Values"] = df["Values"].map(lambda x: "{:.2%}".format(x))
+        df[self.strategy_name] = df[self.strategy_name].map(lambda x: "{:.2%}".format(x))
 
         self.df_statistics = df
 
@@ -118,7 +120,7 @@ class Results:
                 ))
 
             fig.update_layout(
-                title="Evolution of portfolio weights",
+                title=f"Evolution of portfolio weights for strategy : {self.strategy_name}",
                 xaxis_title="Date",
                 yaxis_title="Weight (%)",
                 yaxis=dict(tickformat=".0%", range=[0, 1]),
@@ -181,13 +183,84 @@ class Results:
                                 ptf_weights=self.ptf_weights,
                                 df_statistics=df_comparison,
                                 ptf_value_plot=fig, 
-                                ptf_weights_plot=self.ptf_weights_plot)
+                                ptf_weights_plot=self.ptf_weights_plot,
+                                strategy_name="Comparaison")
         else :
             new_output = Results(ptf_values=self.ptf_values,
                                 ptf_weights=self.ptf_weights,
                                 df_statistics=df_comparison,
                                 ptf_value_plot=fig, 
                                 ptf_weights_plot=self.ptf_weights_plot,
-                                other_weights_plot=other.ptf_weights_plot)
+                                other_weights_plot=other.ptf_weights_plot,
+                                strategy_name="Comparaison")
         
         return new_output
+    
+    @staticmethod
+    def compare_results(results : list["Results"]) -> "Results":
+        """Compare multiple strategy results and returns a new Results instance
+        
+        Args:
+            results (list[Results]) = list of different strategy results
+        
+        Returns:
+            Results: A new Results object containing the combined statistics and comparison plot.
+        """
+        
+        '''Combine the statistics DataFrames'''
+        combined_statistics = pd.DataFrame(columns=["Metrics"])
+        is_backtest = False
+        for result in results:
+            df_stats = result.df_statistics.copy()
+            
+            '''Get only one backtest column'''
+            if "Benchmark" in df_stats.columns and is_backtest is False:
+                is_backtest = True
+            elif "Benchmark" in df_stats.columns and is_backtest is True:
+                df_stats = df_stats.drop('Benchmark', axis=1)
+
+            combined_statistics = pd.merge(
+                combined_statistics, df_stats, on="Metrics", how="outer"
+            )
+        '''Reorganise the columns'''
+        cols = [col for col in combined_statistics.columns if col != "Benchmark"] + ["Benchmark"]
+        combined_statistics = combined_statistics[cols]
+
+        '''As the function is also used to compare with the benchmark, we want to return only one weight plot'''
+        if "Benchmark" not in [res.strategy_name for res in results]:
+            '''Combine the value plots'''
+            fig = go.Figure()
+            
+            for result in results:
+                fig.add_trace(go.Scatter(
+                    x=result.ptf_values.index,
+                    y=result.ptf_values,
+                    mode='lines',
+                    name=result.strategy_name
+                ))
+            fig.update_layout(
+                title="Multiple Strategy Performance Comparison",
+                xaxis_title="Date",
+                yaxis_title="Portfolio Value",
+                font=dict(family="Courier New, monospace", size=14, color="RebeccaPurple")
+            )
+
+            '''We can store all weights evolution in a list of figures'''
+            weight_plots = []
+            for result in results:
+                if result.ptf_weights_plot is not None:
+                    weight_plots.append(result.ptf_weights_plot)
+        else :
+            '''Return only the weigt plot of the strategy and not the benchmark'''
+            strat_name = [res.strategy_name for res in results if res.strategy_name != "Benchmark"][0]
+            weight_plots = [res.ptf_weights_plot for res in results if res.strategy_name == strat_name][0]
+            fig = [res.ptf_value_plot for res in results if res.strategy_name == strat_name][0]
+
+        '''Returns a new instance of Results with new statistics DataFrame and plot'''
+        return Results(
+            ptf_values=results[0].ptf_values,
+            ptf_weights=results[0].ptf_weights,
+            df_statistics=combined_statistics,
+            ptf_value_plot=fig,
+            ptf_weights_plot=weight_plots,
+            strategy_name="Combinaison")
