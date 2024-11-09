@@ -16,10 +16,7 @@ class Backtester:
 
     Args:
         data_input (DataInput) : data input object containing assets prices historic
-        initial_amount (float) : initial value of the portfolio
-        strategy (AbstractStrategy) : instance of Strategy class with "compute_weights" method
         initial_weights (optional list(float)) : initial weights of the strategy, default value is equal weights
-        benchmark_prices (optional pd.DataFrame) : benchmark prices to compare the strategy with
     """
 
     """---------------------------------------------------------------------------------------
@@ -27,12 +24,7 @@ class Backtester:
     ---------------------------------------------------------------------------------------"""
 
     data_input : DataInput
-    initial_amount : float
-
-    strategy : AbstractStrategy
     initial_weights : Optional[list[float]] = None
-
-    benchmark_prices : Optional[pd.Series] = None
 
     ptf_weights : pd.DataFrame = None
     ptf_values : pd.Series = None
@@ -58,6 +50,7 @@ class Backtester:
             return self.data_input.df_benchmark
         else:
             return None
+        
     @property
     def benchmark_returns(self) -> pd.Series:
         if self.benchmark_prices is not None:
@@ -85,31 +78,36 @@ class Backtester:
     ---------------------------------------------------------------------------------------"""
 
     @timer
-    def run(self) -> Results :
+    def run(self, strategy : AbstractStrategy, initial_amount : float = 1000.0) -> Results :
         """Run the backtest over the asset period (& compare with the benchmark if selected)
+        
+        Args:
+            strategy (AbstractStrategy) : instance of Strategy class with "compute_weights" method
+            initial_amount (float) : initial value of the portfolio
         
         Returns:
             Results: A Results object containing statistics and comparison plot for the strategy (& the benchmark if selected)
         """
 
         """Initialisation"""
-        strat_value = self.initial_amount
+        strat_value = initial_amount
         weights = self.initial_weights_value
         stored_weights = [weights]
         stored_values = [strat_value]
+        returns_matrix = self.df_returns.to_numpy()
 
         if self.benchmark_prices is not None :
-            benchmark_value = self.initial_amount
+            benchmark_value = initial_amount
             stored_benchmark = [benchmark_value]
 
         for t in range(1, self.backtest_length):
             
             """Compute the portfolio & benchmark new value"""
-            daily_returns = np.array(self.df_returns.iloc[t].values)
+            daily_returns = returns_matrix[t]
             strat_value *= (1 + np.dot(weights, daily_returns))
 
             """Use Strategy to compute new weights"""
-            weights = self.strategy.compute_weights(weights)
+            weights = strategy.compute_weights(weights)
 
             """Store the new computed values"""
             stored_weights.append(weights)
@@ -126,7 +124,7 @@ class Backtester:
 
         return self.output(stored_values, stored_weights, stored_benchmark)
             
-            
+    @timer
     def output(self, stored_values : list[float], stored_weights : list[float], stored_benchmark : list[float] = None) -> Results :
         """Create the output for the strategy and its benchmark if selected
         

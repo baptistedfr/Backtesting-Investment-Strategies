@@ -47,8 +47,9 @@ class YahooDataInput(AbstractDataInput):
 
         freq = self._get_freq(frequency)
         data : pd.DataFrame = yf.download(tickers, start=start_date, end=end_date, interval=freq, progress=False)['Adj Close']
-        data.reset_index(inplace=True)
-        data.columns = ['_'.join(col).strip() if isinstance(col, tuple) else col for col in data.columns]
-        data["Date"] = data["Date"].apply(lambda x : x.strftime("%Y-%m-%d"))
+        if isinstance(data, pd.DataFrame):
+            data.reset_index(inplace=True)
+            data.columns = ['_'.join(col).strip() if isinstance(col, tuple) else col for col in data.columns]
+            data["Date"] = data["Date"].apply(lambda x : x.strftime("%Y-%m-%d"))
 
         return data

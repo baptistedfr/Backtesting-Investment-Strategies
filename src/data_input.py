@@ -62,11 +62,9 @@ class DataInput:
         
         if self.benchmark is not None:
             ticker_bench = self.benchmark.value
-            df = YahooDataInput().get_data(tickers=ticker_bench,
+            return YahooDataInput().get_data(tickers=ticker_bench,
                                             start_date=self.start_date,
                                             end_date=self.end_date,
                                             frequency=self.frequency)
-            serie_benchmark = df.set_index('Date')[ticker_bench]
-            return serie_benchmark
         else :
             return None
