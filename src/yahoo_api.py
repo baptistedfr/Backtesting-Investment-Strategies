@@ -26,8 +26,6 @@ class YahooDataInput(AbstractDataInput):
                 return '1wk'
             case FrequencyType.DAILY:
                 return '1d'
-            case FrequencyType.HOURLY:
-                return '1h'
             case _:
                 raise FrequencyError(f"Invalid frequency: {frequency}")
 

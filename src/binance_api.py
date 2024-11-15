@@ -25,8 +25,6 @@ class BinanceDataInput(AbstractDataInput):
                 return Client.KLINE_INTERVAL_1WEEK
             case FrequencyType.DAILY:
                 return Client.KLINE_INTERVAL_1DAY
-            case FrequencyType.HOURLY:
-                return Client.KLINE_INTERVAL_1HOUR
             case _:
                 raise FrequencyError(f"Invalid frequency: {frequency}")
 

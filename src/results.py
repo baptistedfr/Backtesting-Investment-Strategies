@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from typing import Optional
 import pandas as pd
 import numpy as np
+from src.tools import FrequencyType
 
 @dataclass
 class Results:
@@ -23,6 +24,7 @@ class Results:
 
     ptf_values : pd.Series
     strategy_name : str
+    data_frequency : FrequencyType
     ptf_weights : Optional[pd.DataFrame] = None
 
     df_statistics : pd.DataFrame = None
@@ -41,14 +43,13 @@ class Results:
     def total_return(self) -> float:
         return (self.ptf_values.iloc[-1] / self.ptf_values.iloc[0]) - 1
     
-    '''CAGR formula'''
     @property
     def annualized_return(self) -> float:
-        return (self.ptf_values.iloc[-1]/self.ptf_values.iloc[0])**(252/len(self.ptf_values)) - 1
+        return (self.ptf_values.iloc[-1]/self.ptf_values.iloc[0])**(self.data_frequency.value/len(self.ptf_values)) - 1
 
     @property
     def annualized_vol(self) -> float:
-        return np.std(self.ptf_returns) * np.sqrt(252)
+        return np.std(self.ptf_returns) * np.sqrt(self.data_frequency.value)
 
     @property
     def sharpe_ratio(self) -> float:
@@ -144,7 +145,8 @@ class Results:
 
         return Results(ptf_values=results[0].ptf_values, ptf_weights=results[0].ptf_weights,
                        df_statistics=combined_statistics, ptf_value_plot=fig,
-                       ptf_weights_plot=weight_plots, strategy_name=strat_name)
+                       ptf_weights_plot=weight_plots, strategy_name=strat_name,
+                       data_frequency=results[0].data_frequency)
     
     @staticmethod
     def combine_df(results : list["Results"]) -> go.Figure:

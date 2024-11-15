@@ -22,10 +22,9 @@ class InputType(Enum):
     FROM_DATAFRAME = "DataFrame"
 
 class FrequencyType(Enum):
-    HOURLY = "H"
-    DAILY = "D"
-    WEEKLY = "W"
-    MONTHLY = "M"
+    DAILY = 252
+    WEEKLY = 52
+    MONTHLY = 12
 
 class Index(Enum):
     CAC40 = "cac40"

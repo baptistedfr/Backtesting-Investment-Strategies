@@ -53,9 +53,9 @@ class Backtester:
         
     @property
     def benchmark_returns(self) -> pd.Series:
-        bench_prices = self.benchmark_prices
+        bench_prices : pd.Series = self.benchmark_prices
         if bench_prices is not None:
-            return bench_prices.iloc[:, 1].pct_change()
+            return bench_prices.pct_change()
         else:
             return None
         
@@ -151,14 +151,14 @@ class Backtester:
 
         self.ptf_weights = pd.DataFrame(stored_weights, index=self.dates, columns=self.df_returns.columns)
         self.ptf_values = pd.Series(stored_values, index=self.dates)
-        results_strat = Results(ptf_values=self.ptf_values, ptf_weights=self.ptf_weights, strategy_name=strategy_name)
+        results_strat = Results(ptf_values=self.ptf_values, ptf_weights=self.ptf_weights, strategy_name=strategy_name, data_frequency=self.data_input.frequency)
         results_strat.get_statistics()
         results_strat.create_plots()
 
         if stored_benchmark is not None :
 
             benchmark_values = pd.Series(stored_benchmark, index=self.dates)
-            results_bench = Results(ptf_values=benchmark_values, strategy_name="Benchmark")
+            results_bench = Results(ptf_values=benchmark_values, strategy_name="Benchmark", data_frequency=self.data_input.frequency)
             results_bench.get_statistics()
             results_bench.create_plots()
             results_strat = Results.compare_results([results_strat, results_bench])
