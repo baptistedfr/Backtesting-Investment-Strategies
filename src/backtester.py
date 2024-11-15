@@ -40,6 +40,7 @@ class Backtester:
     @property
     def dates(self) -> list[datetime]:
         return self.df_prices["Date"]
+    
     @property
     def df_returns(self) -> pd.DataFrame:
         return self.df_prices.iloc[:, 1:].pct_change()
@@ -79,13 +80,16 @@ class Backtester:
     ---------------------------------------------------------------------------------------"""
 
     @timer
-    def run(self, strategy : AbstractStrategy, initial_amount : float = 1000.0, fees : float = 0.001) -> Results :
+    def run(self, strategy : AbstractStrategy, initial_amount : float = 1000.0, fees : float = 0.001, delayed_start : str = None) -> Results :
         """Run the backtest over the asset period (& compare with the benchmark if selected)
         
         Args:
             strategy (AbstractStrategy) : instance of Strategy class with "compute_weights" method
             initial_amount (float) : initial value of the portfolio
-        
+            fees (float) : transaction fees for every portfolio weight rebalancing
+            delayed_start (optional str) : possibility to start the backtest after the first date of the data input 
+                                           (used in the strategies to have enough data at the beginning of the backtest)
+
         Returns:
             Results: A Results object containing statistics and comparison plot for the strategy (& the benchmark if selected)
         """
@@ -103,14 +107,19 @@ class Backtester:
             stored_benchmark = [benchmark_value]
             benchmark_returns_matrix = benchmark_returns_matrix.to_numpy()
 
-        for t in range(1, self.backtest_length):
+        if delayed_start is not None:
+            self.start_backtest = self.dates[self.dates == delayed_start].index[0]
+        else :
+            self.start_backtest = 1
+
+        for t in range(self.start_backtest + 1, self.backtest_length):
             
             """Compute the portfolio & benchmark new value"""
             daily_returns = returns_matrix[t]
             new_strat_value = strat_value * (1 + np.dot(weights, daily_returns))
 
             """Use Strategy to compute new weights"""
-            new_weights = strategy.compute_weights(weights)
+            new_weights = strategy.compute_weights(weights, returns_matrix[:t])
 
             """Compute transaction costs"""
             transaction_costs = strat_value * fees * np.sum(np.abs(new_weights - weights))
@@ -149,15 +158,15 @@ class Backtester:
             Results: A Results object containing statistics and comparison plot for the strategy (& the benchmark if selected)
         """
 
-        self.ptf_weights = pd.DataFrame(stored_weights, index=self.dates, columns=self.df_returns.columns)
-        self.ptf_values = pd.Series(stored_values, index=self.dates)
+        self.ptf_weights = pd.DataFrame(stored_weights, index=self.dates[self.start_backtest:], columns=self.df_returns.columns)
+        self.ptf_values = pd.Series(stored_values, index=self.dates[self.start_backtest:])
         results_strat = Results(ptf_values=self.ptf_values, ptf_weights=self.ptf_weights, strategy_name=strategy_name, data_frequency=self.data_input.frequency)
         results_strat.get_statistics()
         results_strat.create_plots()
 
         if stored_benchmark is not None :
 
-            benchmark_values = pd.Series(stored_benchmark, index=self.dates)
+            benchmark_values = pd.Series(stored_benchmark, index=self.dates[self.start_backtest:])
             results_bench = Results(ptf_values=benchmark_values, strategy_name="Benchmark", data_frequency=self.data_input.frequency)
             results_bench.get_statistics()
             results_bench.create_plots()

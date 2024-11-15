@@ -37,14 +37,13 @@ data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
                 frequency=FrequencyType.WEEKLY,
                 benchmark=Benchmark.CAC40)
 
-
 strategy = RandomFluctuationStrategy()
 backtest = Backtester(data_input=data, custom_name="Fees=0.1%")
-results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.001)
+results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.001, delayed_start='2024-01-01')
 
 strategy2 = RandomFluctuationStrategy()
 backtest2 = Backtester(data_input=data, custom_name="No Fees")
-results_random2 = backtest2.run(strategy=strategy2, initial_amount=1000.0, fees=0.0)
+results_random2 = backtest2.run(strategy=strategy2, initial_amount=1000.0, fees=0.0, delayed_start='2024-01-01')
 
 combined_results = Results.compare_results([results_random, results_random2])
 print(combined_results.df_statistics.head(10))

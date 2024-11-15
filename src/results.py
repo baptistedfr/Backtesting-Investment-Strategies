@@ -15,6 +15,7 @@ class Results:
     Args: 
         ptf_values (pd.Series) : value of the strategy over time
         strategy_name (str) : name of the used strategy
+        data_frequency (FrequencyType) : frequency of the input data, used to annualise volatility and return
         ptf_weights (optional pd.DataFrame) : weights of every asset over time
     """
 

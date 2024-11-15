@@ -6,7 +6,7 @@ import numpy as np
 class AbstractStrategy(ABC):
     
     @abstractmethod
-    def compute_weights(self, previous_weights : np.ndarray[float]) -> np.ndarray[float] :
+    def compute_weights(self, previous_weights : np.ndarray[float], historic_returns : np.ndarray[float]) -> np.ndarray[float] :
         """Method used to calculate the new weights of the strategy from given informations"""
         pass
 
@@ -14,7 +14,7 @@ class AbstractStrategy(ABC):
 class RandomFluctuationStrategy(AbstractStrategy):
     """Return weights with random fluctuations around the previous weights"""
 
-    def compute_weights(self, previous_weights : np.ndarray[float]) -> np.ndarray[float] :
+    def compute_weights(self, previous_weights : np.ndarray[float], historic_returns : np.ndarray[float]) -> np.ndarray[float] :
         new_weights = previous_weights + np.random.random(previous_weights.shape)/4
         return new_weights / np.sum(new_weights)
 
@@ -28,7 +28,7 @@ class FocusedStrategy(AbstractStrategy):
     """
     asset_index: int
 
-    def compute_weights(self, previous_weights: np.ndarray) -> np.ndarray:
+    def compute_weights(self, previous_weights: np.ndarray, historic_returns : np.ndarray[float]) -> np.ndarray:
         new_weights = np.zeros_like(previous_weights)
         new_weights[self.asset_index] = 1.0
         return new_weights
