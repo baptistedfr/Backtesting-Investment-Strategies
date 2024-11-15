@@ -33,10 +33,19 @@ class Index(Enum):
     SP500 = "sp500"
 
 class Benchmark(Enum):
-    CAC40 = "^FCHI"
-    DAX = "^GDAXI"
-    FTSE100 = "^FTSE"
-    SP500 = "^GSPC"
-    NASDAQ = "^IXIC"
-    NIKKEI225 = "^N225"
-    HANGSENG = "^HSI"
+    # Equity benchmarks
+    CAC40 = ("Equity", "^FCHI")
+    DAX = ("Equity", "^GDAXI")
+    FTSE100 = ("Equity", "^FTSE")
+    SP500 = ("Equity", "^GSPC")
+    NASDAQ = ("Equity", "^IXIC")
+    NIKKEI225 = ("Equity", "^N225")
+    HANGSENG = ("Equity", "^HSI")
+    
+    # Crypto benchmarks
+    BTC = ("Crypto", ["BTCUSDT"])
+    ETH = ("Crypto", ["ETHUSDT"])
+
+    def __init__(self, category, symbol):
+        self.category = category
+        self.symbol = symbol

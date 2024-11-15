@@ -56,7 +56,7 @@ class Backtester:
     def benchmark_returns(self) -> pd.Series:
         bench_prices : pd.Series = self.benchmark_prices
         if bench_prices is not None:
-            return bench_prices.pct_change()
+            return bench_prices.iloc[:,1].pct_change()
         else:
             return None
         
@@ -101,7 +101,6 @@ class Backtester:
         stored_weights = [weights]
         stored_values = [strat_value]
         benchmark_returns_matrix = self.benchmark_returns
-
         if benchmark_returns_matrix is not None :
             benchmark_value = initial_amount
             stored_benchmark = [benchmark_value]

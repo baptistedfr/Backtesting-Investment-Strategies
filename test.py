@@ -13,10 +13,11 @@ import pandas as pd
 #                         benchmark=Benchmark.CAC40)
 
 # data = DataInput(data_type=InputType.CRYPTO,
-#                         tickers=['ETHUSDT', 'BTCUSDT', 'SOLUSDT'],
+#                         tickers=['ETHUSDT', 'BTCUSDT'],
 #                         start_date='2023-10-01',
-#                         end_date='2024-10-01',
-#                         frequency=FrequencyType.WEEKLY)
+#                         end_date='2024-11-15',
+#                         frequency=FrequencyType.WEEKLY,
+#                         benchmark=Benchmark.BTC)
 
 
 # data = DataInput(data_type=InputType.FROM_FILE,
@@ -39,11 +40,11 @@ data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
 
 strategy = RandomFluctuationStrategy()
 backtest = Backtester(data_input=data, custom_name="Fees=0.1%")
-results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.001, delayed_start='2024-01-01')
+results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.001)
 
 strategy2 = RandomFluctuationStrategy()
 backtest2 = Backtester(data_input=data, custom_name="No Fees")
-results_random2 = backtest2.run(strategy=strategy2, initial_amount=1000.0, fees=0.0, delayed_start='2024-01-01')
+results_random2 = backtest2.run(strategy=strategy2, initial_amount=1000.0, fees=0.0)
 
 combined_results = Results.compare_results([results_random, results_random2])
 print(combined_results.df_statistics.head(10))

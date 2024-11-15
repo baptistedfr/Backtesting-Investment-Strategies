@@ -70,8 +70,15 @@ class DataInput:
     def df_benchmark(self) -> pd.Series:
         
         if self.benchmark is not None:
-            ticker_bench = self.benchmark.value
-            return YahooDataInput().get_data(tickers=ticker_bench,
+            category_bench = self.benchmark.category
+            ticker_bench = self.benchmark.symbol
+            if category_bench == "Equity":
+                return YahooDataInput().get_data(tickers=ticker_bench,
+                                            start_date=self.start_date,
+                                            end_date=self.end_date,
+                                            frequency=self.frequency)
+            else:
+                return BinanceDataInput().get_data(tickers=ticker_bench,
                                             start_date=self.start_date,
                                             end_date=self.end_date,
                                             frequency=self.frequency)
