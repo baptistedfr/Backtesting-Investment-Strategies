@@ -174,7 +174,9 @@ class Results:
                 combined_statistics, df_stats, on="Metrics", how="outer"
             )
         '''Reorganise the columns'''
-        cols = [col for col in combined_statistics.columns if col != "Benchmark"] + ["Benchmark"]
+        cols = [col for col in combined_statistics.columns if col != "Benchmark"]
+        if is_benchmark:
+            cols+=["Benchmark"]
         combined_statistics = combined_statistics[cols]
 
         return combined_statistics

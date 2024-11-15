@@ -16,9 +16,10 @@ import pandas as pd
 #                         tickers=['ETHUSDT', 'BTCUSDT', 'SOLUSDT'],
 #                         start_date='2023-10-01',
 #                         end_date='2024-10-01',
-#                         frequency=FrequencyType.DAILY)
-                 
-# data = DataInput(data_type=InputType.CUSTOM,
+#                         frequency=FrequencyType.WEEKLY)
+
+
+# data = DataInput(data_type=InputType.FROM_FILE,
 #                         file_path='data/custom.xlsx')
 
 # df = pd.read_excel("data/custom.xlsx")
@@ -27,12 +28,15 @@ import pandas as pd
 #                 benchmark=Benchmark.CAC40,
 #                 frequency=FrequencyType.DAILY)
 
+# print(data.df_prices)
+
 data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
                 index=Index.CAC40,
                 start_date='2023-10-01',
                 end_date='2024-10-01',
-                frequency=FrequencyType.DAILY,
+                frequency=FrequencyType.WEEKLY,
                 benchmark=Benchmark.CAC40)
+
 
 strategy = RandomFluctuationStrategy()
 backtest = Backtester(data_input=data, custom_name="Fees=0.1%")
@@ -42,6 +46,8 @@ strategy2 = RandomFluctuationStrategy()
 backtest2 = Backtester(data_input=data, custom_name="No Fees")
 results_random2 = backtest2.run(strategy=strategy2, initial_amount=1000.0, fees=0.0)
 
+print(results_random.df_statistics)
+print(results_random2.df_statistics)
 combined_results = Results.compare_results([results_random, results_random2])
 print(combined_results.df_statistics.head(10))
 combined_results.ptf_value_plot.show()

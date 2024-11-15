@@ -5,6 +5,7 @@ from src.df_input import DataFrameDataInput
 from src.yahoo_api import YahooDataInput
 from src.exeptions import InputTypeError
 from dataclasses import dataclass
+from typing import Optional
 from datetime import datetime
 import pandas as pd
     
@@ -31,6 +32,7 @@ class DataInput:
     start_date : datetime = None
     end_date : datetime = None
     tickers : list[str] = None
+    initial_weights : Optional[list[float]] = None
     frequency : FrequencyType = None
     index : Index = None
     file_path : str = None
@@ -54,6 +56,8 @@ class DataInput:
                 path_index = "data/" + self.index.value + ".xlsx"
                 index_composition = pd.read_excel(path_index)
                 self.tickers = list(set(index_composition['Ticker']))
+                if ("Poids" in index_composition.columns):
+                    self.initial_weights = list(index_composition['Poids'])
             case _:
                 raise InputTypeError("Unvalid asset price type selected")
 

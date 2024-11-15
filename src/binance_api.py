@@ -100,4 +100,4 @@ class BinanceDataInput(AbstractDataInput):
             else:
                 data_final = data_final.merge(results_retreated, on="Close time", how="left")
 
-        return data_final
+        return data_final.rename(columns={"Close time":"Date"})

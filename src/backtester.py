@@ -24,7 +24,6 @@ class Backtester:
     ---------------------------------------------------------------------------------------"""
 
     data_input : DataInput
-    initial_weights : Optional[list[float]] = None
     custom_name : str = None
 
     ptf_weights : pd.DataFrame = None
@@ -54,8 +53,9 @@ class Backtester:
         
     @property
     def benchmark_returns(self) -> pd.Series:
-        if self.benchmark_prices is not None:
-            return self.benchmark_prices.pct_change()
+        bench_prices = self.benchmark_prices
+        if bench_prices is not None:
+            return bench_prices.iloc[:, 1].pct_change()
         else:
             return None
         
@@ -69,10 +69,10 @@ class Backtester:
     
     @property
     def initial_weights_value(self) -> np.ndarray:
-        if self.initial_weights is None:
+        if self.data_input.initial_weights is None:
             return np.full(self.nb_assets, 1 / self.nb_assets)
         else:
-            return self.initial_weights
+            return np.array(self.data_input.initial_weights)
 
     """---------------------------------------------------------------------------------------
     -                                   Class methods                                        -
@@ -92,14 +92,16 @@ class Backtester:
 
         """Initialisation"""
         strat_value = initial_amount
+        returns_matrix = self.df_returns.to_numpy()
         weights = self.initial_weights_value
         stored_weights = [weights]
         stored_values = [strat_value]
-        returns_matrix = self.df_returns.to_numpy()
+        benchmark_returns_matrix = self.benchmark_returns
 
-        if self.benchmark_prices is not None :
+        if benchmark_returns_matrix is not None :
             benchmark_value = initial_amount
             stored_benchmark = [benchmark_value]
+            benchmark_returns_matrix = benchmark_returns_matrix.to_numpy()
 
         for t in range(1, self.backtest_length):
             
@@ -120,14 +122,14 @@ class Backtester:
 
             """Compute & sotre the new benchmark value"""
             if self.benchmark_prices is not None :
-                benchmark_rdt = self.benchmark_returns.iloc[t]
+                benchmark_rdt = benchmark_returns_matrix[t]
                 benchmark_value *= (1 + benchmark_rdt)
                 stored_benchmark.append(benchmark_value)
 
             weights = new_weights
             strat_value = new_strat_value
 
-        if self.benchmark_prices is None :
+        if benchmark_returns_matrix is None :
             stored_benchmark = None
 
         strat_name = self.custom_name if self.custom_name is not None else strategy.__class__.__name__
@@ -153,13 +155,12 @@ class Backtester:
         results_strat.get_statistics()
         results_strat.create_plots()
 
-        if self.benchmark_prices is not None :
+        if stored_benchmark is not None :
 
             benchmark_values = pd.Series(stored_benchmark, index=self.dates)
             results_bench = Results(ptf_values=benchmark_values, strategy_name="Benchmark")
             results_bench.get_statistics()
             results_bench.create_plots()
-
             results_strat = Results.compare_results([results_strat, results_bench])
 
         return results_strat
