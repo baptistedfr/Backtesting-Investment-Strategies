@@ -35,20 +35,20 @@ class Backtester:
 
     @property
     def df_prices(self) -> pd.DataFrame:
-        return self.data_input.df_prices
+        return self.data_input.df_prices.iloc[:, 1:]
     
     @property
     def dates(self) -> list[datetime]:
-        return self.df_prices["Date"]
+        return self.data_input.df_prices["Date"]
     
     @property
     def df_returns(self) -> pd.DataFrame:
-        return self.df_prices.iloc[:, 1:].pct_change()
+        return self.df_prices.pct_change()
     
     @property
     def benchmark_prices(self) -> pd.Series:
         if self.data_input.benchmark is not None:
-            return self.data_input.df_benchmark
+            return self.data_input.df_benchmark.iloc[:, 1]
         else:
             return None
         
@@ -56,7 +56,7 @@ class Backtester:
     def benchmark_returns(self) -> pd.Series:
         bench_prices : pd.Series = self.benchmark_prices
         if bench_prices is not None:
-            return bench_prices.iloc[:,1].pct_change()
+            return bench_prices.pct_change()
         else:
             return None
         
@@ -97,6 +97,7 @@ class Backtester:
         """Initialisation"""
         strat_value = initial_amount
         returns_matrix = self.df_returns.to_numpy()
+        prices_matrix = self.df_prices.to_numpy()
         weights = self.initial_weights_value
         stored_weights = [weights]
         stored_values = [strat_value]
@@ -111,14 +112,21 @@ class Backtester:
         else :
             self.start_backtest = 1
 
-        for t in range(self.start_backtest + 1, self.backtest_length):
+        if np.any(np.isnan(prices_matrix)):
+            raise ValueError("Some prices are missing in the data input (df_prices)")
+
+        for shift, t in enumerate(range(self.start_backtest + 1, self.backtest_length)):
             
             """Compute the portfolio & benchmark new value"""
             daily_returns = returns_matrix[t]
             new_strat_value = strat_value * (1 + np.dot(weights, daily_returns))
 
             """Use Strategy to compute new weights"""
-            new_weights = strategy.compute_weights(weights, returns_matrix[:t])
+            if strategy.__class__.__name__ in ["TrendFollowingStrategy", "MomentumStrategy", "LowVolatilityStrategy"]:
+                new_weights = strategy.compute_weights(weights, returns_matrix[shift+1:t])
+
+            else:
+                new_weights = strategy.compute_weights(weights, prices_matrix[shift:t])
 
             """Compute transaction costs"""
             transaction_costs = strat_value * fees * np.sum(np.abs(new_weights - weights))

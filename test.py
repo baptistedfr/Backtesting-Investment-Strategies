@@ -1,5 +1,6 @@
 from src.tools import InputType, FrequencyType, Index, Benchmark
-from src.strategy import RandomFluctuationStrategy, FocusedStrategy
+from src.strategy import (RandomFluctuationStrategy, FocusedStrategy, TrendFollowingStrategy, MomentumStrategy,
+                          LowVolatilityStrategy, MeanRevertingStrategy)
 from src.backtester import Backtester
 from src.data_input import DataInput
 from src.results import Results
@@ -33,18 +34,18 @@ import pandas as pd
 
 data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
                 index=Index.CAC40,
-                start_date='2023-10-01',
-                end_date='2024-10-01',
+                start_date='2023-05-01',
+                end_date='2024-11-01',
                 frequency=FrequencyType.WEEKLY,
                 benchmark=Benchmark.CAC40)
 
-strategy = RandomFluctuationStrategy()
-backtest = Backtester(data_input=data, custom_name="Fees=0.1%")
-results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.001)
+strategy = MeanRevertingStrategy()
+backtest = Backtester(data_input=data, custom_name="Mean Reverting - No Fees")
+results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.0, delayed_start="2023-05-29")
 
-strategy2 = RandomFluctuationStrategy()
-backtest2 = Backtester(data_input=data, custom_name="No Fees")
-results_random2 = backtest2.run(strategy=strategy2, initial_amount=1000.0, fees=0.0)
+strategy2 = LowVolatilityStrategy()
+backtest2 = Backtester(data_input=data, custom_name="Low Vol - No Fees")
+results_random2 = backtest2.run(strategy=strategy2, initial_amount=1000.0, fees=0.0, delayed_start="2023-05-29")
 
 combined_results = Results.compare_results([results_random, results_random2])
 print(combined_results.df_statistics.head(10))
