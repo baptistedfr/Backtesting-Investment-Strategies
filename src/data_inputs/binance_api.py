@@ -1,4 +1,4 @@
-from src.abstract_source import AbstractDataInput
+from src.data_inputs.abstract_source import AbstractDataInput
 from src.exeptions import FrequencyError
 from src.tools import FrequencyType
 from binance.client import Client

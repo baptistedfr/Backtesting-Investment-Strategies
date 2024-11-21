@@ -70,6 +70,7 @@ class LowVolatilityStrategy(AbstractStrategy):
 @dataclass
 class MeanRevertingStrategy(AbstractStrategy):
     """Invest in assets that have deviated from their historical mean."""
+    "LES PRIX NE SONT PAS STATIONNAIRES PAS DE MOYENNE DE LONG TERME CF MAB"
 
     def compute_weights(self, previous_weights: np.ndarray[float], prices: np.ndarray[float]) -> np.ndarray[float]:
 

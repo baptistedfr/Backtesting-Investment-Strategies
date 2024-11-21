@@ -1,4 +1,4 @@
-from src.abstract_source import AbstractDataInput
+from src.data_inputs.abstract_source import AbstractDataInput
 from src.exeptions import BadInput, InvalidFormat
 from dataclasses import dataclass
 import pandas as pd
@@ -19,21 +19,20 @@ class DataFrameDataInput(AbstractDataInput):
             start_date (str, optional): strat date of the backtest
             end_date (str, optional): end date of the backtest
         """
-        df = self.custom_df.copy()
 
-        if "Date" not in df.columns:
+        if "Date" not in self.custom_df:
             raise BadInput("'Date' column not in the selected dataframe")
 
-        if len(df.columns) < 2:
+        if len(self.custom_df.columns) < 2:
             raise BadInput("The input dataframe has to store at least one asset serie")
         
-        if df.isnull().values.any():
+        if self.custom_df.isnull().values.any():
             raise BadInput("N/A found in selected dataframe")
         
         if start_date is not None and end_date is not None :
-            if start_date not in df["Date"] or end_date not in df["Date"]:
+            if start_date not in self.custom_df["Date"] or end_date not in self.custom_df["Date"]:
                 raise BadInput("Selected start or end date not present in dataframe")
-            df['Date'] = pd.to_datetime(df['Date'])
-            df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
+            self.custom_df['Date'] = pd.to_datetime(df['Date'])
+            self.custom_df = self.custom_df[(self.custom_df['Date'] >= start_date) & (self.custom_df['Date'] <= end_date)]
 
-        return df
+        return self.custom_df

@@ -1,15 +1,15 @@
 from src.tools import InputType, FrequencyType, Index, Benchmark
-from src.binance_api import BinanceDataInput
-from src.custom_input import CustomDataInput
-from src.df_input import DataFrameDataInput
-from src.yahoo_api import YahooDataInput
+from src.data_inputs.binance_api import BinanceDataInput
+from src.data_inputs.custom_input import CustomDataInput
+from src.data_inputs.df_input import DataFrameDataInput
+from src.data_inputs.yahoo_api import YahooDataInput
 from src.exeptions import InputTypeError
 from dataclasses import dataclass
-from typing import Optional
+from typing import *
 from datetime import datetime
 import pandas as pd
 from functools import cached_property
-@dataclass
+
 class DataInput:
     """
     Generic interface between the APIs & the backtester, stores the prices dataframe as an attribute
@@ -27,20 +27,24 @@ class DataInput:
 
         df_prices (pd.DataFrame) : asset prices
     """
+    def __init__(self, data_type : InputType, start_date : datetime = None, end_date : datetime = None, tickers : list[str] = None, 
+                 initial_weights : Optional[list[float]] = None, frequency : FrequencyType = None, index : Index = None,
+                 file_path : str = None, custom_df : pd.DataFrame = None, benchmark : Benchmark = None):
+        
+        self.data_type : InputType = data_type
+        self.start_date : datetime = start_date
+        self.end_date : datetime = end_date
+        self.tickers : list[str] = tickers
+        self.initial_weights : Optional[list[float]] = initial_weights 
+        self.frequency : FrequencyType = frequency
+        self.index : Index = index
+        self.file_path : str = file_path
+        self.custom_df : pd.DataFrame = custom_df
+        self.benchmark : Benchmark = benchmark
+        self.df_prices = self.get_prices()
+        self.df_benchmark = self.get_benchmark()
 
-    data_type : InputType 
-    start_date : datetime = None
-    end_date : datetime = None
-    tickers : list[str] = None
-    initial_weights : Optional[list[float]] = None
-    frequency : FrequencyType = None
-    index : Index = None
-    file_path : str = None
-    benchmark : Benchmark = None
-    custom_df : pd.DataFrame = None
-
-    @cached_property
-    def df_prices(self) -> pd.DataFrame:
+    def get_prices(self) -> pd.DataFrame:
         match self.data_type:
             case InputType.FROM_FILE:
                 data_requester = CustomDataInput(self.file_path)
@@ -65,8 +69,7 @@ class DataInput:
                                         end_date=self.end_date,
                                         frequency=self.frequency)
     
-    @cached_property
-    def df_benchmark(self) -> pd.Series:
+    def get_benchmark(self) -> pd.Series:
         
         if self.benchmark is not None:
             category_bench = self.benchmark.category

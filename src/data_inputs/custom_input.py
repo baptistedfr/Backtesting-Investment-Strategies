@@ -1,4 +1,4 @@
-from src.abstract_source import AbstractDataInput
+from src.data_inputs.abstract_source import AbstractDataInput
 from src.exeptions import BadInput, InvalidFormat
 from dataclasses import dataclass
 import pandas as pd
