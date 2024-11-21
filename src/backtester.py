@@ -104,11 +104,9 @@ class Backtester:
         """Initialisation"""
         strat_value = initial_amount
         returns_matrix = self.df_returns.to_numpy()
-<<<<<<< HEAD
 
-=======
         prices_matrix = self.df_prices.to_numpy()
->>>>>>> a7d46c06c4fd09d1a48ac11080a0271d3ee3037d
+
         weights = self.initial_weights_value
         stored_weights = [weights]
         stored_values = [strat_value]
