@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import Optional
 from datetime import datetime
 import pandas as pd
-    
+from functools import cached_property
 @dataclass
 class DataInput:
     """
@@ -39,9 +39,8 @@ class DataInput:
     benchmark : Benchmark = None
     custom_df : pd.DataFrame = None
 
-    @property
+    @cached_property
     def df_prices(self) -> pd.DataFrame:
-        
         match self.data_type:
             case InputType.FROM_FILE:
                 data_requester = CustomDataInput(self.file_path)
@@ -66,12 +65,12 @@ class DataInput:
                                         end_date=self.end_date,
                                         frequency=self.frequency)
     
-    @property
+    @cached_property
     def df_benchmark(self) -> pd.Series:
         
         if self.benchmark is not None:
             category_bench = self.benchmark.category
-            ticker_bench = self.benchmark.symbol
+            ticker_bench = [self.benchmark.symbol]
             if category_bench == "Equity":
                 return YahooDataInput().get_data(tickers=ticker_bench,
                                             start_date=self.start_date,

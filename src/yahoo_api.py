@@ -1,5 +1,5 @@
 from src.abstract_source import AbstractDataInput
-from src.exeptions import FrequencyError
+from src.exeptions import FrequencyError, DataError
 from src.tools import FrequencyType
 from dataclasses import dataclass
 import yfinance as yf
@@ -49,5 +49,8 @@ class YahooDataInput(AbstractDataInput):
             data.reset_index(inplace=True)
             data.columns = ['_'.join(col).strip() if isinstance(col, tuple) else col for col in data.columns]
             data["Date"] = data["Date"].apply(lambda x : x.strftime("%Y-%m-%d"))
-
+        
+        for ticker in tickers:
+            if pd.isnull(data.loc[0, ticker]):
+                print(f"The ticker {ticker} does not have a value in {start_date}")
         return data

@@ -43,9 +43,9 @@ class Benchmark(Enum):
     HANGSENG = ("Equity", "^HSI")
     
     # Crypto benchmarks
-    BTC = ("Crypto", ["BTCUSDT"])
-    ETH = ("Crypto", ["ETHUSDT"])
-
+    BTC = ("Crypto", "BTCUSDT")
+    ETH = ("Crypto", "ETHUSDT")
+    SOL = ("Crypto","SOLUSDT")
     def __init__(self, category, symbol):
         self.category = category
         self.symbol = symbol
