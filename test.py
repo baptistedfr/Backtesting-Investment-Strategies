@@ -14,14 +14,15 @@ import pandas as pd
 #                         benchmark=Benchmark.CAC40)
 
 # data = DataInput(data_type=InputType.CRYPTO,
-#                         start_date='2023-10-01',
+#                         tickers=['BTCUSDT','ETHUSDT','PEPEUSDT','DOGEUSDT','SOLUSDT'],
+#                         start_date='2018-10-01',
 #                         end_date='2024-11-15',
 #                         frequency=FrequencyType.WEEKLY,
-#                         benchmark=Benchmark.BTC)
+#                         benchmark = Benchmark.BTC)
 
 
-# data = DataInput(data_type=InputType.FROM_FILE,
-#                         file_path='data/custom.xlsx')
+data = DataInput(data_type=InputType.FROM_FILE,
+                        file_path='data/custom.xlsx')
 
 # df = pd.read_excel("data/custom.xlsx")
 # data = DataInput(data_type=InputType.FROM_DATAFRAME,
@@ -30,6 +31,7 @@ import pandas as pd
 #                 frequency=FrequencyType.DAILY)
 
 # print(data.df_prices)
+
 
 # data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
 #                 index=Index.CAC40,
