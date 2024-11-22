@@ -9,10 +9,13 @@ from typing import Optional
 class AbstractStrategy(ABC):
 
     @abstractmethod
-    def compute_weights(self, previous_weights: np.ndarray[float], prices_or_returns: np.ndarray) -> np.ndarray[float]:
+    def compute_weights(self, previous_weights: np.ndarray[float], returns: np.ndarray[float]) -> np.ndarray[float]:
         """Method used to calculate the new weights of the strategy from given information"""
         pass
 
+    def compute_na(self, weights, returns):
+        weights[np.isnan(returns)] = 0
+        return weights
 
 @dataclass
 class TrendFollowingStrategy(AbstractStrategy):
@@ -67,27 +70,27 @@ class LowVolatilityStrategy(AbstractStrategy):
         return new_weights
 
 
-@dataclass
-class MeanRevertingStrategy(AbstractStrategy):
-    """Invest in assets that have deviated from their historical mean."""
-    "LES PRIX NE SONT PAS STATIONNAIRES PAS DE MOYENNE DE LONG TERME CF MAB"
+# @dataclass
+# class MeanRevertingStrategy(AbstractStrategy):
+#     """Invest in assets that have deviated from their historical mean."""
+#     "LES PRIX NE SONT PAS STATIONNAIRES PAS DE MOYENNE DE LONG TERME CF MAB"
 
-    def compute_weights(self, previous_weights: np.ndarray[float], prices: np.ndarray[float]) -> np.ndarray[float]:
+#     def compute_weights(self, previous_weights: np.ndarray[float], prices: np.ndarray[float]) -> np.ndarray[float]:
 
-        # Compute the deviation of the current prices from the historical mean
-        mean_prices = prices.mean(axis=0)
-        deviation_from_mean = prices[-1] - mean_prices
+#         # Compute the deviation of the current prices from the historical mean
+#         mean_prices = prices.mean(axis=0)
+#         deviation_from_mean = prices[-1] - mean_prices
 
-        # Buy assets that are below their historical mean (undervalued)
-        mean_reverting_assets = np.where(deviation_from_mean < 0, -deviation_from_mean, 0)
+#         # Buy assets that are below their historical mean (undervalued)
+#         mean_reverting_assets = np.where(deviation_from_mean < 0, -deviation_from_mean, 0)
 
-        # if all assets are above their historical mean, we do not invest in any asset
-        if np.sum(mean_reverting_assets) == 0:
-            return np.zeros(len(mean_reverting_assets))
+#         # if all assets are above their historical mean, we do not invest in any asset
+#         if np.sum(mean_reverting_assets) == 0:
+#             return np.zeros(len(mean_reverting_assets))
 
-        new_weights = mean_reverting_assets / np.sum(mean_reverting_assets)
+#         new_weights = mean_reverting_assets / np.sum(mean_reverting_assets)
 
-        return new_weights
+#         return new_weights
 
 
 @dataclass
@@ -96,6 +99,7 @@ class RandomFluctuationStrategy(AbstractStrategy):
 
     def compute_weights(self, previous_weights: np.ndarray[float], returns) -> np.ndarray[float]:
         new_weights = previous_weights + np.random.random(previous_weights.shape) / 4
+        new_weights = self.compute_na(new_weights, returns[-1])
         return new_weights / np.sum(new_weights)
 
 

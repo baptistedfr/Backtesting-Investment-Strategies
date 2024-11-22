@@ -36,7 +36,7 @@ class Backtester:
 
     @cached_property
     def df_prices(self) -> pd.DataFrame:
-        return self.data_input.df_prices.iloc[:, 1:]
+        return self.data_input.df_prices
     
     @cached_property
     def dates(self) -> list[datetime]:
@@ -44,18 +44,18 @@ class Backtester:
     
     @cached_property
     def df_returns(self) -> pd.DataFrame:
-        return self.df_prices.pct_change()
+        return self.df_prices.iloc[:, 1:].pct_change()
     
     @cached_property
     def benchmark_prices(self) -> pd.Series:
         if self.data_input.benchmark is not None:
-            return self.data_input.df_benchmark.iloc[:, 1]
+            return self.data_input.df_benchmark
         else:
             return None
         
     @cached_property
     def benchmark_returns(self) -> pd.Series:
-        bench_prices : pd.Series = self.benchmark_prices
+        bench_prices : pd.Series = self.benchmark_prices.iloc[:, 1]
         if bench_prices is not None:
             return bench_prices.pct_change()
         else:
@@ -67,7 +67,7 @@ class Backtester:
     
     @cached_property
     def nb_assets(self) -> int:
-        return self.df_prices.shape[1] - 1
+        return self.df_prices.shape[1]-1
     
     @cached_property
     def initial_weights_value(self) -> np.ndarray:
@@ -105,7 +105,7 @@ class Backtester:
         strat_value = initial_amount
         returns_matrix = self.df_returns.to_numpy()
 
-        prices_matrix = self.df_prices.to_numpy()
+        #prices_matrix = self.df_prices.iloc[:, 1:].to_numpy()
 
         weights = self.initial_weights_value
         stored_weights = [weights]
@@ -121,8 +121,8 @@ class Backtester:
         else :
             self.start_backtest = 1
 
-        if np.any(np.isnan(prices_matrix)):
-            raise ValueError("Some prices are missing in the data input (df_prices)")
+        # if np.any(np.isnan(prices_matrix)):
+        #     raise ValueError("Some prices are missing in the data input (df_prices)")
 
         for shift, t in enumerate(range(self.start_backtest + 1, self.backtest_length)):
             
@@ -130,12 +130,12 @@ class Backtester:
             daily_returns = np.nan_to_num(returns_matrix[t], nan=0.0)
             new_strat_value = strat_value * (1 + np.dot(weights, daily_returns))
             """Use Strategy to compute new weights"""
-            if strategy.__class__.__name__ in ["TrendFollowingStrategy", "MomentumStrategy", "LowVolatilityStrategy"]:
-                new_weights = strategy.compute_weights(weights, returns_matrix[shift+1:t])
+            # if strategy.__class__.__name__ in ["TrendFollowingStrategy", "MomentumStrategy", "LowVolatilityStrategy"]:
+            #     new_weights = strategy.compute_weights(weights, returns_matrix[shift+1:t])
 
-            else:
-                new_weights = strategy.compute_weights(weights, prices_matrix[shift:t])
-
+            # else:
+            #     new_weights = strategy.compute_weights(weights, prices_matrix[shift:t])
+            new_weights = strategy.compute_weights(weights, returns_matrix[shift+1:t])
             """Compute transaction costs"""
             transaction_costs = strat_value * fees * np.sum(np.abs(new_weights - weights))
             new_strat_value -= transaction_costs
