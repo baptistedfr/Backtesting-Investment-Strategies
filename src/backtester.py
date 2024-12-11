@@ -3,7 +3,7 @@ from src.data_input import DataInput
 from dataclasses import dataclass
 from src.results import Results
 from datetime import datetime
-from src.tools import timer
+from src.tools import timer, FrequencyType
 from typing import Optional
 import pandas as pd
 import numpy as np
@@ -55,9 +55,8 @@ class Backtester:
         
     @cached_property
     def benchmark_returns(self) -> pd.Series:
-        bench_prices : pd.Series = self.benchmark_prices.iloc[:, 1]
-        if bench_prices is not None:
-            return bench_prices.pct_change()
+        if self.benchmark_prices is not None:
+            return self.benchmark_prices.iloc[:, 1].pct_change()
         else:
             return None
         
@@ -71,15 +70,21 @@ class Backtester:
     
     @cached_property
     def initial_weights_value(self) -> np.ndarray:
+        """
+        Initialisation des poids initiaux
+        """
         initial_prices = self.df_prices.iloc[0,1:]
         if self.data_input.initial_weights is None:
             weights = np.full(self.nb_assets, 1 / self.nb_assets)
             weights[initial_prices.isna()] = 0
-            weights /= weights.sum()
+            
         else:
             weights = np.array(self.data_input.initial_weights)
+            if len(weights) != self.nb_assets:
+                raise ValueError("The initial weights size must match the number of assets.")
             weights[initial_prices.isna()] = 0
-            weights /= weights.sum()
+
+        weights /= weights.sum() # Normalisation des poids
         return weights
 
     """---------------------------------------------------------------------------------------
@@ -100,16 +105,26 @@ class Backtester:
         Returns:
             Results: A Results object containing statistics and comparison plot for the strategy (& the benchmark if selected)
         """
+        
+        """Verification of some basic instances"""
+        if not isinstance(initial_amount, (int, float)) or initial_amount <= 0:
+            raise ValueError("Initial amount must be a positive number.")
+        if not (0 <= fees <= 1):
+            raise ValueError("Fees must be a proportion between 0 and 1.")
+        
+        if strategy.rebalance_frequency.value > self.data_input.frequency.value:
+            raise ValueError("We cannot have a frequency of rebalancement more frequent than the frequency of the prices !")
+        
+        """Get the rebalancing dates"""
+        rebalancing_dates = self._get_rebalancing_dates(strategy.rebalance_frequency)
 
         """Initialisation"""
         strat_value = initial_amount
         returns_matrix = self.df_returns.to_numpy()
-
-        #prices_matrix = self.df_prices.iloc[:, 1:].to_numpy()
-
         weights = self.initial_weights_value
         stored_weights = [weights]
         stored_values = [strat_value]
+        stored_benchmark = None
         benchmark_returns_matrix = self.benchmark_returns
         if benchmark_returns_matrix is not None :
             benchmark_value = initial_amount
@@ -121,25 +136,23 @@ class Backtester:
         else :
             self.start_backtest = 1
 
-        # if np.any(np.isnan(prices_matrix)):
-        #     raise ValueError("Some prices are missing in the data input (df_prices)")
-
         for shift, t in enumerate(range(self.start_backtest + 1, self.backtest_length)):
             
             """Compute the portfolio & benchmark new value"""
             daily_returns = np.nan_to_num(returns_matrix[t], nan=0.0)
             new_strat_value = strat_value * (1 + np.dot(weights, daily_returns))
-            """Use Strategy to compute new weights"""
-            # if strategy.__class__.__name__ in ["TrendFollowingStrategy", "MomentumStrategy", "LowVolatilityStrategy"]:
-            #     new_weights = strategy.compute_weights(weights, returns_matrix[shift+1:t])
 
-            # else:
-            #     new_weights = strategy.compute_weights(weights, prices_matrix[shift:t])
-            new_weights = strategy.compute_weights(weights, returns_matrix[shift+1:t])
-            """Compute transaction costs"""
-            transaction_costs = strat_value * fees * np.sum(np.abs(new_weights - weights))
-            new_strat_value -= transaction_costs
-
+            if t in rebalancing_dates:
+                """Use Strategy to compute new weights (Rebalancement)"""
+                new_weights = strategy.compute_weights(weights, returns_matrix[shift+1:t])
+                """Compute transaction costs"""
+                transaction_costs = strat_value * fees * np.sum(np.abs(new_weights - weights))
+                new_strat_value -= transaction_costs
+            else: 
+                """Apply drift to weights"""
+                drifted_weights = weights * (1 + daily_returns)
+                new_weights = drifted_weights / drifted_weights.sum()
+                
             """Store the new computed values"""
             stored_weights.append(new_weights)
             stored_values.append(new_strat_value)
@@ -152,10 +165,6 @@ class Backtester:
 
             weights = new_weights
             strat_value = new_strat_value
-
-        if benchmark_returns_matrix is None :
-            stored_benchmark = None
-
         strat_name = self.custom_name if self.custom_name is not None else strategy.__class__.__name__
         return self.output(strat_name, stored_values, stored_weights, stored_benchmark)
             
@@ -188,3 +197,28 @@ class Backtester:
             results_strat = Results.compare_results([results_strat, results_bench])
 
         return results_strat
+    
+    def _get_rebalancing_dates(self, frequency: FrequencyType) -> list[int]:
+        """
+        Repère les indices correspondant aux dates de rebalancement en fonction de la fréquence donnée.
+        
+        Args:
+            frequency (FrequencyType): Fréquence de rebalancement souhaitée.
+        
+        Returns:
+            list[int]: Indices des dates de rebalancement.
+        """
+        if not pd.api.types.is_datetime64_any_dtype(self.dates):
+            self.data_input.df_prices["Date"] = pd.to_datetime(self.data_input.df_prices["Date"])
+
+        rebalancing_dates = []
+        if frequency == FrequencyType.MONTHLY:
+            rebalancing_dates = self.data_input.df_prices.groupby(self.df_prices["Date"].dt.to_period("M")).apply(
+                lambda group: group.index[-1]).tolist()
+        elif frequency == FrequencyType.WEEKLY:
+            rebalancing_dates = self.df_prices.groupby(self.df_prices["Date"].dt.to_period("W")).apply(
+                lambda group: group.index[-1]).tolist()
+        elif frequency == FrequencyType.DAILY:
+            rebalancing_dates = list(range(len(self.dates)))  # Toutes les dates sont incluses
+        
+        return rebalancing_dates

@@ -22,9 +22,9 @@ class InputType(Enum):
     FROM_DATAFRAME = "DataFrame"
 
 class FrequencyType(Enum):
-    DAILY = 252
-    WEEKLY = 52
-    MONTHLY = 12
+    DAILY = 252 # 252 jours de trading dans une année
+    WEEKLY = 52 # 52 semaines dans une année
+    MONTHLY = 12 # 12 mois dans une année
 
 class Index(Enum):
     CAC40 = "cac40"
@@ -46,6 +46,7 @@ class Benchmark(Enum):
     BTC = ("Crypto", "BTCUSDT")
     ETH = ("Crypto", "ETHUSDT")
     SOL = ("Crypto","SOLUSDT")
+    
     def __init__(self, category, symbol):
         self.category = category
         self.symbol = symbol

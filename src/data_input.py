@@ -41,8 +41,8 @@ class DataInput:
         self.file_path : str = file_path
         self.custom_df : pd.DataFrame = custom_df
         self.benchmark : Benchmark = benchmark
-        self.df_prices = self.get_prices()
-        self.df_benchmark = self.get_benchmark()
+        self.df_prices : pd.DataFrame = self.get_prices()
+        self.df_benchmark : pd.DataFrame = self.get_benchmark()
 
     def get_prices(self) -> pd.DataFrame:
         match self.data_type:

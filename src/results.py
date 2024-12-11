@@ -27,9 +27,10 @@ class Results:
     strategy_name : str
     data_frequency : FrequencyType
     ptf_weights : Optional[pd.DataFrame] = None
-
+    rf : float = 0.02
     df_statistics : pd.DataFrame = None
     ptf_value_plot : go.Figure = None
+    ptf_drawdown_plot : go.Figure = None
     ptf_weights_plot : Union[go.Figure, list[go.Figure]] = None
 
     """---------------------------------------------------------------------------------------
@@ -54,30 +55,53 @@ class Results:
 
     @property
     def sharpe_ratio(self) -> float:
-        return self.annualized_return/self.annualized_vol
+        return (self.annualized_return-self.rf)/self.annualized_vol
     
     @property
     def sortino_ratio(self) -> float:
         downside_returns = [r for r in self.ptf_returns if r < 0]
-        downside_std = np.std(downside_returns, ddof=1) * np.sqrt(len(self.ptf_returns))
-        return self.annualized_return / downside_std
-        
+        downside_std = np.std(downside_returns, ddof=1) * np.sqrt(self.data_frequency.value)
+        return (self.annualized_return-self.rf) / downside_std
+    
+    @property
+    def drawdowns(self)-> float:
+        portfolio_values = np.array(self.ptf_values)
+        previous_peaks = np.maximum.accumulate(portfolio_values)
+        drawdowns = (portfolio_values - previous_peaks) / previous_peaks
+        return drawdowns
+
     @property
     def max_drawdown(self) -> float:
-        cumulative_returns = np.cumsum(self.ptf_returns)
-        previous_peaks = np.maximum.accumulate(cumulative_returns)
-        drawdowns = cumulative_returns - previous_peaks
-        max_drawdown = np.min(drawdowns)
+        max_drawdown = np.min(self.drawdowns)
         return max_drawdown
 
-    def get_statistics(self) -> pd.DataFrame:
-        data = {
-            "Metrics": ["Annualized Return", "Volatility", "Sharpe Ratio", "Sortino Ratio", "Max Drawn-Down"],
-            self.strategy_name: [self.annualized_return, self.annualized_vol, self.sharpe_ratio, self.sortino_ratio, self.max_drawdown]
-        }
-        df = pd.DataFrame(data)
-        df[self.strategy_name] = df[self.strategy_name].map(lambda x: "{:.2%}".format(x))
 
+    def get_statistics(self) -> pd.DataFrame:
+        """
+        Compute the basic statistics of the strategy
+        """
+        metrics = [
+            self.annualized_return, 
+            self.annualized_vol, 
+            self.sharpe_ratio, 
+            self.sortino_ratio, 
+            self.max_drawdown
+        ]
+        data = {
+            "Metrics": ["Annualized Return", "Volatility", "Sharpe Ratio", "Sortino Ratio", "Max Drawdown"],
+            self.strategy_name: metrics
+        }
+        formatted_data = []
+
+        for i, metric in enumerate(data[self.strategy_name]):
+            if pd.isnull(metric):  # Si une métrique est NaN
+                formatted_data.append("N/A")
+            elif i in [0, 1, 4]:  # Annualized Return, Volatility, Max Drawdown (en pourcentage)
+                formatted_data.append("{:.2%}".format(metric))
+            else:  # Ratios (Sharpe, Sortino)
+                formatted_data.append("{:.2f}".format(metric))
+        data[self.strategy_name] = formatted_data
+        df = pd.DataFrame(data)
         self.df_statistics = df
 
     """---------------------------------------------------------------------------------------
@@ -86,8 +110,9 @@ class Results:
 
     def create_plots(self) :
         self.strat_plot()
+        self.drawdown_plot()
         self.weights_plot()
-
+        
     def strat_plot(self) :
 
         strat_values = list(self.ptf_values)
@@ -103,6 +128,21 @@ class Results:
                           font=dict(family="Courier New, monospace", size=14,color="RebeccaPurple"))
         
         self.ptf_value_plot = fig
+    
+    def drawdown_plot(self):
+        drawdown_values = list(self.drawdowns*100)
+        dates = list(self.ptf_values.index)
+        if isinstance(all(dates), str):
+            dates = [datetime.strptime(date, "%Y-%m-%d") for date in dates]
+        
+        if self.strategy_name == "Benchmark":
+            fig = go.Figure(data=go.Scatter(x=dates, y=drawdown_values,name=self.strategy_name, line=dict(dash='dot')))
+        else : 
+            fig = go.Figure(data=go.Scatter(x=dates, y=drawdown_values,name=self.strategy_name))
+        fig.update_layout(title='Drawdowns of the strategy', xaxis_title='Dates', yaxis_title='Drawdown Values (%)', 
+                          font=dict(family="Courier New, monospace", size=14,color="RebeccaPurple"))
+        
+        self.drawdown_values_plot = fig
     
     def weights_plot(self):
         if self.ptf_weights is not None :
@@ -137,6 +177,7 @@ class Results:
 
         combined_statistics = Results.combine_df(results)
         fig = Results.combine_value_plot(results)
+        drawdowns_plots = Results.combine_drawdown_plots(results)
         weight_plots = Results.combine_weight_plot(results)
 
         if "Benchmark" in [res.strategy_name for res in results]:
@@ -145,7 +186,7 @@ class Results:
             strat_name = "Comparaison"
 
         return Results(ptf_values=results[0].ptf_values, ptf_weights=results[0].ptf_weights,
-                       df_statistics=combined_statistics, ptf_value_plot=fig,
+                       df_statistics=combined_statistics, ptf_value_plot=fig, ptf_drawdown_plot=drawdowns_plots,
                        ptf_weights_plot=weight_plots, strategy_name=strat_name,
                        data_frequency=results[0].data_frequency)
     
@@ -204,6 +245,29 @@ class Results:
 
         fig.update_layout(title="Multiple Strategies Performance Comparison", xaxis_title="Date",
             yaxis_title="Portfolio Value", font=dict(family="Courier New, monospace", size=14, color="RebeccaPurple"))
+        
+        return fig
+    
+    @staticmethod
+    def combine_drawdown_plots(results : list["Results"]) -> go.Figure:
+        """
+        Combine the drawdown plots by adding each trace or each plot results in a new plotly figure.
+        To avoid adding twice the benchmark plot we check if the benchmark as already been added in the fig by check the scatter names.
+
+        Args:
+            results (list[Results]) : list of different strategy results
+
+        Returns:
+            go.Figure : combined plots of drawdowns values over time
+        """
+        fig = go.Figure()
+        for result in results:
+            for scatter in result.drawdown_values_plot.data:
+                if scatter.name != "Benchmark" or (scatter.name == "Benchmark" and "Benchmark" not in [scatter.name for scatter in fig.data]):
+                    fig.add_trace(scatter)
+
+        fig.update_layout(title="Multiple Strategies Drawdown Comparison", xaxis_title="Date",
+            yaxis_title="Drawdown Values (%)", font=dict(family="Courier New, monospace", size=14, color="RebeccaPurple"))
         
         return fig
     

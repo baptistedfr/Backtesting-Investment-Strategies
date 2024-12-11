@@ -3,10 +3,13 @@ from abc import ABC, abstractmethod
 import numpy as np
 import pandas as pd
 from typing import Optional
+from src.tools import FrequencyType
 
 
 @dataclass
 class AbstractStrategy(ABC):
+
+    rebalance_frequency : FrequencyType = FrequencyType.MONTHLY #Choix de la fréquence de rebalancement
 
     @abstractmethod
     def compute_weights(self, previous_weights: np.ndarray[float], returns: np.ndarray[float]) -> np.ndarray[float]:
