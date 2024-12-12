@@ -75,7 +75,6 @@ class Results:
         max_drawdown = np.min(self.drawdowns)
         return max_drawdown
 
-
     def get_statistics(self) -> pd.DataFrame:
         """
         Compute the basic statistics of the strategy

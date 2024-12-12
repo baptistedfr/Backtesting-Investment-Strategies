@@ -3,6 +3,7 @@ from src.data_inputs.binance_api import BinanceDataInput
 from src.data_inputs.custom_input import CustomDataInput
 from src.data_inputs.df_input import DataFrameDataInput
 from src.data_inputs.yahoo_api import YahooDataInput
+from src.data_inputs.bloomberg_api import BLPApi
 from src.exeptions import InputTypeError
 from dataclasses import dataclass
 from typing import *
@@ -61,6 +62,8 @@ class DataInput:
                 self.tickers = list(set(index_composition['Ticker']))
                 if ("Poids" in index_composition.columns):
                     self.initial_weights = list(index_composition['Poids'])
+            case InputType.FROM_BLOOMBERG:
+                data_requester = BLPApi()
             case _:
                 raise InputTypeError("Unvalid asset price type selected")
 
@@ -75,7 +78,13 @@ class DataInput:
             category_bench = self.benchmark.category
             ticker_bench = [self.benchmark.symbol]
             if category_bench == "Equity":
-                return YahooDataInput().get_data(tickers=ticker_bench,
+                if self.data_type == InputType.FROM_BLOOMBERG:
+                    return BLPApi().get_data(tickers=ticker_bench,
+                                            start_date=self.start_date,
+                                            end_date=self.end_date,
+                                            frequency=self.frequency)
+                else:
+                    return YahooDataInput().get_data(tickers=ticker_bench,
                                             start_date=self.start_date,
                                             end_date=self.end_date,
                                             frequency=self.frequency)
