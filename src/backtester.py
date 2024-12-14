@@ -11,6 +11,7 @@ from functools import cached_property
 
 @dataclass
 class Backtester:
+    
 
     """
     Generic class to backtest strategies from assets prices & a strategy
@@ -92,7 +93,7 @@ class Backtester:
     ---------------------------------------------------------------------------------------"""
 
     @timer
-    def run(self, strategy : AbstractStrategy, initial_amount : float = 1000.0, fees : float = 0.001, delayed_start : str = None) -> Results :
+    def run(self, strategy : AbstractStrategy, initial_amount : float = 1000.0, fees : float = 0.001) -> Results :
         """Run the backtest over the asset period (& compare with the benchmark if selected)
         
         Args:
@@ -115,8 +116,12 @@ class Backtester:
         if strategy.rebalance_frequency.value > self.data_input.frequency.value:
             raise ValueError("We cannot have a frequency of rebalancement more frequent than the frequency of the prices !")
         
+        if strategy.lookback_period * self.data_input.frequency.value > len(self.df_prices):
+            raise ValueError("We don't have enought data to run our backtest !")
+        
         """Get the rebalancing dates"""
         rebalancing_dates = self._get_rebalancing_dates(strategy.rebalance_frequency)
+        strategy.adjusted_lookback_period = self._adjust_lookback_period(strategy.lookback_period)
 
         """Initialisation"""
         strat_value = initial_amount
@@ -131,28 +136,23 @@ class Backtester:
             stored_benchmark = [benchmark_value]
             benchmark_returns_matrix = benchmark_returns_matrix.to_numpy()
 
-        if delayed_start is not None:
-            self.start_backtest = self.dates[self.dates == delayed_start].index[0]
-        else :
-            self.start_backtest = 1
-
-        for shift, t in enumerate(range(self.start_backtest + 1, self.backtest_length)):
+        for t in range(strategy.adjusted_lookback_period+1, self.backtest_length):
             
             """Compute the portfolio & benchmark new value"""
             daily_returns = np.nan_to_num(returns_matrix[t], nan=0.0)
-            new_strat_value = strat_value * (1 + np.dot(weights, daily_returns))
+            return_strat = np.dot(weights, daily_returns)
+            new_strat_value = strat_value * (1 + return_strat)
 
             if t in rebalancing_dates:
                 """Use Strategy to compute new weights (Rebalancement)"""
-                new_weights = strategy.compute_weights(weights, returns_matrix[shift+1:t])
+                new_weights = strategy.get_position(returns_matrix[:t+1], weights)
                 """Compute transaction costs"""
                 transaction_costs = strat_value * fees * np.sum(np.abs(new_weights - weights))
                 new_strat_value -= transaction_costs
             else: 
                 """Apply drift to weights"""
-                drifted_weights = weights * (1 + daily_returns)
-                new_weights = drifted_weights / drifted_weights.sum()
-                
+                new_weights = weights * (1 + daily_returns)/(1 + return_strat)
+
             """Store the new computed values"""
             stored_weights.append(new_weights)
             stored_values.append(new_strat_value)
@@ -166,10 +166,10 @@ class Backtester:
             weights = new_weights
             strat_value = new_strat_value
         strat_name = self.custom_name if self.custom_name is not None else strategy.__class__.__name__
-        return self.output(strat_name, stored_values, stored_weights, stored_benchmark)
+        return self.output(strat_name, stored_values, stored_weights, stored_benchmark, strategy.adjusted_lookback_period)
             
     @timer
-    def output(self, strategy_name : str, stored_values : list[float], stored_weights : list[float], stored_benchmark : list[float] = None) -> Results :
+    def output(self, strategy_name : str, stored_values : list[float], stored_weights : list[float], stored_benchmark : list[float] = None, index_start = 0) -> Results :
         """Create the output for the strategy and its benchmark if selected
         
         Args:
@@ -182,15 +182,15 @@ class Backtester:
             Results: A Results object containing statistics and comparison plot for the strategy (& the benchmark if selected)
         """
 
-        self.ptf_weights = pd.DataFrame(stored_weights, index=self.dates[self.start_backtest:], columns=self.df_returns.columns)
-        self.ptf_values = pd.Series(stored_values, index=self.dates[self.start_backtest:])
+        self.ptf_weights = pd.DataFrame(stored_weights, index=self.dates[index_start:], columns=self.df_returns.columns)
+        self.ptf_values = pd.Series(stored_values, index=self.dates[index_start:])
         results_strat = Results(ptf_values=self.ptf_values, ptf_weights=self.ptf_weights, strategy_name=strategy_name, data_frequency=self.data_input.frequency)
         results_strat.get_statistics()
         results_strat.create_plots()
 
         if stored_benchmark is not None :
 
-            benchmark_values = pd.Series(stored_benchmark, index=self.dates[self.start_backtest:])
+            benchmark_values = pd.Series(stored_benchmark, index=self.dates[index_start:])
             results_bench = Results(ptf_values=benchmark_values, strategy_name="Benchmark", data_frequency=self.data_input.frequency)
             results_bench.get_statistics()
             results_bench.create_plots()
@@ -222,3 +222,6 @@ class Backtester:
             rebalancing_dates = list(range(len(self.dates)))  # Toutes les dates sont incluses
         
         return rebalancing_dates
+    
+    def _adjust_lookback_period(self, lookback_period : int) -> int:
+        return int(lookback_period * self.data_input.frequency.value)

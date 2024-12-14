@@ -6,6 +6,7 @@ from typing import Optional
 import pandas as pd
 import numpy as np
 from src.tools import FrequencyType
+from functools import cached_property
 
 @dataclass
 class Results:
@@ -37,7 +38,7 @@ class Results:
     -                                 Generate Statistics                                    -
     ---------------------------------------------------------------------------------------"""
 
-    @property
+    @cached_property
     def ptf_returns(self) -> list[float]:
         return list(pd.Series(self.ptf_values).pct_change().iloc[1:])
     
@@ -49,7 +50,7 @@ class Results:
     def annualized_return(self) -> float:
         return (self.ptf_values.iloc[-1]/self.ptf_values.iloc[0])**(self.data_frequency.value/len(self.ptf_values)) - 1
 
-    @property
+    @cached_property
     def annualized_vol(self) -> float:
         return np.std(self.ptf_returns) * np.sqrt(self.data_frequency.value)
 
@@ -75,6 +76,44 @@ class Results:
         max_drawdown = np.min(self.drawdowns)
         return max_drawdown
 
+    def compute_VaR(self, alpha: float = 0.95) -> float:
+        """
+        Compute the Value at Risk (VaR) of the strategy at the given confidence level (alpha).
+
+        Args:
+            alpha (float): Confidence level for the VaR calculation (e.g., 0.95 for 95% confidence).
+
+        Returns:
+            float: The computed Value at Risk (VaR).
+
+        Raises:
+            ValueError: If alpha is not in the range (0, 1).
+            ValueError: If the portfolio returns are empty.
+        """
+        # Validate inputs
+        if not (0 < alpha < 1):
+            raise ValueError("Alpha must be a float between 0 and 1.")
+        if len(self.ptf_returns) == 0:
+            raise ValueError("Portfolio returns cannot be empty.")
+        # Compute VaR
+        var = np.percentile(np.array(self.ptf_returns), (1 - alpha) * 100)
+        return var
+    
+    def compute_CVaR(self, alpha: float = 0.95) -> float:
+        """
+        Compute the Conditional Value at Risk (CVaR) of the strategy at the given confidence level (alpha).
+
+        Args:
+            alpha (float): Confidence level for the CVaR calculation (e.g., 0.95 for 95% confidence).
+
+        Returns:
+            float: The computed Conditional Value at Risk (CVaR).
+        """
+        var_threshold = self.compute_VaR(alpha)
+        # Compute CVaR as the average of returns below the VaR threshold
+        cvar = np.mean([r for r in self.ptf_returns if r <= var_threshold])
+        return cvar
+
     def get_statistics(self) -> pd.DataFrame:
         """
         Compute the basic statistics of the strategy
@@ -84,10 +123,12 @@ class Results:
             self.annualized_vol, 
             self.sharpe_ratio, 
             self.sortino_ratio, 
-            self.max_drawdown
+            self.max_drawdown,
+            self.compute_VaR(),
+            self.compute_CVaR(),
         ]
         data = {
-            "Metrics": ["Annualized Return", "Volatility", "Sharpe Ratio", "Sortino Ratio", "Max Drawdown"],
+            "Metrics": ["Annualized Return", "Volatility", "Sharpe Ratio", "Sortino Ratio", "Max Drawdown", "VaR 95%", "CVaR 95%"],
             self.strategy_name: metrics
         }
         formatted_data = []
@@ -95,7 +136,7 @@ class Results:
         for i, metric in enumerate(data[self.strategy_name]):
             if pd.isnull(metric):  # Si une métrique est NaN
                 formatted_data.append("N/A")
-            elif i in [0, 1, 4]:  # Annualized Return, Volatility, Max Drawdown (en pourcentage)
+            elif i in [0, 1, 4, 5, 6]:  # Annualized Return, Volatility, Max Drawdown (en pourcentage)
                 formatted_data.append("{:.2%}".format(metric))
             else:  # Ratios (Sharpe, Sortino)
                 formatted_data.append("{:.2f}".format(metric))
@@ -115,33 +156,35 @@ class Results:
     def strat_plot(self) :
 
         strat_values = list(self.ptf_values)
-        dates = list(self.ptf_values.index)
-        if isinstance(all(dates), str):
-            dates = [datetime.strptime(date, "%Y-%m-%d") for date in dates]
+        dates = pd.to_datetime(self.ptf_values.index)
         
         if self.strategy_name == "Benchmark":
             fig = go.Figure(data=go.Scatter(x=dates, y=strat_values,name=self.strategy_name, line=dict(dash='dot')))
         else : 
             fig = go.Figure(data=go.Scatter(x=dates, y=strat_values,name=self.strategy_name))
-        fig.update_layout(title='Strategy performance', xaxis_title='Dates', yaxis_title='Portfolio Values', 
+
+        fig.update_layout(title=f'Strategy performance {self.strategy_name}', 
+                          xaxis_title='Dates', 
+                          yaxis_title='Portfolio Values', 
                           font=dict(family="Courier New, monospace", size=14,color="RebeccaPurple"))
         
         self.ptf_value_plot = fig
     
     def drawdown_plot(self):
         drawdown_values = list(self.drawdowns*100)
-        dates = list(self.ptf_values.index)
-        if isinstance(all(dates), str):
-            dates = [datetime.strptime(date, "%Y-%m-%d") for date in dates]
+        dates = pd.to_datetime(self.ptf_values.index)
         
         if self.strategy_name == "Benchmark":
             fig = go.Figure(data=go.Scatter(x=dates, y=drawdown_values,name=self.strategy_name, line=dict(dash='dot')))
         else : 
             fig = go.Figure(data=go.Scatter(x=dates, y=drawdown_values,name=self.strategy_name))
-        fig.update_layout(title='Drawdowns of the strategy', xaxis_title='Dates', yaxis_title='Drawdown Values (%)', 
+
+        fig.update_layout(title=f'Drawdowns of the strategy {self.strategy_name}', 
+                          xaxis_title='Dates', 
+                          yaxis_title='Drawdown Values (%)', 
                           font=dict(family="Courier New, monospace", size=14,color="RebeccaPurple"))
         
-        self.drawdown_values_plot = fig
+        self.ptf_drawdown_plot = fig
     
     def weights_plot(self):
         if self.ptf_weights is not None :
@@ -204,9 +247,11 @@ class Results:
         '''Combine the statistics DataFrames'''
         combined_statistics = pd.DataFrame(columns=["Metrics"])
         is_benchmark= False
+        metrics_order = []
         for result in results:
             df_stats = result.df_statistics.copy()
-            
+            if not metrics_order:
+                metrics_order = df_stats["Metrics"].tolist()
             '''Get only one backtest column'''
             if "Benchmark" in df_stats.columns and is_benchmark is False:
                 is_benchmark = True
@@ -221,6 +266,10 @@ class Results:
         if is_benchmark:
             cols+=["Benchmark"]
         combined_statistics = combined_statistics[cols]
+        combined_statistics["Metrics"] = pd.Categorical(
+            combined_statistics["Metrics"], categories=metrics_order, ordered=True
+        )
+        combined_statistics = combined_statistics.sort_values("Metrics").reset_index(drop=True)
 
         return combined_statistics
     
@@ -237,10 +286,12 @@ class Results:
             go.Figure : combined plots of strategy values over time
         """
         fig = go.Figure()
+        existing_names = set()
         for result in results:
             for scatter in result.ptf_value_plot.data:
-                if scatter.name != "Benchmark" or (scatter.name == "Benchmark" and "Benchmark" not in [scatter.name for scatter in fig.data]):
+                if scatter.name not in existing_names:
                     fig.add_trace(scatter)
+                    existing_names.add(scatter.name)
 
         fig.update_layout(title="Multiple Strategies Performance Comparison", xaxis_title="Date",
             yaxis_title="Portfolio Value", font=dict(family="Courier New, monospace", size=14, color="RebeccaPurple"))
@@ -260,10 +311,12 @@ class Results:
             go.Figure : combined plots of drawdowns values over time
         """
         fig = go.Figure()
+        existing_names = set()
         for result in results:
-            for scatter in result.drawdown_values_plot.data:
-                if scatter.name != "Benchmark" or (scatter.name == "Benchmark" and "Benchmark" not in [scatter.name for scatter in fig.data]):
+            for scatter in result.ptf_drawdown_plot.data:
+                if scatter.name not in existing_names:
                     fig.add_trace(scatter)
+                    existing_names.add(scatter.name)
 
         fig.update_layout(title="Multiple Strategies Drawdown Comparison", xaxis_title="Date",
             yaxis_title="Drawdown Values (%)", font=dict(family="Courier New, monospace", size=14, color="RebeccaPurple"))

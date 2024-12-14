@@ -8,15 +8,55 @@ from src.tools import FrequencyType
 
 @dataclass
 class AbstractStrategy(ABC):
+    
+    """Abstract class to represent a strategy used in backtesting.
+    Args:
+        rebalance_frequency : FrequencyType : Choice of the rebalancing frequence of the strategy. Default Value is Monthly rebalancement
+        lookback_period : float : The historical period (%year) considered by the strategy to calculate indicators or make decisions. Default value is one year
+        adjusted_lookback_period : int : The historical period adjusted by the frequency of the data. 
+    """
 
-    rebalance_frequency : FrequencyType = FrequencyType.MONTHLY #Choix de la fréquence de rebalancement
+    """---------------------------------------------------------------------------------------
+    -                                 Class arguments                                        -
+    ---------------------------------------------------------------------------------------"""
+
+    rebalance_frequency : FrequencyType = FrequencyType.MONTHLY 
+    lookback_period : float = 1.00 # (1 an) de données  
+    adjusted_lookback_period: Optional[int] = None  
+
+    """---------------------------------------------------------------------------------------
+    -                                 Class methods                                       -
+    ---------------------------------------------------------------------------------------"""
 
     @abstractmethod
-    def compute_weights(self, previous_weights: np.ndarray[float], returns: np.ndarray[float]) -> np.ndarray[float]:
-        """Method used to calculate the new weights of the strategy from given information"""
+    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
+        """
+        Mandatory method to be implemented by all strategies.
+        Calculates the new position based on historical data and the current position.
+
+        Args:
+            historical_data : Historical data required for decision-making (e.g., prices, returns, etc.).
+            current_position : The current position of the strategy (e.g., current asset weights).
+        
+        Returns:
+            The new positions in a numpy array
+        """
+        pass
+
+    def fit(self, data):
+        """
+        Optional method.
+        Can be used to train or calibrate the strategy (does nothing by default).
+        
+        Args:
+            data : Data required to train the strategy.
+        """
         pass
 
     def compute_na(self, weights, returns):
+        """
+        Method to handle NaN values by setting weights to 0 where returns are NaN and adjusts the weights correspondously
+        """
         weights[np.isnan(returns)] = 0
         return weights
 
@@ -24,32 +64,20 @@ class AbstractStrategy(ABC):
 class TrendFollowingStrategy(AbstractStrategy):
     """Invest in assets that have shown a positive trend"""
 
-    def compute_weights(self, previous_weights: np.ndarray[float], returns: np.ndarray[float]) -> np.ndarray[float]:
-        mean_returns = returns.mean(axis=0)
+    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
+        mean_returns = historical_data.mean(axis=0)
         positive_trend_assets = mean_returns > 0
         new_weights = positive_trend_assets / np.sum(positive_trend_assets)
         return new_weights
-
-
-'''@dataclass
-class ValueStrategy(AbstractStrategy):
-    """
-    Invest in undervalued assets.
-    """
-
-    def compute_weights(self, previous_weights: np.ndarray, df_prices: pd.DataFrame) -> np.ndarray:
-        # to complete by getting the PE ratios
-        new_weights = undervalued_assets / np.sum(undervalued_assets)
-        return new_weights'''
 
 
 @dataclass
 class MomentumStrategy(AbstractStrategy):
     """Invest in assets that have shown positive returns during a recent period"""
 
-    def compute_weights(self, previous_weights: np.ndarray[float], returns: np.ndarray[float]) -> np.ndarray[float]:
+    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
 
-        cumulative_returns = returns[-1]
+        cumulative_returns = historical_data[-1]
         positive_momentum_assets = cumulative_returns > 0
         new_weights = positive_momentum_assets / np.sum(positive_momentum_assets)
         return new_weights
@@ -59,12 +87,12 @@ class MomentumStrategy(AbstractStrategy):
 class LowVolatilityStrategy(AbstractStrategy):
     """Invest in assets with low volatility"""
 
-    def compute_weights(self, previous_weights: np.ndarray[float], returns: np.ndarray[float]) -> np.ndarray[float]:
-        volatility = returns.std(axis=0)
+    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
+        volatility = historical_data.std(axis=0)
 
         # If all assets have a volatility of 0, we keep the previous weights
         if np.all(volatility == 0):
-            return previous_weights
+            return current_position
 
         # Inverse of volatility is used to invest more in low volatility assets
         low_volatility_assets = 1 / volatility
@@ -100,9 +128,9 @@ class LowVolatilityStrategy(AbstractStrategy):
 class RandomFluctuationStrategy(AbstractStrategy):
     """Return weights with random fluctuations around the previous weights"""
 
-    def compute_weights(self, previous_weights: np.ndarray[float], returns) -> np.ndarray[float]:
-        new_weights = previous_weights + np.random.random(previous_weights.shape) / 4
-        new_weights = self.compute_na(new_weights, returns[-1])
+    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
+        new_weights = current_position + np.random.random(current_position.shape) / 4
+        new_weights = self.compute_na(new_weights, historical_data[-1])
         return new_weights / np.sum(new_weights)
 
 
@@ -116,7 +144,7 @@ class FocusedStrategy(AbstractStrategy):
     """
     asset_index: int = 0
 
-    def compute_weights(self, previous_weights: np.ndarray[float]) -> np.ndarray[float]:
-        new_weights = np.zeros_like(previous_weights)
+    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
+        new_weights = np.zeros_like(current_position)
         new_weights[self.asset_index] = 1.0
         return new_weights
