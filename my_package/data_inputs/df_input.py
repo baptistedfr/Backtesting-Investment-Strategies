@@ -32,7 +32,7 @@ class DataFrameDataInput(AbstractDataInput):
         if start_date is not None and end_date is not None :
             if start_date not in self.custom_df["Date"] or end_date not in self.custom_df["Date"]:
                 raise BadInput("Selected start or end date not present in dataframe")
-            self.custom_df['Date'] = pd.to_datetime(df['Date'])
+            self.custom_df['Date'] = pd.to_datetime(self.custom_df['Date'])
             self.custom_df = self.custom_df[(self.custom_df['Date'] >= start_date) & (self.custom_df['Date'] <= end_date)]
 
         return self.custom_df
