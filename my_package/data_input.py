@@ -1,15 +1,11 @@
-from src.tools import InputType, FrequencyType, Index, Benchmark
-from src.data_inputs.binance_api import BinanceDataInput
-from src.data_inputs.custom_input import CustomDataInput
-from src.data_inputs.df_input import DataFrameDataInput
-from src.data_inputs.yahoo_api import YahooDataInput
-from src.data_inputs.bloomberg_api import BLPApi
-from src.exeptions import InputTypeError
 from dataclasses import dataclass
 from typing import *
 from datetime import datetime
 import pandas as pd
 from functools import cached_property
+from .tools import InputType, FrequencyType, Index, Benchmark
+from .data_inputs import BinanceDataInput, CustomDataInput, DataFrameDataInput, YahooDataInput, BLPApi
+from .exceptions import InputTypeError
 
 class DataInput:
     """

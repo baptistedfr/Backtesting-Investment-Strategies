@@ -3,10 +3,10 @@ from abc import ABC, abstractmethod
 import numpy as np
 import pandas as pd
 from typing import Optional
-from src.tools import FrequencyType
 from scipy.optimize import Bounds
 from scipy.optimize import LinearConstraint
 from scipy.optimize import minimize
+from .tools import FrequencyType
 
 @dataclass
 class AbstractStrategy(ABC):

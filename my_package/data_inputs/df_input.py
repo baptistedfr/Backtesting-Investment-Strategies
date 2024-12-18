@@ -1,5 +1,5 @@
-from src.data_inputs.abstract_source import AbstractDataInput
-from src.exeptions import BadInput, InvalidFormat
+from .abstract_source import AbstractDataInput
+from ..exceptions import BadInput, InvalidFormat
 from dataclasses import dataclass
 import pandas as pd
 import os.path

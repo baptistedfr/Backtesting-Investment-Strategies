@@ -1,9 +1,9 @@
-from src.strategy import AbstractStrategy
-from src.data_input import DataInput
+from .strategy import AbstractStrategy
+from .data_input import DataInput
 from dataclasses import dataclass
-from src.results import Results
+from .results import Results
 from datetime import datetime
-from src.tools import timer, FrequencyType
+from .tools import timer, FrequencyType
 from typing import Optional
 import pandas as pd
 import numpy as np

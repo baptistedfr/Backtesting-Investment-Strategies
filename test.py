@@ -1,9 +1,8 @@
-from src.tools import InputType, FrequencyType, Index, Benchmark
-from src.strategy import *
-from src.backtester import Backtester
-from src.data_input import DataInput
-from src.results import Results
-import pandas as pd
+from my_package.tools import InputType, FrequencyType, Index, Benchmark
+from my_package.strategy import *
+from my_package import Backtester
+from my_package import DataInput
+from my_package import Results
 
 data = DataInput(data_type=InputType.EQUITY,
                         tickers=['GLE.PA', 'OR.PA','MC.PA','VIV.PA','TTE.PA'],

@@ -2,8 +2,8 @@ import blpapi
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from src.tools import FrequencyType
-from src.exeptions import FrequencyError, DataError
+from ..tools import FrequencyType
+from ..exceptions import FrequencyError, DataError
 
 class BLPApi():
     #-----------------------------------------------------------------------------------------------------    

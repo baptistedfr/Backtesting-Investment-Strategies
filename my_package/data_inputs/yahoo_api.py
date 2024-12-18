@@ -1,6 +1,6 @@
-from src.data_inputs.abstract_source import AbstractDataInput
-from src.exeptions import FrequencyError, DataError
-from src.tools import FrequencyType
+from .abstract_source import AbstractDataInput
+from ..exceptions import FrequencyError, DataError
+from ..tools import FrequencyType
 from dataclasses import dataclass
 import yfinance as yf
 import pandas as pd

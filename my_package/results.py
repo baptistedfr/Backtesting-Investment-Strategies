@@ -5,8 +5,8 @@ import plotly.graph_objects as go
 from typing import Optional
 import pandas as pd
 import numpy as np
-from src.tools import FrequencyType
 from functools import cached_property
+from .tools import FrequencyType
 
 @dataclass
 class Results:
