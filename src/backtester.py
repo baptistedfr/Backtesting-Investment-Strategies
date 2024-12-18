@@ -7,6 +7,7 @@ from src.tools import timer, FrequencyType
 from typing import Optional
 import pandas as pd
 import numpy as np
+from tqdm import tqdm
 from functools import cached_property
 
 @dataclass
@@ -136,7 +137,7 @@ class Backtester:
             stored_benchmark = [benchmark_value]
             benchmark_returns_matrix = benchmark_returns_matrix.to_numpy()
 
-        for t in range(strategy.adjusted_lookback_period+1, self.backtest_length):
+        for t in tqdm(range(strategy.adjusted_lookback_period+1, self.backtest_length),desc="Running Backtesting"):
             
             """Compute the portfolio & benchmark new value"""
             daily_returns = np.nan_to_num(returns_matrix[t], nan=0.0)

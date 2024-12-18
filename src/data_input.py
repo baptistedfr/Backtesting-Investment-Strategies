@@ -44,6 +44,14 @@ class DataInput:
         self.benchmark : Benchmark = benchmark
         self.df_prices : pd.DataFrame = self.get_prices()
         self.df_benchmark : pd.DataFrame = self.get_benchmark()
+        if (len(self.df_prices)!=len(self.df_benchmark)):
+            print("Attention, le benchmark et les datas n'ont pas le meme nombre de lignes, nous allons conserver les lignes en commun!\n")
+            print('Taille des datas:',len(self.df_prices))
+            print('Taille du benchmark:',len(self.df_benchmark))
+            self.df_prices = self.df_prices[self.df_prices['Date'].isin(self.df_benchmark['Date'].unique())]
+            self.df_benchmark = self.df_benchmark[self.df_benchmark['Date'].isin(self.df_prices['Date'].unique())]
+            self.df_prices = self.df_prices.sort_values(by='Date').reset_index(drop=True)
+            self.df_benchmark = self.df_benchmark.sort_values(by='Date').reset_index(drop=True)
 
     def get_prices(self) -> pd.DataFrame:
         match self.data_type:
