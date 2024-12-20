@@ -27,7 +27,6 @@ class Backtester:
     ---------------------------------------------------------------------------------------"""
 
     data_input : DataInput
-    custom_name : str = None
 
     ptf_weights : pd.DataFrame = None
     ptf_values : pd.Series = None
@@ -94,7 +93,7 @@ class Backtester:
     ---------------------------------------------------------------------------------------"""
 
     @timer
-    def run(self, strategy : AbstractStrategy, initial_amount : float = 1000.0, fees : float = 0.001) -> Results :
+    def run(self, strategy : AbstractStrategy, initial_amount : float = 1000.0, fees : float = 0.001, custom_name : str = None) -> Results :
         """Run the backtest over the asset period (& compare with the benchmark if selected)
         
         Args:
@@ -166,7 +165,7 @@ class Backtester:
 
             weights = new_weights
             strat_value = new_strat_value
-        strat_name = self.custom_name if self.custom_name is not None else strategy.__class__.__name__
+        strat_name = custom_name if custom_name is not None else strategy.__class__.__name__
         return self.output(strat_name, stored_values, stored_weights, stored_benchmark, strategy.adjusted_lookback_period)
             
     @timer

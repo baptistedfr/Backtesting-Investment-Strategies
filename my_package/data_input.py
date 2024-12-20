@@ -5,7 +5,7 @@ import pandas as pd
 from functools import cached_property
 from .tools import InputType, FrequencyType, Index, Benchmark
 from .data_inputs import BinanceDataInput, CustomDataInput, DataFrameDataInput, YahooDataInput, BLPApi
-from .exceptions import InputTypeError
+from .exceptions import InputTypeError, BadInput
 
 class DataInput:
     """
@@ -24,11 +24,21 @@ class DataInput:
 
         df_prices (pd.DataFrame) : asset prices
     """
-    def __init__(self, data_type : InputType, start_date : datetime = None, end_date : datetime = None, tickers : list[str] = None, 
-                 initial_weights : Optional[list[float]] = None, frequency : FrequencyType = None, index : Index = None,
-                 file_path : str = None, custom_df : pd.DataFrame = None, benchmark : Benchmark = None):
+    def __init__(self, data_type : InputType, 
+                 start_date : datetime = None, 
+                 end_date : datetime = None, 
+                 frequency : FrequencyType = None, 
+                 tickers : list[str] = None, 
+                 initial_weights : Optional[list[float]] = None, index : Index = None,
+                 file_path : str = None, 
+                 custom_df : pd.DataFrame = None, 
+                 benchmark : Benchmark = None):
         
         self.data_type : InputType = data_type
+
+        if (benchmark is not None and (start_date is None or end_date is None)):
+            raise BadInput("Merci d'entrer une date de début et de fin lors de l'ajout d'un benchmark")
+
         self.start_date : datetime = start_date
         self.end_date : datetime = end_date
         self.tickers : list[str] = tickers
@@ -40,7 +50,8 @@ class DataInput:
         self.benchmark : Benchmark = benchmark
         self.df_prices : pd.DataFrame = self.get_prices()
         self.df_benchmark : pd.DataFrame = self.get_benchmark()
-        if (len(self.df_prices)!=len(self.df_benchmark)):
+        
+        if (self.df_benchmark is not None) and (len(self.df_prices) != len(self.df_benchmark)):
             print("Attention, le benchmark et les datas n'ont pas le meme nombre de lignes, nous allons conserver les lignes en commun!\n")
             print('Taille des datas:',len(self.df_prices))
             print('Taille du benchmark:',len(self.df_benchmark))

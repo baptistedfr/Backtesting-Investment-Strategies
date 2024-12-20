@@ -188,6 +188,9 @@ class Results:
     
     def weights_plot(self):
         if self.ptf_weights is not None :
+            min_weight = self.ptf_weights.min().min()
+            max_weight = 1
+
             fig = go.Figure()
             '''Attribut "stackgroup" permet d'empiler les plots'''
             for column in self.ptf_weights.columns:
@@ -195,7 +198,7 @@ class Results:
                                          mode='lines', stackgroup='one', name=column))
 
             fig.update_layout(title=f"Evolution of portfolio weights for strategy : {self.strategy_name}", xaxis_title="Date",
-                yaxis_title="Weight (%)", yaxis=dict(tickformat=".0%", range=[0, 1]),
+                yaxis_title="Weight (%)", yaxis=dict(tickformat=".0%", range=[min_weight, max_weight]),
                 legend_title="Assets", hovermode="x unified")
             
             self.ptf_weights_plot = fig

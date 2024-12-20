@@ -4,12 +4,12 @@ from my_package import Backtester
 from my_package import DataInput
 from my_package import Results
 
-data = DataInput(data_type=InputType.EQUITY,
-                        tickers=['GLE.PA', 'OR.PA','MC.PA','VIV.PA','TTE.PA'],
-                        start_date='2015-10-01',
-                        end_date='2024-10-01',
-                        frequency=FrequencyType.WEEKLY,
-                        benchmark=Benchmark.CAC40)
+# data = DataInput(data_type=InputType.EQUITY,
+#                         tickers=['GLE.PA', 'OR.PA','MC.PA','VIV.PA','TTE.PA'],
+#                         start_date='2015-10-01',
+#                         end_date='2024-10-01',
+#                         frequency=FrequencyType.WEEKLY,
+#                         benchmark=Benchmark.CAC40)
 
 # data = DataInput(data_type=InputType.CRYPTO,
 #                         tickers=['BTCUSDT','ETHUSDT','PEPEUSDT','DOGEUSDT','SOLUSDT'],
@@ -24,6 +24,7 @@ data = DataInput(data_type=InputType.EQUITY,
 
 # print(data.df_prices)
 # df = pd.read_excel("data/custom.xlsx")
+# print(df)
 # data = DataInput(data_type=InputType.FROM_DATAFRAME,
 #                 custom_df=df,
 #                 benchmark=Benchmark.CAC40,
@@ -31,31 +32,35 @@ data = DataInput(data_type=InputType.EQUITY,
 
 
 
-# data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
-#                 index=Index.CAC40,
-#                 start_date='2010-10-01',
-#                 end_date='2024-10-01',
-#                 frequency=FrequencyType.WEEKLY,
-#                 benchmark=Benchmark.CAC40)
+data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
+                index=Index.CAC40,
+                start_date='2010-10-01',
+                end_date='2024-10-01',
+                frequency=FrequencyType.WEEKLY,
+                benchmark=Benchmark.CAC40)
 
 
+backtest = Backtester(data_input=data)
 
 # # prices = data.df_prices
 # strategy = RandomFluctuationStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0)
 # backtest = Backtester(data_input=data, custom_name="Fees=0.1%")
 
-strategy = OptimalSharpeStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=2)
-backtest = Backtester(data_input=data, custom_name="Optimal Sharpe")
+#strategy = OptimalSharpeStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0)
+
 
 # # # # weight = backtest.initial_weights_value
 # # # # print(weight)
-results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.000)
+#results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.000)
 
-strategy2 = RandomFluctuationStrategy(rebalance_frequency = FrequencyType.WEEKLY, lookback_period=1)
-backtest2 = Backtester(data_input=data, custom_name="No Fees")
-results_random2 = backtest2.run(strategy=strategy2, initial_amount=1000.0, fees=0.0)
+strategy2 = RandomFluctuationStrategy(rebalance_frequency = FrequencyType.WEEKLY, lookback_period=0)
 
-combined_results = Results.compare_results([results_random, results_random2])
+results_random2 = backtest.run(strategy=strategy2, initial_amount=1000.0, fees=0.0)
+
+strategy3 = EqualWeightStrategy(rebalance_frequency = FrequencyType.MONTHLY, lookback_period=0)
+results3 = backtest.run(strategy=strategy3, initial_amount=1000.0, fees=0.0)
+
+combined_results = Results.compare_results([results_random2, results3])
 print(combined_results.df_statistics.head(10))
 combined_results.ptf_value_plot.show()
 combined_results.ptf_drawdown_plot.show()

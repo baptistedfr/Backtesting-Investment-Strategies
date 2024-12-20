@@ -169,7 +169,17 @@ class RandomFluctuationStrategy(AbstractStrategy):
         new_weights = self.compute_na(new_weights, historical_data[-1])
         return new_weights / np.sum(new_weights)
 
-
+@dataclass
+class EqualWeightStrategy(AbstractStrategy):
+    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
+        """
+        Allocates equal weights to all assets in the portfolio
+        """
+        n_assets = historical_data.shape[1]
+        new_weights = np.ones(n_assets) / n_assets
+        new_weights = self.compute_na(new_weights, historical_data[-1])
+        return new_weights / np.sum(new_weights)
+    
 @dataclass
 class FocusedStrategy(AbstractStrategy):
     """
