@@ -97,5 +97,6 @@ class BinanceDataInput(AbstractDataInput):
                 data_final = results_retreated
             else:
                 data_final = data_final.merge(results_retreated, on="Close time", how="left")
-
-        return data_final.rename(columns={"Close time":"Date"})
+        data_final = data_final.rename(columns={"Close time":"Date"})
+        data_final['Date']=pd.to_datetime(data_final['Date'])
+        return data_final

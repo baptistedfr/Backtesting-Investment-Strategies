@@ -3,26 +3,30 @@ from my_package.strategy import *
 from my_package import Backtester
 from my_package import DataInput
 from my_package import Results
-
-# data = DataInput(data_type=InputType.EQUITY,
-#                         tickers=['GLE.PA', 'OR.PA','MC.PA','VIV.PA','TTE.PA'],
-#                         start_date='2015-10-01',
-#                         end_date='2024-10-01',
-#                         frequency=FrequencyType.WEEKLY,
-#                         benchmark=Benchmark.CAC40)
+import yfinance as yf
+data = DataInput(data_type=InputType.EQUITY,
+                        tickers=['GLE.PA', 'OR.PA','MC.PA','VIV.PA','TTE.PA'],
+                        start_date='2015-10-01',
+                        end_date='2024-10-01',
+                        frequency=FrequencyType.WEEKLY,
+                        benchmark=Benchmark.CAC40)
 
 # data = DataInput(data_type=InputType.CRYPTO,
 #                         tickers=['BTCUSDT','ETHUSDT','PEPEUSDT','DOGEUSDT','SOLUSDT'],
 #                         start_date='2018-10-01',
 #                         end_date='2024-11-15',
 #                         frequency=FrequencyType.WEEKLY,
-#                         benchmark = Benchmark.BTC)
+#                         )
 
 
 # data = DataInput(data_type=InputType.FROM_FILE,
-#                         file_path='data/custom.xlsx')
+#                         file_path='data/custom.xlsx',
+#                         benchmark=Benchmark.CAC40,
+#                         )
 
 # print(data.df_prices)
+
+
 # df = pd.read_excel("data/custom.xlsx")
 # print(df)
 # data = DataInput(data_type=InputType.FROM_DATAFRAME,
@@ -32,35 +36,34 @@ from my_package import Results
 
 
 
-data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
-                index=Index.CAC40,
-                start_date='2010-10-01',
-                end_date='2024-10-01',
-                frequency=FrequencyType.WEEKLY,
-                benchmark=Benchmark.CAC40)
+# data = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
+#                 index=Index.CAC40,
+#                 start_date='2010-10-01',
+#                 end_date='2024-10-01',
+#                 frequency=FrequencyType.WEEKLY,
+#                 benchmark=Benchmark.CAC40)
 
 
 backtest = Backtester(data_input=data)
 
 # # prices = data.df_prices
-# strategy = RandomFluctuationStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0)
-# backtest = Backtester(data_input=data, custom_name="Fees=0.1%")
+strategy = RandomFluctuationStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0)
 
-#strategy = OptimalSharpeStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0)
+strategy_sharpe = OptimalSharpeStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0.5)
 
 
 # # # # weight = backtest.initial_weights_value
 # # # # print(weight)
-#results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.000)
+results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.000)
 
-strategy2 = RandomFluctuationStrategy(rebalance_frequency = FrequencyType.WEEKLY, lookback_period=0)
+# strategy2 = RandomFluctuationStrategy(rebalance_frequency = FrequencyType.WEEKLY, lookback_period=0)
 
-results_random2 = backtest.run(strategy=strategy2, initial_amount=1000.0, fees=0.0)
+results_random2 = backtest.run(strategy=strategy_sharpe, initial_amount=1000.0, fees=0.0)
 
 strategy3 = EqualWeightStrategy(rebalance_frequency = FrequencyType.MONTHLY, lookback_period=0)
 results3 = backtest.run(strategy=strategy3, initial_amount=1000.0, fees=0.0)
 
-combined_results = Results.compare_results([results_random2, results3])
+combined_results = Results.compare_results([results_random,results_random2, results3])
 print(combined_results.df_statistics.head(10))
 combined_results.ptf_value_plot.show()
 combined_results.ptf_drawdown_plot.show()

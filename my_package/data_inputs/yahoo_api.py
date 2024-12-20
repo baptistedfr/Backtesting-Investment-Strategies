@@ -44,12 +44,12 @@ class YahooDataInput(AbstractDataInput):
         """
 
         freq = self._get_freq(frequency)
-        data : pd.DataFrame = yf.download(tickers, start=start_date, end=end_date, interval=freq, progress=False)['Adj Close']
+        data : pd.DataFrame = yf.download(tickers, start=start_date, end=end_date, interval=freq, progress=False)['Close']
         if isinstance(data, pd.DataFrame):
             data.reset_index(inplace=True)
             data.columns = ['_'.join(col).strip() if isinstance(col, tuple) else col for col in data.columns]
             data["Date"] = data["Date"].apply(lambda x : x.strftime("%Y-%m-%d"))
-        
+            data['Date']=pd.to_datetime(data['Date'])
         for ticker in tickers:
             if pd.isnull(data.loc[0, ticker]):
                 print(f"The ticker {ticker} does not have a value in {start_date}")

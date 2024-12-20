@@ -188,7 +188,7 @@ class Results:
     
     def weights_plot(self):
         if self.ptf_weights is not None :
-            min_weight = self.ptf_weights.min().min()
+            min_weight = min(self.ptf_weights.min().min(),0)
             max_weight = 1
 
             fig = go.Figure()
@@ -221,7 +221,7 @@ class Results:
         """
 
         combined_statistics = Results.combine_df(results)
-        fig = Results.combine_value_plot(results)
+        value_plot = Results.combine_value_plot(results)
         drawdowns_plots = Results.combine_drawdown_plots(results)
         weight_plots = Results.combine_weight_plot(results)
 
@@ -231,7 +231,7 @@ class Results:
             strat_name = "Comparaison"
 
         return Results(ptf_values=results[0].ptf_values, ptf_weights=results[0].ptf_weights,
-                       df_statistics=combined_statistics, ptf_value_plot=fig, ptf_drawdown_plot=drawdowns_plots,
+                       df_statistics=combined_statistics, ptf_value_plot=value_plot, ptf_drawdown_plot=drawdowns_plots,
                        ptf_weights_plot=weight_plots, strategy_name=strat_name,
                        data_frequency=results[0].data_frequency)
     
@@ -252,6 +252,8 @@ class Results:
         is_benchmark= False
         metrics_order = []
         for result in results:
+            if result.df_statistics is None:
+                result.get_statistics()
             df_stats = result.df_statistics.copy()
             if not metrics_order:
                 metrics_order = df_stats["Metrics"].tolist()
@@ -291,6 +293,8 @@ class Results:
         fig = go.Figure()
         existing_names = set()
         for result in results:
+            if result.ptf_value_plot is None:
+                result.create_plots()
             for scatter in result.ptf_value_plot.data:
                 if scatter.name not in existing_names:
                     fig.add_trace(scatter)

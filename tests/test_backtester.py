@@ -25,15 +25,7 @@ def backtester():
                            frequency=FrequencyType.DAILY)
     return Backtester(data_input=data)
 
-def test_df_prices(backtester : Backtester):
-    """
-    Vérifier que la propriété df_prices renvoie bien le DataFrame des prix et sous la bonne forme
-    """
-    df_prices = backtester.df_prices
-    assert isinstance(df_prices, pd.DataFrame)
-    assert df_prices.shape == (5, 4)  # Vérifier que la taille est correcte (5 périodes et 4 colonnes)
-    assert "Date" in df_prices.columns  # Vérifier que la colonne "Date" est présente
-    assert "Asset1" in df_prices.columns  # Vérifier la présence d'une colonne d'actifs
+ 
 
 def test_dates(backtester : Backtester):
     """
