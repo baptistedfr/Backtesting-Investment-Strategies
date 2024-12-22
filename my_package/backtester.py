@@ -1,4 +1,4 @@
-from .strategy import AbstractStrategy
+from .strategies import AbstractStrategy
 from .data_input import DataInput
 from dataclasses import dataclass
 from .results import Results
@@ -123,6 +123,7 @@ class Backtester:
         strategy.adjusted_lookback_period = self._adjust_lookback_period(strategy.lookback_period)
 
         """Initialisation"""
+        strat_name = custom_name if custom_name is not None else strategy.__class__.__name__
         strat_value = initial_amount
         returns_matrix = self.df_returns.to_numpy()
         prices_matrix = self.df_prices.iloc[:, 1:].to_numpy()
@@ -136,7 +137,7 @@ class Backtester:
             stored_benchmark = [benchmark_value]
             benchmark_returns_matrix = benchmark_returns_matrix.to_numpy()
 
-        for t in tqdm(range(strategy.adjusted_lookback_period+1, self.backtest_length),desc="Running Backtesting"):
+        for t in tqdm(range(strategy.adjusted_lookback_period+1, self.backtest_length),desc=f"Running Backtesting {strat_name}"):
             
             """Compute the portfolio & benchmark new value"""
             daily_returns = np.nan_to_num(returns_matrix[t], nan=0.0)
@@ -166,7 +167,7 @@ class Backtester:
 
             weights = new_weights
             strat_value = new_strat_value
-        strat_name = custom_name if custom_name is not None else strategy.__class__.__name__
+        
         return self.output(strat_name, stored_values, stored_weights, stored_benchmark, strategy.adjusted_lookback_period)
             
     @timer

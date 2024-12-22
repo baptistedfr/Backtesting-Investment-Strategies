@@ -1,5 +1,5 @@
 from my_package.tools import InputType, FrequencyType, Index, Benchmark
-from my_package.strategy import *
+from my_package.strategies import *
 from my_package import Backtester
 from my_package import DataInput
 from my_package import Results
@@ -46,27 +46,25 @@ data = DataInput(data_type=InputType.EQUITY,
 
 backtest = Backtester(data_input=data)
 
-strategy_mr = MeanRevertingStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1)
-results_mr = backtest.run(strategy=strategy_mr, initial_amount=1000.0, fees=0.0)
+# strategy_mr = MeanRevertingStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1)
+# results_mr = backtest.run(strategy=strategy_mr, initial_amount=1000.0, fees=0.0)
 
 # # prices = data.df_prices
 strategy = RandomFluctuationStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0)
-
-strategy_sharpe = OptimalSharpeStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0.5)
-
-
-# # # # weight = backtest.initial_weights_value
-# # # # print(weight)
 results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.000)
 
-# strategy2 = RandomFluctuationStrategy(rebalance_frequency = FrequencyType.WEEKLY, lookback_period=0)
+# strategy_sharpe = OptimalSharpeStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0.5)
+# strateg_vol = OptimalLowVolatilityStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0.5)
+# results_sharpe = backtest.run(strategy=strategy_sharpe, initial_amount=1000.0, fees=0.0)
+# result_vol = backtest.run(strategy=strateg_vol, initial_amount=1000.0, fees=0.0)
 
-results_random2 = backtest.run(strategy=strategy_sharpe, initial_amount=1000.0, fees=0.0)
+strategy_eqw = EqualWeightStrategy(rebalance_frequency = FrequencyType.MONTHLY, lookback_period=0)
+results_eqw = backtest.run(strategy=strategy_eqw, initial_amount=1000.0, fees=0.0)
 
-strategy3 = EqualWeightStrategy(rebalance_frequency = FrequencyType.MONTHLY, lookback_period=0)
-results3 = backtest.run(strategy=strategy3, initial_amount=1000.0, fees=0.0)
+strategie_random_ls = RandomWeightStrategy(rebalance_frequency = FrequencyType.MONTHLY, lookback_period=0)
+results_random_ls = backtest.run(strategy=strategie_random_ls, initial_amount=1000.0, fees=0.0)
+combined_results = Results.compare_results([results_random,results_eqw,results_random_ls ])
 
-combined_results = Results.compare_results([results_random,results_random2, results3])
 print(combined_results.df_statistics.head(10))
 combined_results.ptf_value_plot.show()
 combined_results.ptf_drawdown_plot.show()

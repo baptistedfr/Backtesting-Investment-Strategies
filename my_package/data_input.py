@@ -82,8 +82,8 @@ class DataInput:
                 self.tickers = list(set(index_composition['Ticker']))
                 if ("Poids" in index_composition.columns):
                     self.initial_weights = list(index_composition['Poids'])
-            case InputType.FROM_BLOOMBERG:
-                data_requester = BLPApi()
+            # case InputType.FROM_BLOOMBERG:
+            #     data_requester = BLPApi()
             case _:
                 raise InputTypeError("Unvalid asset price type selected")
 
