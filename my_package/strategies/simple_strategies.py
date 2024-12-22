@@ -50,3 +50,4 @@ class RandomWeightStrategy(AbstractStrategy):
         adjusted_weights = random_weights - mean_adjustment
         new_weights = (adjusted_weights / np.sum(np.abs(adjusted_weights)))
         return new_weights
+    
