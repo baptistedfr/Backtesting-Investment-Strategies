@@ -13,16 +13,16 @@ class DataInput:
 
     Args:
         data_type (Enum InputType) : type of input (APIs or custom files)
+        frequency (Enum FrequencyType) : frequency of the Data
         start_date (optional datetime) : start of the backtest period
         end_date (optional datetime) : start of the backtest period
         tickers (optional list[str]) : tickers to retreave from the API service
-        frequency (optional Enum FrequencyType) : frequency of the Data
         index (optional Enum Index) : asset to extract the composition from
         file_path (optional str) : path of the custom file
-        benchmark (optional Index) : benchmark to compare the performance of the strategy
         custom_df (optional pd.DataFrame) : custom dataframe as a data input
-
+        benchmark (optional Index) : benchmark to compare the performance of the strategy
         df_prices (pd.DataFrame) : asset prices
+        df_benchmark (pd.DataFrame) : benchmark prices
     """
     def __init__(self, data_type : InputType, 
                  frequency : FrequencyType,

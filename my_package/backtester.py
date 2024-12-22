@@ -19,7 +19,6 @@ class Backtester:
 
     Args:
         data_input (DataInput) : data input object containing assets prices historic
-        initial_weights (optional list(float)) : initial weights of the strategy, default value is equal weights
     """
 
     """---------------------------------------------------------------------------------------
