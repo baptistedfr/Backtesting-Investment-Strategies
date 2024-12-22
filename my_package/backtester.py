@@ -125,6 +125,7 @@ class Backtester:
         """Initialisation"""
         strat_value = initial_amount
         returns_matrix = self.df_returns.to_numpy()
+        prices_matrix = self.df_prices.iloc[:, 1:].to_numpy()
         weights = self.initial_weights_value
         stored_weights = [weights]
         stored_values = [strat_value]
@@ -144,7 +145,8 @@ class Backtester:
 
             if t in rebalancing_dates:
                 """Use Strategy to compute new weights (Rebalancement)"""
-                new_weights = strategy.get_position(returns_matrix[:t+1], weights)
+                new_weights = strategy.get_position(prices_matrix[:t+1] if strategy.__class__.__name__ == 'MeanRevertingStrategy'
+                                                    else returns_matrix[:t+1], weights)
                 """Compute transaction costs"""
                 transaction_costs = strat_value * fees * np.sum(np.abs(new_weights - weights))
                 new_strat_value -= transaction_costs

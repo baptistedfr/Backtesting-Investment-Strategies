@@ -4,7 +4,8 @@ from datetime import datetime
 import pandas as pd
 from functools import cached_property
 from .tools import InputType, FrequencyType, Index, Benchmark
-from .data_inputs import BinanceDataInput, CustomDataInput, DataFrameDataInput, YahooDataInput, BLPApi
+#from .data_inputs import BinanceDataInput, CustomDataInput, DataFrameDataInput, YahooDataInput, BLPApi
+from .data_inputs import BinanceDataInput, CustomDataInput, DataFrameDataInput, YahooDataInput
 from .exceptions import InputTypeError, BadInput
 
 class DataInput:
@@ -91,7 +92,7 @@ class DataInput:
                                         end_date=self.end_date,
                                         frequency=self.frequency)
     
-    def get_benchmark(self) -> pd.Series:
+    '''def get_benchmark(self) -> pd.Series:
         
         if self.benchmark is not None:
             category_bench = self.benchmark.category
@@ -113,4 +114,22 @@ class DataInput:
                                             end_date=self.end_date,
                                             frequency=self.frequency)
         else :
+            return None'''
+
+    def get_benchmark(self) -> pd.Series:
+
+        if self.benchmark is not None:
+            category_bench = self.benchmark.category
+            ticker_bench = [self.benchmark.symbol]
+            if category_bench == "Equity":
+                return YahooDataInput().get_data(tickers=ticker_bench,
+                                                 start_date=self.start_date,
+                                                 end_date=self.end_date,
+                                                 frequency=self.frequency)
+            else:
+                return BinanceDataInput().get_data(tickers=ticker_bench,
+                                                   start_date=self.start_date,
+                                                   end_date=self.end_date,
+                                                   frequency=self.frequency)
+        else:
             return None

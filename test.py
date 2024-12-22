@@ -11,7 +11,7 @@ data = DataInput(data_type=InputType.EQUITY,
                         frequency=FrequencyType.WEEKLY,
                         benchmark=Benchmark.CAC40)
 
-# data = DataInput(data_type=InputType.CRYPTO,
+'''# data = DataInput(data_type=InputType.CRYPTO,
 #                         tickers=['BTCUSDT','ETHUSDT','PEPEUSDT','DOGEUSDT','SOLUSDT'],
 #                         start_date='2018-10-01',
 #                         end_date='2024-11-15',
@@ -41,10 +41,13 @@ data = DataInput(data_type=InputType.EQUITY,
 #                 start_date='2010-10-01',
 #                 end_date='2024-10-01',
 #                 frequency=FrequencyType.WEEKLY,
-#                 benchmark=Benchmark.CAC40)
+#                 benchmark=Benchmark.CAC40)'''
 
 
 backtest = Backtester(data_input=data)
+
+strategy_mr = MeanRevertingStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1)
+results_mr = backtest.run(strategy=strategy_mr, initial_amount=1000.0, fees=0.0)
 
 # # prices = data.df_prices
 strategy = RandomFluctuationStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0)
