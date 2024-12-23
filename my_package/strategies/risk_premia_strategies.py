@@ -1,11 +1,9 @@
-from dataclasses import dataclass
-from abc import ABC, abstractmethod
+from scipy.stats import gmean
 import numpy as np
-import pandas as pd
-from typing import Optional
 from scipy.optimize import Bounds
 from scipy.optimize import LinearConstraint
 from scipy.optimize import minimize
+<<<<<<< HEAD:my_package/strategy.py
 from .tools import FrequencyType
 from scipy.stats import gmean
 
@@ -70,6 +68,28 @@ class AbstractStrategy(ABC):
         """
         valid_assets = ~np.any(np.isnan(data), axis=0)
         return data[:, valid_assets], valid_assets
+=======
+from dataclasses import dataclass
+from .abstract_strategy import AbstractStrategy
+from ..tools import FrequencyType
+from typing import Optional
+
+@dataclass
+class ValueStrategy(AbstractStrategy):
+
+    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
+        per = historical_data[-1]
+        new_weights = self.fit(per)
+        return new_weights
+
+    def fit(self, data: np.ndarray[float]):
+        undervalued_assets = data < 10
+        #overvalued_assets = data > 17
+        return data * undervalued_assets / np.sum(data[undervalued_assets])
+
+
+
+>>>>>>> b554d17c1efe3b485c957be4060a228f60758895:my_package/strategies/risk_premia_strategies.py
 
 
 @dataclass
@@ -137,6 +157,7 @@ class MomentumStrategy(AbstractStrategy):
         new_weights = self.fit(data)
         return new_weights
 
+<<<<<<< HEAD:my_package/strategy.py
     def fit(self, data: np.ndarray[float]):
         # Filter on valid columns (at least one non-NaN value)
         filtered_data, valid_assets = self.valid_assets_data(data)
@@ -188,6 +209,15 @@ class LowVolatilityStrategy(AbstractStrategy):
         return new_weights
 
 
+=======
+    def fit(self, data:np.ndarray[float]):
+        mean_return = gmean(data + 1) - 1
+        positive_momentum_assets = mean_return > 0
+        if np.sum(positive_momentum_assets) == 0:
+            return np.zeros(len(positive_momentum_assets))
+        return data * positive_momentum_assets / np.sum(data[positive_momentum_assets])
+    
+>>>>>>> b554d17c1efe3b485c957be4060a228f60758895:my_package/strategies/risk_premia_strategies.py
 @dataclass
 class MeanRevertingStrategy(AbstractStrategy):
     """Invest in assets that have deviated from their historical mean."""
@@ -225,70 +255,68 @@ class MeanRevertingStrategy(AbstractStrategy):
 
         return new_weights
 
-@dataclass
-class OptimalSharpeStrategy(AbstractStrategy):
-    """Invest in assets that maximizes the Sharpe Ratio calculated with Markowitz optimization"""
+
+'''@dataclass
+class LowVolatilityStrategy(AbstractStrategy):
+    """Invest in assets with low volatility"""
 
     def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
-        data = historical_data[-self.adjusted_lookback_period-1:]
+        data = historical_data[-self.adjusted_lookback_period - 1:]
         new_weights = self.fit(data)
         return new_weights
-    
+
     def fit(self, data: np.ndarray[float]):
+<<<<<<< HEAD:my_package/strategy.py
         # Filter on valid columns (at least one non-NaN value)
         filtered_data, valid_assets = self.valid_assets_data(data)
         
         expected_returns = np.nanmean(filtered_data, axis=0)
         cov_matrix = np.cov(filtered_data, rowvar=False)
+=======
+        volatility = data.std(axis=0)
 
-        n_assets = len(expected_returns)
-        x0 = np.ones(n_assets) / n_assets
+        # If all assets have a volatility of 0, we keep the previous weights
+        #if np.all(volatility == 0):
+        #    return current_position
 
-        bounds = Bounds(0, 1)
-        linear_constraint = LinearConstraint(np.ones((n_assets,), dtype=int), 1, 1)  # Sum of weights = 1
+        # Inverse of volatility is used to invest more in low volatility assets
+        low_volatility_assets = 1 / volatility
 
-        def max_sharpe(w):
-            return -expected_returns.dot(w) / np.sqrt(w.T.dot(cov_matrix).dot(w))
-        
-        # Perform optimization
-        result = minimize(max_sharpe, x0, method='trust-constr', constraints=linear_constraint, bounds=bounds)
-        # Rebuild the full weight array, assigning 0 to invalid assets
-        full_weights = np.zeros(data.shape[1])
-        full_weights[valid_assets] = result.x
-        return full_weights
+        return low_volatility_assets / np.sum(low_volatility_assets)'''
+>>>>>>> b554d17c1efe3b485c957be4060a228f60758895:my_package/strategies/risk_premia_strategies.py
 
 
+
+
+
+<<<<<<< HEAD:my_package/strategy.py
 @dataclass
 class RandomFluctuationStrategy(AbstractStrategy):
     """Return weights with random fluctuations around the previous weights"""
+=======
+# @dataclass
+# class MeanRevertingStrategy(AbstractStrategy):
+#     """Invest in assets that have deviated from their historical mean."""
+#     "LES PRIX NE SONT PAS STATIONNAIRES PAS DE MOYENNE DE LONG TERME CF MAB"
 
-    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
-        new_weights = current_position + np.random.random(current_position.shape) / 4
-        new_weights = self.compute_na(new_weights, historical_data[-1])
-        return new_weights / np.sum(new_weights)
+#     def compute_weights(self, previous_weights: np.ndarray[float], prices: np.ndarray[float]) -> np.ndarray[float]:
 
-@dataclass
-class EqualWeightStrategy(AbstractStrategy):
-    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
-        """
-        Allocates equal weights to all assets in the portfolio
-        """
-        n_assets = historical_data.shape[1]
-        new_weights = np.ones(n_assets) / n_assets
-        new_weights = self.compute_na(new_weights, historical_data[-1])
-        return new_weights / np.sum(new_weights)
-    
-@dataclass
-class FocusedStrategy(AbstractStrategy):
-    """
-    Strategy fully invested in one asset
+#         # Compute the deviation of the current prices from the historical mean
+#         mean_prices = prices.mean(axis=0)
+#         deviation_from_mean = prices[-1] - mean_prices
 
-    Args:
-        asset_index (int): index of the asset in initial asset list to fully invest in
-    """
-    asset_index: int = 0
+#         # Buy assets that are below their historical mean (undervalued)
+#         mean_reverting_assets = np.where(deviation_from_mean < 0, -deviation_from_mean, 0)
 
-    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
-        new_weights = np.zeros_like(current_position)
-        new_weights[self.asset_index] = 1.0
-        return new_weights
+#         # if all assets are above their historical mean, we do not invest in any asset
+#         if np.sum(mean_reverting_assets) == 0:
+#             return np.zeros(len(mean_reverting_assets))
+
+#         new_weights = mean_reverting_assets / np.sum(mean_reverting_assets)
+
+#         return new_weights
+
+
+>>>>>>> b554d17c1efe3b485c957be4060a228f60758895:my_package/strategies/risk_premia_strategies.py
+
+

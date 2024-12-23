@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from my_package.tools import InputType, FrequencyType, Index, Benchmark
-from my_package.strategy import *
+from my_package.strategies import *
 from my_package import Backtester
 from my_package import DataInput
 from my_package import Results

@@ -119,6 +119,7 @@ class Results:
         Compute the basic statistics of the strategy
         """
         metrics = [
+            self.total_return,
             self.annualized_return, 
             self.annualized_vol, 
             self.sharpe_ratio, 
@@ -128,7 +129,7 @@ class Results:
             self.compute_CVaR(),
         ]
         data = {
-            "Metrics": ["Annualized Return", "Volatility", "Sharpe Ratio", "Sortino Ratio", "Max Drawdown", "VaR 95%", "CVaR 95%"],
+            "Metrics": ["Total Return", "Annualized Return", "Volatility", "Sharpe Ratio", "Sortino Ratio", "Max Drawdown", "VaR 95%", "CVaR 95%"],
             self.strategy_name: metrics
         }
         formatted_data = []
@@ -136,7 +137,7 @@ class Results:
         for i, metric in enumerate(data[self.strategy_name]):
             if pd.isnull(metric):  # Si une métrique est NaN
                 formatted_data.append("N/A")
-            elif i in [0, 1, 4, 5, 6]:  # Annualized Return, Volatility, Max Drawdown (en pourcentage)
+            elif i in [0, 1, 2, 5, 6, 7]:  # Total Return, Annualized Return, Volatility, Max Drawdown (en pourcentage)
                 formatted_data.append("{:.2%}".format(metric))
             else:  # Ratios (Sharpe, Sortino)
                 formatted_data.append("{:.2f}".format(metric))
