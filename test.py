@@ -47,7 +47,6 @@ data = DataInput(data_type=InputType.CRYPTO,
 
 backtest = Backtester(data_input=data)
 
-<<<<<<< HEAD
 strategy_momentum = MomentumStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1, is_LS_strategy=True)
 strategy_mr = MeanRevertingStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1, is_LS_strategy=True)
 strategy_tf = TrendFollowingStrategy(rebalance_frequency=FrequencyType.MONTHLY, short_window_period=10, long_window_period=50, is_LS_strategy=True)
@@ -61,27 +60,6 @@ results_low = backtest.run(strategy=strategy_low, initial_amount=1000.0, fees=0.
 results_mkw = backtest.run(strategy=strategy_mkw, initial_amount=1000.0, fees=0.0)
 
 combined_results = Results.compare_results([results_momentum,results_mr, results_tf, results_low, results_mkw])
-=======
-# strategy_mr = MeanRevertingStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1)
-# results_mr = backtest.run(strategy=strategy_mr, initial_amount=1000.0, fees=0.0)
-
-# # prices = data.df_prices
-strategy = RandomFluctuationStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0)
-results_random = backtest.run(strategy=strategy, initial_amount=1000.0, fees=0.000)
-
-# strategy_sharpe = OptimalSharpeStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0.5)
-# strateg_vol = OptimalLowVolatilityStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=0.5)
-# results_sharpe = backtest.run(strategy=strategy_sharpe, initial_amount=1000.0, fees=0.0)
-# result_vol = backtest.run(strategy=strateg_vol, initial_amount=1000.0, fees=0.0)
-
-strategy_eqw = EqualWeightStrategy(rebalance_frequency = FrequencyType.MONTHLY, lookback_period=0)
-results_eqw = backtest.run(strategy=strategy_eqw, initial_amount=1000.0, fees=0.0)
-
-strategie_random_ls = RandomWeightStrategy(rebalance_frequency = FrequencyType.MONTHLY, lookback_period=0)
-results_random_ls = backtest.run(strategy=strategie_random_ls, initial_amount=1000.0, fees=0.0)
-combined_results = Results.compare_results([results_random,results_eqw,results_random_ls ])
-
->>>>>>> b554d17c1efe3b485c957be4060a228f60758895
 print(combined_results.df_statistics.head(10))
 combined_results.ptf_value_plot.show()
 combined_results.ptf_drawdown_plot.show()

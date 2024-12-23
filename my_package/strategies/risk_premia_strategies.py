@@ -1,96 +1,14 @@
-from scipy.stats import gmean
+from dataclasses import dataclass
+from abc import ABC, abstractmethod
 import numpy as np
+import pandas as pd
+from typing import Optional
 from scipy.optimize import Bounds
 from scipy.optimize import LinearConstraint
 from scipy.optimize import minimize
-<<<<<<< HEAD:my_package/strategy.py
-from .tools import FrequencyType
+from my_package.tools import FrequencyType
 from scipy.stats import gmean
-
-@dataclass
-class AbstractStrategy(ABC):
-    
-    """Abstract class to represent a strategy used in backtesting.
-    Args:
-        rebalance_frequency : FrequencyType : Choice of the rebalancing frequence of the strategy. Default Value is Monthly rebalancement
-        lookback_period : float : The historical period (%year) considered by the strategy to calculate indicators or make decisions. Default value is one year
-        adjusted_lookback_period : int : The lookback_period adjusted by the frequency of the data. Automatically calculated in the Backtester
-    """
-
-    """---------------------------------------------------------------------------------------
-    -                                 Class arguments                                        -
-    ---------------------------------------------------------------------------------------"""
-
-    rebalance_frequency : FrequencyType = FrequencyType.MONTHLY
-    lookback_period : float = 1.00 # (1 an) de données
-    adjusted_lookback_period: Optional[int] = None
-    is_LS_strategy: Optional[bool] = False
-
-    """---------------------------------------------------------------------------------------
-    -                                 Class methods                                       -
-    ---------------------------------------------------------------------------------------"""
-
-    @abstractmethod
-    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
-        """
-        Mandatory method to be implemented by all strategies.
-        Calculates the new position based on historical data and the current position.
-
-        Args:
-            historical_data : Historical data required for decision-making (e.g., prices, returns, etc.).
-            current_position : The current position of the strategy (e.g., current asset weights).
-        
-        Returns:
-            The new positions in a numpy array
-        """
-        pass
-
-    def fit(self, data):
-        """
-        Optional method.
-        Can be used to train or calibrate the strategy (does nothing by default).
-        
-        Args:
-            data : Data required to train the strategy.
-        """
-        pass
-
-    def compute_na(self, weights, returns):
-        """
-        Method to handle NaN values by setting weights to 0 where returns are NaN and adjusts the weights correspondously
-        """
-        weights[np.any(np.isnan(returns), axis=0)] = 0
-        return weights
-
-    def valid_assets_data(self, data):
-        """
-        Method to filter the data for valid assets (at least one non-NaN value)
-        """
-        valid_assets = ~np.any(np.isnan(data), axis=0)
-        return data[:, valid_assets], valid_assets
-=======
-from dataclasses import dataclass
 from .abstract_strategy import AbstractStrategy
-from ..tools import FrequencyType
-from typing import Optional
-
-@dataclass
-class ValueStrategy(AbstractStrategy):
-
-    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
-        per = historical_data[-1]
-        new_weights = self.fit(per)
-        return new_weights
-
-    def fit(self, data: np.ndarray[float]):
-        undervalued_assets = data < 10
-        #overvalued_assets = data > 17
-        return data * undervalued_assets / np.sum(data[undervalued_assets])
-
-
-
->>>>>>> b554d17c1efe3b485c957be4060a228f60758895:my_package/strategies/risk_premia_strategies.py
-
 
 @dataclass
 class TrendFollowingStrategy(AbstractStrategy):
@@ -157,7 +75,6 @@ class MomentumStrategy(AbstractStrategy):
         new_weights = self.fit(data)
         return new_weights
 
-<<<<<<< HEAD:my_package/strategy.py
     def fit(self, data: np.ndarray[float]):
         # Filter on valid columns (at least one non-NaN value)
         filtered_data, valid_assets = self.valid_assets_data(data)
@@ -209,15 +126,6 @@ class LowVolatilityStrategy(AbstractStrategy):
         return new_weights
 
 
-=======
-    def fit(self, data:np.ndarray[float]):
-        mean_return = gmean(data + 1) - 1
-        positive_momentum_assets = mean_return > 0
-        if np.sum(positive_momentum_assets) == 0:
-            return np.zeros(len(positive_momentum_assets))
-        return data * positive_momentum_assets / np.sum(data[positive_momentum_assets])
-    
->>>>>>> b554d17c1efe3b485c957be4060a228f60758895:my_package/strategies/risk_premia_strategies.py
 @dataclass
 class MeanRevertingStrategy(AbstractStrategy):
     """Invest in assets that have deviated from their historical mean."""
@@ -254,69 +162,3 @@ class MeanRevertingStrategy(AbstractStrategy):
                 new_weights[valid_assets] = (-z_scores * signal) / np.sum(-z_scores * signal)
 
         return new_weights
-
-
-'''@dataclass
-class LowVolatilityStrategy(AbstractStrategy):
-    """Invest in assets with low volatility"""
-
-    def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
-        data = historical_data[-self.adjusted_lookback_period - 1:]
-        new_weights = self.fit(data)
-        return new_weights
-
-    def fit(self, data: np.ndarray[float]):
-<<<<<<< HEAD:my_package/strategy.py
-        # Filter on valid columns (at least one non-NaN value)
-        filtered_data, valid_assets = self.valid_assets_data(data)
-        
-        expected_returns = np.nanmean(filtered_data, axis=0)
-        cov_matrix = np.cov(filtered_data, rowvar=False)
-=======
-        volatility = data.std(axis=0)
-
-        # If all assets have a volatility of 0, we keep the previous weights
-        #if np.all(volatility == 0):
-        #    return current_position
-
-        # Inverse of volatility is used to invest more in low volatility assets
-        low_volatility_assets = 1 / volatility
-
-        return low_volatility_assets / np.sum(low_volatility_assets)'''
->>>>>>> b554d17c1efe3b485c957be4060a228f60758895:my_package/strategies/risk_premia_strategies.py
-
-
-
-
-
-<<<<<<< HEAD:my_package/strategy.py
-@dataclass
-class RandomFluctuationStrategy(AbstractStrategy):
-    """Return weights with random fluctuations around the previous weights"""
-=======
-# @dataclass
-# class MeanRevertingStrategy(AbstractStrategy):
-#     """Invest in assets that have deviated from their historical mean."""
-#     "LES PRIX NE SONT PAS STATIONNAIRES PAS DE MOYENNE DE LONG TERME CF MAB"
-
-#     def compute_weights(self, previous_weights: np.ndarray[float], prices: np.ndarray[float]) -> np.ndarray[float]:
-
-#         # Compute the deviation of the current prices from the historical mean
-#         mean_prices = prices.mean(axis=0)
-#         deviation_from_mean = prices[-1] - mean_prices
-
-#         # Buy assets that are below their historical mean (undervalued)
-#         mean_reverting_assets = np.where(deviation_from_mean < 0, -deviation_from_mean, 0)
-
-#         # if all assets are above their historical mean, we do not invest in any asset
-#         if np.sum(mean_reverting_assets) == 0:
-#             return np.zeros(len(mean_reverting_assets))
-
-#         new_weights = mean_reverting_assets / np.sum(mean_reverting_assets)
-
-#         return new_weights
-
-
->>>>>>> b554d17c1efe3b485c957be4060a228f60758895:my_package/strategies/risk_premia_strategies.py
-
-

@@ -23,7 +23,7 @@ class AbstractStrategy(ABC):
     rebalance_frequency: FrequencyType = FrequencyType.MONTHLY
     lookback_period: float = 1.00  # 1 year of data
     adjusted_lookback_period: Optional[int] = None
-
+    is_LS_strategy: Optional[bool] = False
 
     """---------------------------------------------------------------------------------------
     -                                 Class methods                                       -
@@ -60,3 +60,10 @@ class AbstractStrategy(ABC):
         """
         weights[np.isnan(returns)] = 0
         return weights
+
+    def valid_assets_data(self, data):
+        """
+        Method to filter the data for valid assets (at least one non-NaN value)
+        """
+        valid_assets = ~np.any(np.isnan(data), axis=0)
+        return data[:, valid_assets], valid_assets
