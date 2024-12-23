@@ -11,10 +11,3 @@ class AbstractDataInput(ABC):
         Generic method to retrieve the data (prices) from the source
         """
         pass
-
-    @abstractmethod
-    def get_PER(self, tickers, start_date,  end_date, frequency):
-        """
-        Generic method to retrieve the PER from the source (ONLY FOR EQUOTIES)
-        """
-        pass
