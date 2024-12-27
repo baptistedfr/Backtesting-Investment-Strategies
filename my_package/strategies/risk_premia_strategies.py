@@ -47,21 +47,34 @@ class TrendFollowingStrategy(AbstractStrategy):
         long_MA = gmean(filtered_data[-self.long_window:] + 1) - 1
 
         # Identify assets with a positive trend (short MA greater than long MA)
-        signal = short_MA > long_MA
+        long_signal = short_MA > long_MA
 
+        # Initialize the new weights array
         new_weights = np.zeros(data.shape[1])
+
+        # If the strategy is a Long Short strategy
         if self.is_LS_strategy:
-            # If the strategy is a L/S strategy, we return 1 for a positive trend and -1 for a negative trend
-            LS_signal = np.where(signal, 1, -1)
-            new_weights[valid_assets] = LS_signal / np.sum(abs(LS_signal))
+            short_signal = ~long_signal
+
+            '''# If no assets have a positive/negative trend, return an array of zeros
+            for signal in [long_signal, short_signal]:
+                if np.sum(signal) == 0:
+                    return new_weights'''
+
+            # Compute the long and short weights
+            long_weights = long_signal / np.sum(long_signal) if np.sum(long_signal) > 0 else np.zeros(len(long_signal))
+            short_weights = -short_signal.astype(int) / np.sum(short_signal) if np.sum(short_signal) > 0 else np.zeros(len(short_signal))
+
+            # Combine the long and short weights
+            new_weights[valid_assets] = long_weights + short_weights
 
         # If the strategy is a Long Only strategy
         else:
             # If no assets have a positive trend, return an array of zeros
-            if np.sum(signal) == 0:
+            if np.sum(long_signal) == 0:
                 return new_weights
             else:
-                new_weights[valid_assets] = signal / np.sum(signal)
+                new_weights[valid_assets] = long_signal / np.sum(long_signal)
 
         return new_weights
 
@@ -83,20 +96,29 @@ class MomentumStrategy(AbstractStrategy):
         mean_return = gmean(filtered_data + 1) - 1
 
         # Identify assets with positive momentum (mean return greater than 0)
-        signal = mean_return > 0
+        long_signal = mean_return > 0
 
+        # Initialize the new weights array
         new_weights = np.zeros(data.shape[1])
+
+        # If the strategy is a Long Short strategy
         if self.is_LS_strategy:
-            # If the strategy is a L/S strategy, we return 1 for a positive momentum and -1 for a negative momentum
-            new_weights[valid_assets] = mean_return / abs(np.sum(mean_return))
+            short_signal = ~long_signal
+
+            # Compute the long and short weights
+            long_weights = mean_return * long_signal / np.sum(mean_return[long_signal]) if np.sum(mean_return[long_signal]) > 0 else np.zeros(len(long_signal))
+            short_weights = mean_return * short_signal / abs(np.sum(mean_return[short_signal])) if np.sum(mean_return[short_signal]) < 0 else np.zeros(len(short_signal))
+
+            # Combine the long and short weights
+            new_weights[valid_assets] = long_weights + short_weights
 
         # If the strategy is a Long Only strategy
         else:
             # If no assets have positive momentum, return an array of zeros
-            if np.sum(signal) == 0:
+            if np.sum(long_signal) == 0:
                 return new_weights
             else:
-                new_weights[valid_assets] = (mean_return * signal) / np.sum(mean_return * signal)
+                new_weights[valid_assets] = (mean_return * long_signal) / np.sum(mean_return[long_signal])
 
         return new_weights
 
@@ -147,18 +169,28 @@ class MeanRevertingStrategy(AbstractStrategy):
         z_scores = deviation / std_prices
 
         # Identify undervalued assets (those with negative z-scores)
-        signal = z_scores < 0
+        long_signal = z_scores < 0
 
+        # Initialize the new weights array
         new_weights = np.zeros(data.shape[1])
+
+        # If the strategy is a Long Short strategy
         if self.is_LS_strategy:
-            new_weights[valid_assets] = -z_scores / abs(np.sum(z_scores))
+
+            short_signal = ~long_signal
+
+            # Compute the long and short weights
+            long_weights = z_scores * long_signal / np.sum(z_scores[long_signal]) if np.sum(z_scores[long_signal]) < 0 else np.zeros(len(long_signal))
+            short_weights = -z_scores * short_signal / np.sum(z_scores[short_signal]) if np.sum(z_scores[short_signal]) > 0 else np.zeros(len(short_signal))
+
+            new_weights[valid_assets] = long_weights + short_weights
 
         # If the strategy is a Long Only strategy
         else:
             # If there are no undervalued assets, return an array of zeros
-            if np.sum(signal) == 0:
+            if np.sum(long_signal) == 0:
                 return new_weights
             else:
-                new_weights[valid_assets] = (-z_scores * signal) / np.sum(-z_scores * signal)
+                new_weights[valid_assets] = z_scores * long_signal / np.sum(z_scores[long_signal])
 
         return new_weights
