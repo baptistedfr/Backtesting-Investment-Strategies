@@ -2,11 +2,11 @@ import pytest
 import numpy as np
 import pandas as pd
 from datetime import datetime
-from my_package.tools import InputType, FrequencyType, Index, Benchmark
-from my_package.strategies import *
-from my_package import Backtester
-from my_package import DataInput
-from my_package import Results
+from backtester_poo_272_mcd.tools import InputType, FrequencyType, Index, Benchmark
+from backtester_poo_272_mcd.strategies import *
+from backtester_poo_272_mcd import Backtester
+from backtester_poo_272_mcd import DataInput
+from backtester_poo_272_mcd import Results
 
 @pytest.fixture
 def backtester():

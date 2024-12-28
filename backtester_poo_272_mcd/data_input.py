@@ -1,12 +1,10 @@
-from dataclasses import dataclass
 from typing import *
 from datetime import datetime
 import pandas as pd
-from functools import cached_property
 from .tools import InputType, FrequencyType, Index, Benchmark
-#from .data_inputs import BinanceDataInput, CustomDataInput, DataFrameDataInput, YahooDataInput, BLPApi
 from .data_inputs import BinanceDataInput, CustomDataInput, DataFrameDataInput, YahooDataInput
 from .exceptions import InputTypeError, BadInput
+import importlib.resources as pkg_resources
 
 class DataInput:
     """
@@ -77,13 +75,12 @@ class DataInput:
                 data_requester = BinanceDataInput()
             case InputType.FROM_INDEX_COMPOSITION:
                 data_requester = YahooDataInput()
-                path_index = "data/" + self.index.value + ".xlsx"
-                index_composition = pd.read_excel(path_index)
+                path_index = pkg_resources.files('backtester_poo_272_mcd.data') / (self.index.value + '.json')
+                with path_index.open('r', encoding='utf-8') as file:
+                    index_composition = pd.read_json(file)
                 self.tickers = list(set(index_composition['Ticker']))
                 if ("Poids" in index_composition.columns):
                     self.initial_weights = list(index_composition['Poids'])
-            # case InputType.FROM_BLOOMBERG:
-            #     data_requester = BLPApi()
             case _:
                 raise InputTypeError("Unvalid asset price type selected")
 
@@ -92,30 +89,6 @@ class DataInput:
                                         end_date=self.end_date,
                                         frequency=self.frequency)
     
-    '''def get_benchmark(self) -> pd.Series:
-        
-        if self.benchmark is not None:
-            category_bench = self.benchmark.category
-            ticker_bench = [self.benchmark.symbol]
-            if category_bench == "Equity":
-                if self.data_type == InputType.FROM_BLOOMBERG:
-                    return BLPApi().get_data(tickers=ticker_bench,
-                                            start_date=self.start_date,
-                                            end_date=self.end_date,
-                                            frequency=self.frequency)
-                else:
-                    return YahooDataInput().get_data(tickers=ticker_bench,
-                                            start_date=self.start_date,
-                                            end_date=self.end_date,
-                                            frequency=self.frequency)
-            else:
-                return BinanceDataInput().get_data(tickers=ticker_bench,
-                                            start_date=self.start_date,
-                                            end_date=self.end_date,
-                                            frequency=self.frequency)
-        else :
-            return None'''
-
     def get_benchmark(self) -> pd.Series:
 
         if self.benchmark is not None:

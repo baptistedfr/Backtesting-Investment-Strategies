@@ -1,0 +1,352 @@
+[
+    {
+        "Ticker": "OR FP Equity",
+        "Nom": "L'Oréal SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 363.0
+    },
+    {
+        "Ticker": "DG FP Equity",
+        "Nom": "Vinci SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 105.1
+    },
+    {
+        "Ticker": "BBVA SQ Equity",
+        "Nom": "Banco Bilbao Vizcaya Argentaria SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 9.186
+    },
+    {
+        "Ticker": "SAN SQ Equity",
+        "Nom": "Banco Santander SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 4.652
+    },
+    {
+        "Ticker": "ASML NA Equity",
+        "Nom": "ASML Holding NV",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 664.8
+    },
+    {
+        "Ticker": "TTE FP Equity",
+        "Nom": "TotalEnergies SE",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 60.93
+    },
+    {
+        "Ticker": "AI FP Equity",
+        "Nom": "Air Liquide SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 170.46
+    },
+    {
+        "Ticker": "CS FP Equity",
+        "Nom": "AXA SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 35.47
+    },
+    {
+        "Ticker": "BNP FP Equity",
+        "Nom": "BNP Paribas",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 65.82
+    },
+    {
+        "Ticker": "BN FP Equity",
+        "Nom": "Danone",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 65.52
+    },
+    {
+        "Ticker": "SGO FP Equity",
+        "Nom": "Compagnie de Saint-Gobain",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 81.64
+    },
+    {
+        "Ticker": "EL FP Equity",
+        "Nom": "EssilorLuxottica SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 220.7
+    },
+    {
+        "Ticker": "MC FP Equity",
+        "Nom": "Moet Hennessy Louis Vuitton SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 629.2
+    },
+    {
+        "Ticker": "KER FP Equity",
+        "Nom": "Kering",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 234.7
+    },
+    {
+        "Ticker": "RACE IM Equity",
+        "Nom": "Ferrari NV",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 450.6
+    },
+    {
+        "Ticker": "SAF FP Equity",
+        "Nom": "Safran SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 210.9
+    },
+    {
+        "Ticker": "WKL NA Equity",
+        "Nom": "Wolters Kluwer NV",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 157.35
+    },
+    {
+        "Ticker": "AD NA Equity",
+        "Nom": "Koninklijke Ahold Delhaize NV",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 30.77
+    },
+    {
+        "Ticker": "UCG IM Equity",
+        "Nom": "UniCredit SpA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 40.415
+    },
+    {
+        "Ticker": "IBE SQ Equity",
+        "Nom": "Iberdrola SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 14.12
+    },
+    {
+        "Ticker": "RMS FP Equity",
+        "Nom": "Hermès International",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 2106.0
+    },
+    {
+        "Ticker": "INGA NA Equity",
+        "Nom": "ING Groep NV",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 15.684
+    },
+    {
+        "Ticker": "STLAM IM Equity",
+        "Nom": "Stellantis NV",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 12.796
+    },
+    {
+        "Ticker": "PRX NA Equity",
+        "Nom": "Prosus NV",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 39.26
+    },
+    {
+        "Ticker": "ITX SQ Equity",
+        "Nom": "Industria de Diseno Textil SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 54.62
+    },
+    {
+        "Ticker": "ISP IM Equity",
+        "Nom": "Intesa Sanpaolo SpA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 3.912
+    },
+    {
+        "Ticker": "ENI IM Equity",
+        "Nom": "Eni SpA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 14.36
+    },
+    {
+        "Ticker": "ABI BB Equity",
+        "Nom": "Anheuser-Busch InBev SA/NV",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 60.4
+    },
+    {
+        "Ticker": "NDA FH Equity",
+        "Nom": "Nordea Bank Abp",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 10.915
+    },
+    {
+        "Ticker": "ADYEN NA Equity",
+        "Nom": "Adyen NV",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 1426.8
+    },
+    {
+        "Ticker": "SAN FP Equity",
+        "Nom": "Sanofi",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 98.76
+    },
+    {
+        "Ticker": "ENEL IM Equity",
+        "Nom": "Enel SpA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 7.25
+    },
+    {
+        "Ticker": "NOKIA FH Equity",
+        "Nom": "Nokia Oyj",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 4.378
+    },
+    {
+        "Ticker": "SU FP Equity",
+        "Nom": "Schneider Electric SE",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 241.6
+    },
+    {
+        "Ticker": "ALV GY Equity",
+        "Nom": "Allianz SE",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 295.4
+    },
+    {
+        "Ticker": "AIR FP Equity",
+        "Nom": "Airbus SE",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 141.52
+    },
+    {
+        "Ticker": "BAYN GY Equity",
+        "Nom": "Bayer AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 26.13
+    },
+    {
+        "Ticker": "BMW GY Equity",
+        "Nom": "Bayerische Motoren Werke AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 78.34
+    },
+    {
+        "Ticker": "BAS GY Equity",
+        "Nom": "BASF SE",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 46.84
+    },
+    {
+        "Ticker": "SIE GY Equity",
+        "Nom": "Siemens AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 181.92
+    },
+    {
+        "Ticker": "VOW3 GY Equity",
+        "Nom": "Volkswagen AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 95.1
+    },
+    {
+        "Ticker": "MUV2 GY Equity",
+        "Nom": "Muenchener Rueckversicherungs-Gesellschaft AG in Muenchen",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 476.1
+    },
+    {
+        "Ticker": "SAP GY Equity",
+        "Nom": "SAP SE",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 218.15
+    },
+    {
+        "Ticker": "RI FP Equity",
+        "Nom": "Pernod-Ricard SA",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 125.95
+    },
+    {
+        "Ticker": "ADS GY Equity",
+        "Nom": "adidas AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 217.9
+    },
+    {
+        "Ticker": "DTE GY Equity",
+        "Nom": "Deutsche Telekom AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 27.99
+    },
+    {
+        "Ticker": "DHL GY Equity",
+        "Nom": "Deutsche Post AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 37.44
+    },
+    {
+        "Ticker": "MBG GY Equity",
+        "Nom": "Mercedes-Benz Group AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 59.58
+    },
+    {
+        "Ticker": "IFX GY Equity",
+        "Nom": "Infineon Technologies AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 31.285
+    },
+    {
+        "Ticker": "DB1 GY Equity",
+        "Nom": "Deutsche Boerse AG",
+        "Poids": "--",
+        "Actions": "--",
+        "Cours": 214.8
+    }
+]

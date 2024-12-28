@@ -1,17 +1,14 @@
 from dataclasses import dataclass
-from abc import ABC, abstractmethod
 import numpy as np
-import pandas as pd
 from typing import Optional
-from scipy.optimize import Bounds
-from scipy.optimize import LinearConstraint
-from scipy.optimize import minimize
-from my_package.tools import FrequencyType
+from backtester_poo_272_mcd.tools import FrequencyType
 from scipy.stats import gmean
-from .abstract_strategy import AbstractStrategy
+from .abstract_strategy import AbstractStrategy, AbstractLongShortStrategy
+
+
 
 @dataclass
-class TrendFollowingStrategy(AbstractStrategy):
+class TrendFollowingStrategy(AbstractLongShortStrategy):
     """
     Strategy that uses short and long moving averages to determine asset trends.
 
@@ -19,6 +16,7 @@ class TrendFollowingStrategy(AbstractStrategy):
         short_window_period : int : Window size for the short moving average. Can be provided by the user.
         long_window_period : int : Window size for the long moving average. Can be provided by the user.
     """
+
     short_window_dict = {FrequencyType.DAILY: 10, FrequencyType.WEEKLY: 5, FrequencyType.MONTHLY: 3}
     long_window_dict = {FrequencyType.DAILY: 50, FrequencyType.WEEKLY: 30, FrequencyType.MONTHLY: 12}
 
@@ -80,9 +78,9 @@ class TrendFollowingStrategy(AbstractStrategy):
 
 
 @dataclass
-class MomentumStrategy(AbstractStrategy):
+class MomentumStrategy(AbstractLongShortStrategy):
     """Invest in assets that have shown positive returns during a recent period."""
-
+    
     def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:
         data = historical_data[-self.adjusted_lookback_period-1:]
         new_weights = self.fit(data)
@@ -149,7 +147,7 @@ class LowVolatilityStrategy(AbstractStrategy):
 
 
 @dataclass
-class MeanRevertingStrategy(AbstractStrategy):
+class MeanRevertingStrategy(AbstractLongShortStrategy):
     """Invest in assets that have deviated from their historical mean."""
 
     def get_position(self, historical_data : np.ndarray[float], current_position: np.ndarray[float]) -> np.ndarray[float]:

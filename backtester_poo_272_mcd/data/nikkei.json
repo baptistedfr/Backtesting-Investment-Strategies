@@ -1,0 +1,902 @@
+[
+    {
+        "Ticker": "8766.T",
+        "Nom": "Tokio Marine Holdings Inc"
+    },
+    {
+        "Ticker": "8309.T",
+        "Nom": "Sumitomo Mitsui Trust Group Inc"
+    },
+    {
+        "Ticker": "5411.T",
+        "Nom": "JFE Holdings Inc"
+    },
+    {
+        "Ticker": "8316.T",
+        "Nom": "Sumitomo Mitsui Financial Group Inc"
+    },
+    {
+        "Ticker": "8411.T",
+        "Nom": "Mizuho Financial Group Inc"
+    },
+    {
+        "Ticker": "2768.T",
+        "Nom": "Sojitz Corp"
+    },
+    {
+        "Ticker": "1721.T",
+        "Nom": "COMSYS Holdings Corp"
+    },
+    {
+        "Ticker": "8795.T",
+        "Nom": "T&D Holdings Inc"
+    },
+    {
+        "Ticker": "6674.T",
+        "Nom": "GS Yuasa Corp"
+    },
+    {
+        "Ticker": "3382.T",
+        "Nom": "Seven & i Holdings Co Ltd"
+    },
+    {
+        "Ticker": "4568.T",
+        "Nom": "Daiichi Sankyo Co Ltd"
+    },
+    {
+        "Ticker": "4188.T",
+        "Nom": "Mitsubishi Chemical Group Corp"
+    },
+    {
+        "Ticker": "3436.T",
+        "Nom": "SUMCO Corp"
+    },
+    {
+        "Ticker": "1605.T",
+        "Nom": "Inpex Corp"
+    },
+    {
+        "Ticker": "8354.T",
+        "Nom": "Fukuoka Financial Group Inc"
+    },
+    {
+        "Ticker": "4751.T",
+        "Nom": "CyberAgent Inc"
+    },
+    {
+        "Ticker": "3086.T",
+        "Nom": "J Front Retailing Co Ltd"
+    },
+    {
+        "Ticker": "8725.T",
+        "Nom": "MS&AD Insurance Group Holdings Inc"
+    },
+    {
+        "Ticker": "3099.T",
+        "Nom": "Isetan Mitsukoshi Holdings Ltd"
+    },
+    {
+        "Ticker": "2269.T",
+        "Nom": "MEIJI Holdings Co Ltd"
+    },
+    {
+        "Ticker": "8630.T",
+        "Nom": "Sompo Holdings Inc"
+    },
+    {
+        "Ticker": "5020.T",
+        "Nom": "ENEOS Holdings Inc"
+    },
+    {
+        "Ticker": "6526.T",
+        "Nom": "Socionext Inc"
+    },
+    {
+        "Ticker": "9843.T",
+        "Nom": "Nitori Holdings Co Ltd"
+    },
+    {
+        "Ticker": "6988.T",
+        "Nom": "Nitto Denko Corp"
+    },
+    {
+        "Ticker": "3289.T",
+        "Nom": "Tokyu Fudosan Holdings Corp"
+    },
+    {
+        "Ticker": "1808.T",
+        "Nom": "Haseko Corp"
+    },
+    {
+        "Ticker": "3092.T",
+        "Nom": "ZOZO Inc"
+    },
+    {
+        "Ticker": "6723.T",
+        "Nom": "Renesas Electronics Corp"
+    },
+    {
+        "Ticker": "6861.T",
+        "Nom": "Keyence Corp"
+    },
+    {
+        "Ticker": "8697.T",
+        "Nom": "Japan Exchange Group Inc"
+    },
+    {
+        "Ticker": "2413.T",
+        "Nom": "M3 Inc"
+    },
+    {
+        "Ticker": "6098.T",
+        "Nom": "Recruit Holdings Co Ltd"
+    },
+    {
+        "Ticker": "6501.T",
+        "Nom": "Hitachi Ltd"
+    },
+    {
+        "Ticker": "7267.T",
+        "Nom": "Honda Motor Co Ltd"
+    },
+    {
+        "Ticker": "6971.T",
+        "Nom": "Kyocera Corp"
+    },
+    {
+        "Ticker": "6752.T",
+        "Nom": "Panasonic Holdings Corp"
+    },
+    {
+        "Ticker": "6758.T",
+        "Nom": "Sony Group Corp"
+    },
+    {
+        "Ticker": "6762.T",
+        "Nom": "TDK Corp"
+    },
+    {
+        "Ticker": "6857.T",
+        "Nom": "Advantest Corp"
+    },
+    {
+        "Ticker": "2802.T",
+        "Nom": "Ajinomoto Co Inc"
+    },
+    {
+        "Ticker": "9202.T",
+        "Nom": "ANA Holdings Inc"
+    },
+    {
+        "Ticker": "6770.T",
+        "Nom": "Alps Alpine Co Ltd"
+    },
+    {
+        "Ticker": "6113.T",
+        "Nom": "Amada Co Ltd"
+    },
+    {
+        "Ticker": "2502.T",
+        "Nom": "Asahi Group Holdings Ltd"
+    },
+    {
+        "Ticker": "3407.T",
+        "Nom": "Asahi Kasei Corp"
+    },
+    {
+        "Ticker": "5201.T",
+        "Nom": "AGC Inc"
+    },
+    {
+        "Ticker": "7741.T",
+        "Nom": "Hoya Corp"
+    },
+    {
+        "Ticker": "5108.T",
+        "Nom": "Bridgestone Corp"
+    },
+    {
+        "Ticker": "7751.T",
+        "Nom": "Canon Inc"
+    },
+    {
+        "Ticker": "6952.T",
+        "Nom": "Casio Computer Co Ltd"
+    },
+    {
+        "Ticker": "8331.T",
+        "Nom": "Chiba Bank Ltd/The"
+    },
+    {
+        "Ticker": "9502.T",
+        "Nom": "Chubu Electric Power Co Inc"
+    },
+    {
+        "Ticker": "4519.T",
+        "Nom": "Chugai Pharmaceutical Co Ltd"
+    },
+    {
+        "Ticker": "7762.T",
+        "Nom": "Citizen Watch Co Ltd"
+    },
+    {
+        "Ticker": "8253.T",
+        "Nom": "Credit Saison Co Ltd"
+    },
+    {
+        "Ticker": "7912.T",
+        "Nom": "Dai Nippon Printing Co Ltd"
+    },
+    {
+        "Ticker": "6367.T",
+        "Nom": "Daikin Industries Ltd"
+    },
+    {
+        "Ticker": "4506.T",
+        "Nom": "Sumitomo Pharma Co Ltd"
+    },
+    {
+        "Ticker": "7735.T",
+        "Nom": "SCREEN Holdings Co Ltd"
+    },
+    {
+        "Ticker": "1925.T",
+        "Nom": "Daiwa House Industry Co Ltd"
+    },
+    {
+        "Ticker": "8601.T",
+        "Nom": "Daiwa Securities Group Inc"
+    },
+    {
+        "Ticker": "4061.T",
+        "Nom": "Denka Co Ltd"
+    },
+    {
+        "Ticker": "5714.T",
+        "Nom": "Dowa Holdings Co Ltd"
+    },
+    {
+        "Ticker": "6361.T",
+        "Nom": "Ebara Corp"
+    },
+    {
+        "Ticker": "4523.T",
+        "Nom": "Eisai Co Ltd"
+    },
+    {
+        "Ticker": "6954.T",
+        "Nom": "FANUC Corp"
+    },
+    {
+        "Ticker": "6504.T",
+        "Nom": "Fuji Electric Co Ltd"
+    },
+    {
+        "Ticker": "7270.T",
+        "Nom": "Subaru Corp"
+    },
+    {
+        "Ticker": "4901.T",
+        "Nom": "FUJIFILM Holdings Corp"
+    },
+    {
+        "Ticker": "6981.T",
+        "Nom": "Murata Manufacturing Co Ltd"
+    },
+    {
+        "Ticker": "5803.T",
+        "Nom": "Fujikura Ltd"
+    },
+    {
+        "Ticker": "6702.T",
+        "Nom": "Fujitsu Ltd"
+    },
+    {
+        "Ticker": "5801.T",
+        "Nom": "Furukawa Electric Co Ltd"
+    },
+    {
+        "Ticker": "6594.T",
+        "Nom": "NIDEC CORP"
+    },
+    {
+        "Ticker": "9201.T",
+        "Nom": "Japan Airlines Co Ltd"
+    },
+    {
+        "Ticker": "7205.T",
+        "Nom": "Hino Motors Ltd"
+    },
+    {
+        "Ticker": "6305.T",
+        "Nom": "Hitachi Construction Machinery Co Ltd"
+    },
+    {
+        "Ticker": "7004.T",
+        "Nom": "Kanadevia Corp"
+    },
+    {
+        "Ticker": "7013.T",
+        "Nom": "IHI Corp"
+    },
+    {
+        "Ticker": "7202.T",
+        "Nom": "Isuzu Motors Ltd"
+    },
+    {
+        "Ticker": "8001.T",
+        "Nom": "ITOCHU Corp"
+    },
+    {
+        "Ticker": "5631.T",
+        "Nom": "Japan Steel Works Ltd/The"
+    },
+    {
+        "Ticker": "1963.T",
+        "Nom": "JGC Holdings Corp"
+    },
+    {
+        "Ticker": "8267.T",
+        "Nom": "Aeon Co Ltd"
+    },
+    {
+        "Ticker": "1812.T",
+        "Nom": "Kajima Corp"
+    },
+    {
+        "Ticker": "9503.T",
+        "Nom": "Kansai Electric Power Co Inc/The"
+    },
+    {
+        "Ticker": "4452.T",
+        "Nom": "Kao Corp"
+    },
+    {
+        "Ticker": "6645.T",
+        "Nom": "Omron Corp"
+    },
+    {
+        "Ticker": "7012.T",
+        "Nom": "Kawasaki Heavy Industries Ltd"
+    },
+    {
+        "Ticker": "9107.T",
+        "Nom": "Kawasaki Kisen Kaisha Ltd"
+    },
+    {
+        "Ticker": "8591.T",
+        "Nom": "ORIX Corp"
+    },
+    {
+        "Ticker": "9434.T",
+        "Nom": "SoftBank Corp"
+    },
+    {
+        "Ticker": "9008.T",
+        "Nom": "Keio Corp"
+    },
+    {
+        "Ticker": "9009.T",
+        "Nom": "Keisei Electric Railway Co Ltd"
+    },
+    {
+        "Ticker": "2801.T",
+        "Nom": "Kikkoman Corp"
+    },
+    {
+        "Ticker": "7974.T",
+        "Nom": "Nintendo Co Ltd"
+    },
+    {
+        "Ticker": "2503.T",
+        "Nom": "Kirin Holdings Co Ltd"
+    },
+    {
+        "Ticker": "5406.T",
+        "Nom": "Kobe Steel Ltd"
+    },
+    {
+        "Ticker": "6301.T",
+        "Nom": "Komatsu Ltd"
+    },
+    {
+        "Ticker": "9766.T",
+        "Nom": "Konami Group Corp"
+    },
+    {
+        "Ticker": "4902.T",
+        "Nom": "Konica Minolta Inc"
+    },
+    {
+        "Ticker": "6473.T",
+        "Nom": "JTEKT Corp"
+    },
+    {
+        "Ticker": "6326.T",
+        "Nom": "Kubota Corp"
+    },
+    {
+        "Ticker": "3405.T",
+        "Nom": "Kuraray Co Ltd"
+    },
+    {
+        "Ticker": "4151.T",
+        "Nom": "Kyowa Kirin Co Ltd"
+    },
+    {
+        "Ticker": "8002.T",
+        "Nom": "Marubeni Corp"
+    },
+    {
+        "Ticker": "8252.T",
+        "Nom": "Marui Group Co Ltd"
+    },
+    {
+        "Ticker": "7261.T",
+        "Nom": "Mazda Motor Corp"
+    },
+    {
+        "Ticker": "6479.T",
+        "Nom": "MINEBEA MITSUMI Inc"
+    },
+    {
+        "Ticker": "9301.T",
+        "Nom": "Mitsubishi Logistics Corp"
+    },
+    {
+        "Ticker": "8058.T",
+        "Nom": "Mitsubishi Corp"
+    },
+    {
+        "Ticker": "6503.T",
+        "Nom": "Mitsubishi Electric Corp"
+    },
+    {
+        "Ticker": "8802.T",
+        "Nom": "Mitsubishi Estate Co Ltd"
+    },
+    {
+        "Ticker": "7011.T",
+        "Nom": "Mitsubishi Heavy Industries Ltd"
+    },
+    {
+        "Ticker": "4043.T",
+        "Nom": "Tokuyama Corp"
+    },
+    {
+        "Ticker": "5711.T",
+        "Nom": "Mitsubishi Materials Corp"
+    },
+    {
+        "Ticker": "7211.T",
+        "Nom": "Mitsubishi Motors Corp"
+    },
+    {
+        "Ticker": "8031.T",
+        "Nom": "Mitsui & Co Ltd"
+    },
+    {
+        "Ticker": "8801.T",
+        "Nom": "Mitsui Fudosan Co Ltd"
+    },
+    {
+        "Ticker": "5706.T",
+        "Nom": "Mitsui Mining & Smelting Co Ltd"
+    },
+    {
+        "Ticker": "9104.T",
+        "Nom": "Mitsui OSK Lines Ltd"
+    },
+    {
+        "Ticker": "7272.T",
+        "Nom": "Yamaha Motor Co Ltd"
+    },
+    {
+        "Ticker": "4183.T",
+        "Nom": "Mitsui Chemicals Inc"
+    },
+    {
+        "Ticker": "6701.T",
+        "Nom": "NEC Corp"
+    },
+    {
+        "Ticker": "5333.T",
+        "Nom": "NGK Insulators Ltd"
+    },
+    {
+        "Ticker": "2871.T",
+        "Nom": "Nichirei Corp"
+    },
+    {
+        "Ticker": "7731.T",
+        "Nom": "Nikon Corp"
+    },
+    {
+        "Ticker": "8304.T",
+        "Nom": "Aozora Bank Ltd"
+    },
+    {
+        "Ticker": "5214.T",
+        "Nom": "Nippon Electric Glass Co Ltd"
+    },
+    {
+        "Ticker": "6146.T",
+        "Nom": "Disco Corp"
+    },
+    {
+        "Ticker": "2282.T",
+        "Nom": "NH Foods Ltd"
+    },
+    {
+        "Ticker": "7832.T",
+        "Nom": "Bandai Namco Holdings Inc"
+    },
+    {
+        "Ticker": "6471.T",
+        "Nom": "NSK Ltd"
+    },
+    {
+        "Ticker": "5831.T",
+        "Nom": "Shizuoka Financial Group Inc"
+    },
+    {
+        "Ticker": "5401.T",
+        "Nom": "Nippon Steel Corp"
+    },
+    {
+        "Ticker": "1332.T",
+        "Nom": "Nissui Corp"
+    },
+    {
+        "Ticker": "9432.T",
+        "Nom": "Nippon Telegraph & Telephone Corp"
+    },
+    {
+        "Ticker": "9101.T",
+        "Nom": "Nippon Yusen KK"
+    },
+    {
+        "Ticker": "6902.T",
+        "Nom": "Denso Corp"
+    },
+    {
+        "Ticker": "6273.T",
+        "Nom": "SMC Corp"
+    },
+    {
+        "Ticker": "4021.T",
+        "Nom": "Nissan Chemical Corp"
+    },
+    {
+        "Ticker": "7201.T",
+        "Nom": "Nissan Motor Co Ltd"
+    },
+    {
+        "Ticker": "2002.T",
+        "Nom": "Nisshin Seifun Group Inc"
+    },
+    {
+        "Ticker": "7453.T",
+        "Nom": "Ryohin Keikaku Co Ltd"
+    },
+    {
+        "Ticker": "4385.T",
+        "Nom": "Mercari Inc"
+    },
+    {
+        "Ticker": "8604.T",
+        "Nom": "Nomura Holdings Inc"
+    },
+    {
+        "Ticker": "4307.T",
+        "Nom": "Nomura Research Institute Ltd"
+    },
+    {
+        "Ticker": "6472.T",
+        "Nom": "NTN Corp"
+    },
+    {
+        "Ticker": "1802.T",
+        "Nom": "Obayashi Corp"
+    },
+    {
+        "Ticker": "9007.T",
+        "Nom": "Odakyu Electric Railway Co Ltd"
+    },
+    {
+        "Ticker": "3861.T",
+        "Nom": "Oji Holdings Corp"
+    },
+    {
+        "Ticker": "7186.T",
+        "Nom": "Concordia Financial Group Ltd"
+    },
+    {
+        "Ticker": "6103.T",
+        "Nom": "OKUMA Corp"
+    },
+    {
+        "Ticker": "4661.T",
+        "Nom": "Oriental Land Co Ltd/Japan"
+    },
+    {
+        "Ticker": "7733.T",
+        "Nom": "Olympus Corp"
+    },
+    {
+        "Ticker": "5233.T",
+        "Nom": "Taiheiyo Cement Corp"
+    },
+    {
+        "Ticker": "9532.T",
+        "Nom": "Osaka Gas Co Ltd"
+    },
+    {
+        "Ticker": "6178.T",
+        "Nom": "Japan Post Holdings Co Ltd"
+    },
+    {
+        "Ticker": "7752.T",
+        "Nom": "Ricoh Co Ltd"
+    },
+    {
+        "Ticker": "2501.T",
+        "Nom": "Sapporo Holdings Ltd"
+    },
+    {
+        "Ticker": "9735.T",
+        "Nom": "Secom Co Ltd"
+    },
+    {
+        "Ticker": "1928.T",
+        "Nom": "Sekisui House Ltd"
+    },
+    {
+        "Ticker": "6753.T",
+        "Nom": "Sharp Corp/Japan"
+    },
+    {
+        "Ticker": "1803.T",
+        "Nom": "Shimizu Corp"
+    },
+    {
+        "Ticker": "4063.T",
+        "Nom": "Shin-Etsu Chemical Co Ltd"
+    },
+    {
+        "Ticker": "4507.T",
+        "Nom": "Shionogi & Co Ltd"
+    },
+    {
+        "Ticker": "5019.T",
+        "Nom": "Idemitsu Kosan Co Ltd"
+    },
+    {
+        "Ticker": "4911.T",
+        "Nom": "Shiseido Co Ltd"
+    },
+    {
+        "Ticker": "4004.T",
+        "Nom": "Resonac Holdings Corp"
+    },
+    {
+        "Ticker": "4005.T",
+        "Nom": "Sumitomo Chemical Co Ltd"
+    },
+    {
+        "Ticker": "8053.T",
+        "Nom": "Sumitomo Corp"
+    },
+    {
+        "Ticker": "5802.T",
+        "Nom": "Sumitomo Electric Industries Ltd"
+    },
+    {
+        "Ticker": "4755.T",
+        "Nom": "Rakuten Group Inc"
+    },
+    {
+        "Ticker": "6302.T",
+        "Nom": "Sumitomo Heavy Industries Ltd"
+    },
+    {
+        "Ticker": "5713.T",
+        "Nom": "Sumitomo Metal Mining Co Ltd"
+    },
+    {
+        "Ticker": "8830.T",
+        "Nom": "Sumitomo Realty & Development Co Ltd"
+    },
+    {
+        "Ticker": "7269.T",
+        "Nom": "Suzuki Motor Corp"
+    },
+    {
+        "Ticker": "1801.T",
+        "Nom": "Taisei Corp"
+    },
+    {
+        "Ticker": "6976.T",
+        "Nom": "Taiyo Yuden Co Ltd"
+    },
+    {
+        "Ticker": "8233.T",
+        "Nom": "Takashimaya Co Ltd"
+    },
+    {
+        "Ticker": "4502.T",
+        "Nom": "Takeda Pharmaceutical Co Ltd"
+    },
+    {
+        "Ticker": "3401.T",
+        "Nom": "Teijin Ltd"
+    },
+    {
+        "Ticker": "6920.T",
+        "Nom": "Lasertec Corp"
+    },
+    {
+        "Ticker": "6724.T",
+        "Nom": "Seiko Epson Corp"
+    },
+    {
+        "Ticker": "4543.T",
+        "Nom": "Terumo Corp"
+    },
+    {
+        "Ticker": "9001.T",
+        "Nom": "Tobu Railway Co Ltd"
+    },
+    {
+        "Ticker": "9602.T",
+        "Nom": "Toho Co Ltd/Tokyo"
+    },
+    {
+        "Ticker": "5301.T",
+        "Nom": "Tokai Carbon Co Ltd"
+    },
+    {
+        "Ticker": "2432.T",
+        "Nom": "DeNA Co Ltd"
+    },
+    {
+        "Ticker": "9501.T",
+        "Nom": "Tokyo Electric Power Co Holdings Inc"
+    },
+    {
+        "Ticker": "8035.T",
+        "Nom": "Tokyo Electron Ltd"
+    },
+    {
+        "Ticker": "9531.T",
+        "Nom": "Tokyo Gas Co Ltd"
+    },
+    {
+        "Ticker": "8804.T",
+        "Nom": "Tokyo Tatemono Co Ltd"
+    },
+    {
+        "Ticker": "9005.T",
+        "Nom": "Tokyu Corp"
+    },
+    {
+        "Ticker": "3659.T",
+        "Nom": "Nexon Co Ltd"
+    },
+    {
+        "Ticker": "7911.T",
+        "Nom": "TOPPAN Holdings Inc"
+    },
+    {
+        "Ticker": "3402.T",
+        "Nom": "Toray Industries Inc"
+    },
+    {
+        "Ticker": "4042.T",
+        "Nom": "Tosoh Corp"
+    },
+    {
+        "Ticker": "4578.T",
+        "Nom": "Otsuka Holdings Co Ltd"
+    },
+    {
+        "Ticker": "5332.T",
+        "Nom": "TOTO Ltd"
+    },
+    {
+        "Ticker": "7203.T",
+        "Nom": "Toyota Motor Corp"
+    },
+    {
+        "Ticker": "8015.T",
+        "Nom": "Toyota Tsusho Corp"
+    },
+    {
+        "Ticker": "4208.T",
+        "Nom": "UBE Corp"
+    },
+    {
+        "Ticker": "7951.T",
+        "Nom": "Yamaha Corp"
+    },
+    {
+        "Ticker": "9147.T",
+        "Nom": "NIPPON EXPRESS HOLDINGS INC"
+    },
+    {
+        "Ticker": "4503.T",
+        "Nom": "Astellas Pharma Inc"
+    },
+    {
+        "Ticker": "9064.T",
+        "Nom": "Yamato Holdings Co Ltd"
+    },
+    {
+        "Ticker": "6506.T",
+        "Nom": "Yaskawa Electric Corp"
+    },
+    {
+        "Ticker": "6841.T",
+        "Nom": "Yokogawa Electric Corp"
+    },
+    {
+        "Ticker": "5101.T",
+        "Nom": "Yokohama Rubber Co Ltd/The"
+    },
+    {
+        "Ticker": "9020.T",
+        "Nom": "East Japan Railway Co"
+    },
+    {
+        "Ticker": "9433.T",
+        "Nom": "KDDI Corp"
+    },
+    {
+        "Ticker": "4324.T",
+        "Nom": "Dentsu Group Inc"
+    },
+    {
+        "Ticker": "9984.T",
+        "Nom": "SoftBank Group Corp"
+    },
+    {
+        "Ticker": "9983.T",
+        "Nom": "Fast Retailing Co Ltd"
+    },
+    {
+        "Ticker": "2914.T",
+        "Nom": "Japan Tobacco Inc"
+    },
+    {
+        "Ticker": "9613.T",
+        "Nom": "NTT Data Group Corp"
+    },
+    {
+        "Ticker": "9021.T",
+        "Nom": "West Japan Railway Co"
+    },
+    {
+        "Ticker": "9022.T",
+        "Nom": "Central Japan Railway Co"
+    },
+    {
+        "Ticker": "8750.T",
+        "Nom": "Dai-ichi Life Holdings Inc"
+    },
+    {
+        "Ticker": "4689.T",
+        "Nom": "LY Corp"
+    },
+    {
+        "Ticker": "4704.T",
+        "Nom": "Trend Micro Inc/Japan"
+    },
+    {
+        "Ticker": "8306.T",
+        "Nom": "Mitsubishi UFJ Financial Group Inc"
+    },
+    {
+        "Ticker": "8308.T",
+        "Nom": "Resona Holdings Inc"
+    }
+]

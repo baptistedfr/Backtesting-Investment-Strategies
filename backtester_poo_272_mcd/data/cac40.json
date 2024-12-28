@@ -1,0 +1,202 @@
+[
+    {
+        "Ticker": "OR.PA",
+        "Nom": "L'ORÉAL",
+        "Poids": 0.058505850585058514
+    },
+    {
+        "Ticker": "DG.PA",
+        "Nom": "VINCI",
+        "Poids": 0.032803280328032806
+    },
+    {
+        "Ticker": "STLAP.PA",
+        "Nom": "STELLANTIS N.V.",
+        "Poids": 0.026002600260026005
+    },
+    {
+        "Ticker": "TTE.PA",
+        "Nom": "TOTALENERGIES SE",
+        "Poids": 0.08830883088308832
+    },
+    {
+        "Ticker": "AI.PA",
+        "Nom": "AIR LIQUIDE",
+        "Poids": 0.051205120512051214
+    },
+    {
+        "Ticker": "DSY.PA",
+        "Nom": "DASSAULT SYSTÈMES",
+        "Poids": 0.014101410141014103
+    },
+    {
+        "Ticker": "CS.PA",
+        "Nom": "AXA",
+        "Poids": 0.034403440344034406
+    },
+    {
+        "Ticker": "ERF.PA",
+        "Nom": "EUROFINS SCIENTIFIC SE",
+        "Poids": 0.0039003900390039005
+    },
+    {
+        "Ticker": "BNP.PA",
+        "Nom": "BNP PARIBAS",
+        "Poids": 0.04230423042304231
+    },
+    {
+        "Ticker": "BN.PA",
+        "Nom": "DANONE",
+        "Poids": 0.020502050205020505
+    },
+    {
+        "Ticker": "CAP.PA",
+        "Nom": "CAPGEMINI SE",
+        "Poids": 0.018901890189018902
+    },
+    {
+        "Ticker": "CA.PA",
+        "Nom": "CARREFOUR",
+        "Poids": 0.005000500050005001
+    },
+    {
+        "Ticker": "SGO.PA",
+        "Nom": "SAINT-GOBAIN",
+        "Poids": 0.020202020202020204
+    },
+    {
+        "Ticker": "AC.PA",
+        "Nom": "ACCOR",
+        "Poids": 0.0042004200420042
+    },
+    {
+        "Ticker": "EL.PA",
+        "Nom": "ESSILORLUXOTTICA",
+        "Poids": 0.035803580358035804
+    },
+    {
+        "Ticker": "VIV.PA",
+        "Nom": "VIVENDI SE",
+        "Poids": 0.0039003900390039005
+    },
+    {
+        "Ticker": "MC.PA",
+        "Nom": "LVMH",
+        "Poids": 0.10161016101610161
+    },
+    {
+        "Ticker": "ML.PA",
+        "Nom": "MICHELIN",
+        "Poids": 0.014001400140014003
+    },
+    {
+        "Ticker": "EDEN.PA",
+        "Nom": "EDENRED",
+        "Poids": 0.0061006100610061014
+    },
+    {
+        "Ticker": "KER.PA",
+        "Nom": "KERING",
+        "Poids": 0.013301330133013302
+    },
+    {
+        "Ticker": "PUB.PA",
+        "Nom": "PUBLICIS GROUPE",
+        "Poids": 0.013201320132013203
+    },
+    {
+        "Ticker": "RNO.PA",
+        "Nom": "RENAULT",
+        "Poids": 0.005300530053005301
+    },
+    {
+        "Ticker": "SAF.PA",
+        "Nom": "SAFRAN",
+        "Poids": 0.04250425042504251
+    },
+    {
+        "Ticker": "HO.PA",
+        "Nom": "THALES",
+        "Poids": 0.009500950095009501
+    },
+    {
+        "Ticker": "TEP.PA",
+        "Nom": "TELEPERFORMANCE",
+        "Poids": 0.003300330033003301
+    },
+    {
+        "Ticker": "RMS.PA",
+        "Nom": "HERMÈS INTERNATIONAL",
+        "Poids": 0.03730373037303731
+    },
+    {
+        "Ticker": "ENGI.PA",
+        "Nom": "ENGIE",
+        "Poids": 0.015201520152015204
+    },
+    {
+        "Ticker": "ORA.PA",
+        "Nom": "ORANGE",
+        "Poids": 0.010601060106010602
+    },
+    {
+        "Ticker": "MTS.MC",
+        "Nom": "ARCELORMITTAL",
+        "Poids": 0.006500650065006501
+    },
+    {
+        "Ticker": "EN.PA",
+        "Nom": "BOUYGUES",
+        "Poids": 0.0036003600360036006
+    },
+    {
+        "Ticker": "VIE.PA",
+        "Nom": "VEOLIA ENVIRONNEMENT",
+        "Poids": 0.010001000100010001
+    },
+    {
+        "Ticker": "SAN.PA",
+        "Nom": "SANOFI",
+        "Poids": 0.05520552055205521
+    },
+    {
+        "Ticker": "GLE.PA",
+        "Nom": "SOCIÉTÉ GÉNÉRALE",
+        "Poids": 0.010901090109010901
+    },
+    {
+        "Ticker": "SU.PA",
+        "Nom": "SCHNEIDER ELECTRIC SE",
+        "Poids": 0.07260726072607261
+    },
+    {
+        "Ticker": "AIR.PA",
+        "Nom": "AIRBUS SE",
+        "Poids": 0.051405140514051414
+    },
+    {
+        "Ticker": "LR.PA",
+        "Nom": "LEGRAND",
+        "Poids": 0.014901490149014903
+    },
+    {
+        "Ticker": "URW.PA",
+        "Nom": "UNIBAIL-RODAMCO-WESTFIELD",
+        "Poids": 0.005000500050005001
+    },
+    {
+        "Ticker": "ACA.PA",
+        "Nom": "CRÉDIT AGRICOLE S.A.",
+        "Poids": 0.009000900090009001
+    },
+    {
+        "Ticker": "RI.PA",
+        "Nom": "PERNOD RICARD",
+        "Poids": 0.015601560156015602
+    },
+    {
+        "Ticker": "STMPA.PA",
+        "Nom": "STMICROELECTRONICS",
+        "Poids": 0.013301330133013302
+    }
+]

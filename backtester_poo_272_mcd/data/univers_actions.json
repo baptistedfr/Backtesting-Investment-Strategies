@@ -1,0 +1,158 @@
+[
+    {
+        "Stock Name": "Michelin",
+        "Stock Ticker": "ML.PA"
+    },
+    {
+        "Stock Name": "Engie",
+        "Stock Ticker": "ENGI.PA"
+    },
+    {
+        "Stock Name": "Air liquide",
+        "Stock Ticker": "AI.PA"
+    },
+    {
+        "Stock Name": "Airbus",
+        "Stock Ticker": "AIR.PA"
+    },
+    {
+        "Stock Name": "Société Générale",
+        "Stock Ticker": "GLE.PA"
+    },
+    {
+        "Stock Name": "Danone",
+        "Stock Ticker": "BN.PA"
+    },
+    {
+        "Stock Name": "Crédit Agricole",
+        "Stock Ticker": "ACA.PA"
+    },
+    {
+        "Stock Name": "Vinci",
+        "Stock Ticker": "DG.PA"
+    },
+    {
+        "Stock Name": "Le grand",
+        "Stock Ticker": "LR.PA"
+    },
+    {
+        "Stock Name": "Sanofi",
+        "Stock Ticker": "SAN.PA"
+    },
+    {
+        "Stock Name": "Schneider",
+        "Stock Ticker": "SU.PA"
+    },
+    {
+        "Stock Name": "Pernod Ricard",
+        "Stock Ticker": "RI.PA"
+    },
+    {
+        "Stock Name": "Capgemini",
+        "Stock Ticker": "CAP.PA"
+    },
+    {
+        "Stock Name": "Véolia",
+        "Stock Ticker": "VIE.PA"
+    },
+    {
+        "Stock Name": "Sodexo",
+        "Stock Ticker": "SW.PA"
+    },
+    {
+        "Stock Name": "LVMH",
+        "Stock Ticker": "MC.PA"
+    },
+    {
+        "Stock Name": "Bouygues",
+        "Stock Ticker": "EN.PA"
+    },
+    {
+        "Stock Name": "L'Oréal",
+        "Stock Ticker": "OR.PA"
+    },
+    {
+        "Stock Name": "BNP",
+        "Stock Ticker": "BNP.PA"
+    },
+    {
+        "Stock Name": "Orange",
+        "Stock Ticker": "ORA.PA"
+    },
+    {
+        "Stock Name": "Accor",
+        "Stock Ticker": "AC.PA"
+    },
+    {
+        "Stock Name": "Saint Gobain",
+        "Stock Ticker": "SGO.PA"
+    },
+    {
+        "Stock Name": "Carrefour",
+        "Stock Ticker": "CA.PA"
+    },
+    {
+        "Stock Name": "Kering",
+        "Stock Ticker": "KER.PA"
+    },
+    {
+        "Stock Name": "Thales",
+        "Stock Ticker": "HO.PA"
+    },
+    {
+        "Stock Name": "Alstom",
+        "Stock Ticker": "ALO.PA"
+    },
+    {
+        "Stock Name": "Axa",
+        "Stock Ticker": "CS.PA"
+    },
+    {
+        "Stock Name": "Dassault Systemes",
+        "Stock Ticker": "AM.PA"
+    },
+    {
+        "Stock Name": "Edenred",
+        "Stock Ticker": "EDEN.PA"
+    },
+    {
+        "Stock Name": "EssilorLuxottica",
+        "Stock Ticker": "EL.PA"
+    },
+    {
+        "Stock Name": "Eurofin Scientific",
+        "Stock Ticker": "ERF.PA"
+    },
+    {
+        "Stock Name": "Hermès",
+        "Stock Ticker": "RMS.PA"
+    },
+    {
+        "Stock Name": "Publicis",
+        "Stock Ticker": "PUB.PA"
+    },
+    {
+        "Stock Name": "Renault",
+        "Stock Ticker": "RNO.PA"
+    },
+    {
+        "Stock Name": "Safran",
+        "Stock Ticker": "SAF.PA"
+    },
+    {
+        "Stock Name": "Stellantis",
+        "Stock Ticker": "STLAP.PA"
+    },
+    {
+        "Stock Name": "STMicroelectronics",
+        "Stock Ticker": "STMPA.PA"
+    },
+    {
+        "Stock Name": "Teleperformance",
+        "Stock Ticker": "TEP.PA"
+    },
+    {
+        "Stock Name": "Vivendi",
+        "Stock Ticker": "VIV.PA"
+    }
+]

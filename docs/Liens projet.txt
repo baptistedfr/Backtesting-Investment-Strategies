@@ -1,3 +1,0 @@
-Consigne : https://remigenet.github.io/OOP_Python/content/Projets/m2_EIF_2024.html
-
-Organisation projet : https://remigenet.github.io/OOP_Python/content/Cours_5/1-Project_layout.html

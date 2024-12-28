@@ -5,7 +5,7 @@ description = "POO Project for backtesting investment strategies"
 authors = ["baptistedfr <bapdufo@gmail.com>"]
 readme = "README.md"
 packages = [
-    { include = "my_package" }
+    { include = "backtester_poo_272_mcd" }
 ]
 
 [tool.poetry.dependencies]

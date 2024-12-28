@@ -6,7 +6,6 @@ class InputType(Enum):
     FROM_INDEX_COMPOSITION = "Index"
     FROM_FILE = "File"
     FROM_DATAFRAME = "DataFrame"
-    FROM_BLOOMBERG = "Bloomberg"
 
 class FrequencyType(Enum):
     DAILY = 252 # 252 jours de trading dans une année

@@ -2,8 +2,8 @@ import pytest
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from my_package.results import Results
-from my_package.tools import FrequencyType
+from backtester_poo_272_mcd.results import Results
+from backtester_poo_272_mcd.tools import FrequencyType
 import plotly.graph_objects as go
 
 @pytest.fixture

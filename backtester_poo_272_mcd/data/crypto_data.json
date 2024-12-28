@@ -1,0 +1,247 @@
+[
+    {
+        "Coin": "BTC",
+        "Target": "USDT",
+        "Ticker": "BTCUSDT"
+    },
+    {
+        "Coin": "ETH",
+        "Target": "USDT",
+        "Ticker": "ETHUSDT"
+    },
+    {
+        "Coin": "SOL",
+        "Target": "USDT",
+        "Ticker": "SOLUSDT"
+    },
+    {
+        "Coin": "BNB",
+        "Target": "USDT",
+        "Ticker": "BNBUSDT"
+    },
+    {
+        "Coin": "WIF",
+        "Target": "USDT",
+        "Ticker": "WIFUSDT"
+    },
+    {
+        "Coin": "SUI",
+        "Target": "USDT",
+        "Ticker": "SUIUSDT"
+    },
+    {
+        "Coin": "TAO",
+        "Target": "USDT",
+        "Ticker": "TAOUSDT"
+    },
+    {
+        "Coin": "DOGE",
+        "Target": "USDT",
+        "Ticker": "DOGEUSDT"
+    },
+    {
+        "Coin": "XRP",
+        "Target": "USDT",
+        "Ticker": "XRPUSDT"
+    },
+    {
+        "Coin": "FTM",
+        "Target": "USDT",
+        "Ticker": "FTMUSDT"
+    },
+    {
+        "Coin": "SEI",
+        "Target": "USDT",
+        "Ticker": "SEIUSDT"
+    },
+    {
+        "Coin": "RUNE",
+        "Target": "USDT",
+        "Ticker": "RUNEUSDT"
+    },
+    {
+        "Coin": "PEPE",
+        "Target": "USDT",
+        "Ticker": "PEPEUSDT"
+    },
+    {
+        "Coin": "NEAR",
+        "Target": "USDT",
+        "Ticker": "NEARUSDT"
+    },
+    {
+        "Coin": "ARB",
+        "Target": "USDT",
+        "Ticker": "ARBUSDT"
+    },
+    {
+        "Coin": "AAVE",
+        "Target": "USDT",
+        "Ticker": "AAVEUSDT"
+    },
+    {
+        "Coin": "RENDER",
+        "Target": "USDT",
+        "Ticker": "RENDERUSDT"
+    },
+    {
+        "Coin": "JUP",
+        "Target": "USDT",
+        "Ticker": "JUPUSDT"
+    },
+    {
+        "Coin": "FET",
+        "Target": "USDT",
+        "Ticker": "FETUSDT"
+    },
+    {
+        "Coin": "AVAX",
+        "Target": "USDT",
+        "Ticker": "AVAXUSDT"
+    },
+    {
+        "Coin": "SHIB",
+        "Target": "USDT",
+        "Ticker": "SHIBUSDT"
+    },
+    {
+        "Coin": "BONK",
+        "Target": "USDT",
+        "Ticker": "BONKUSDT"
+    },
+    {
+        "Coin": "TRX",
+        "Target": "USDT",
+        "Ticker": "TRXUSDT"
+    },
+    {
+        "Coin": "ICP",
+        "Target": "USDT",
+        "Ticker": "ICPUSDT"
+    },
+    {
+        "Coin": "FIL",
+        "Target": "USDT",
+        "Ticker": "FILUSDT"
+    },
+    {
+        "Coin": "APT",
+        "Target": "USDT",
+        "Ticker": "APTUSDT"
+    },
+    {
+        "Coin": "DOT",
+        "Target": "USDT",
+        "Ticker": "DOTUSDT"
+    },
+    {
+        "Coin": "INJ",
+        "Target": "USDT",
+        "Ticker": "INJUSDT"
+    },
+    {
+        "Coin": "ATOM",
+        "Target": "USDT",
+        "Ticker": "ATOMUSDT"
+    },
+    {
+        "Coin": "UNI",
+        "Target": "USDT",
+        "Ticker": "UNIUSDT"
+    },
+    {
+        "Coin": "LINK",
+        "Target": "USDT",
+        "Ticker": "LINKUSDT"
+    },
+    {
+        "Coin": "STX",
+        "Target": "USDT",
+        "Ticker": "STXUSDT"
+    },
+    {
+        "Coin": "MKR",
+        "Target": "USDT",
+        "Ticker": "MKRUSDT"
+    },
+    {
+        "Coin": "AR",
+        "Target": "USDT",
+        "Ticker": "ARUSDT"
+    },
+    {
+        "Coin": "BTC",
+        "Target": "USDT",
+        "Ticker": "BTCUSDT"
+    },
+    {
+        "Coin": "ETH",
+        "Target": "USDT",
+        "Ticker": "ETHUSDT"
+    },
+    {
+        "Coin": "SOL",
+        "Target": "USDT",
+        "Ticker": "SOLUSDT"
+    },
+    {
+        "Coin": "BNB",
+        "Target": "USDT",
+        "Ticker": "BNBUSDT"
+    },
+    {
+        "Coin": "FTM",
+        "Target": "USDT",
+        "Ticker": "FTMUSDT"
+    },
+    {
+        "Coin": "SEI",
+        "Target": "USDT",
+        "Ticker": "SEIUSDT"
+    },
+    {
+        "Coin": "RUNE",
+        "Target": "USDT",
+        "Ticker": "RUNEUSDT"
+    },
+    {
+        "Coin": "PEPE",
+        "Target": "USDT",
+        "Ticker": "PEPEUSDT"
+    },
+    {
+        "Coin": "NEAR",
+        "Target": "USDT",
+        "Ticker": "NEARUSDT"
+    },
+    {
+        "Coin": "RENDER",
+        "Target": "USDT",
+        "Ticker": "RENDERUSDT"
+    },
+    {
+        "Coin": "JUP",
+        "Target": "USDT",
+        "Ticker": "JUPUSDT"
+    },
+    {
+        "Coin": "FET",
+        "Target": "USDT",
+        "Ticker": "FETUSDT"
+    },
+    {
+        "Coin": "TRX",
+        "Target": "USDT",
+        "Ticker": "TRXUSDT"
+    },
+    {
+        "Coin": "ICP",
+        "Target": "USDT",
+        "Ticker": "ICPUSDT"
+    },
+    {
+        "Coin": "INJ",
+        "Target": "USDT",
+        "Ticker": "INJUSDT"
+    }
+]

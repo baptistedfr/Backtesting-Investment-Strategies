@@ -2,8 +2,8 @@ import pytest
 import numpy as np
 import pandas as pd
 from datetime import datetime
-from my_package.tools import InputType, FrequencyType, Index, Benchmark
-from my_package import DataInput
+from backtester_poo_272_mcd.tools import InputType, FrequencyType, Index, Benchmark
+from backtester_poo_272_mcd import DataInput
 
 def test_data_input_no_benchmark():
     """

@@ -43,8 +43,6 @@ class CustomDataInput(AbstractDataInput):
             raise BadInput("N/A found in selected file")
         
         if start_date is not None and end_date is not None :
-            if start_date not in df["Date"] or end_date not in df["Date"]:
-                raise BadInput("Selected start or end date not present in file")
             df['Date'] = pd.to_datetime(df['Date'])
             df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
 

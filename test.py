@@ -1,23 +1,25 @@
-from my_package.tools import InputType, FrequencyType, Index, Benchmark
-from my_package.strategies import *
-from my_package import Backtester
-from my_package import DataInput
-from my_package import Results
+from backtester_poo_272_mcd.tools import InputType, FrequencyType, Index, Benchmark
+from backtester_poo_272_mcd.strategies import *
+from backtester_poo_272_mcd import Backtester
+from backtester_poo_272_mcd import DataInput
+from backtester_poo_272_mcd import Results
 import yfinance as yf
 
-'''data = DataInput(data_type=InputType.EQUITY,
+data = DataInput(data_type=InputType.EQUITY,
                         tickers=['GLE.PA', 'OR.PA','MC.PA','VIV.PA','TTE.PA'],
                         start_date='2015-10-01',
                         end_date='2024-10-01',
                         frequency=FrequencyType.WEEKLY,
-                        benchmark=Benchmark.CAC40)'''
+                        benchmark=Benchmark.CAC40)
 
-data = DataInput(data_type=InputType.CRYPTO,
-                 tickers=['BTCUSDT','ETHUSDT','PEPEUSDT','DOGEUSDT','SOLUSDT'],
-                 start_date='2018-10-01',
-                 end_date='2024-11-15',
-                 frequency=FrequencyType.WEEKLY,
-                 )
+
+
+# data = DataInput(data_type=InputType.CRYPTO,
+#                  tickers=['BTCUSDT','ETHUSDT','PEPEUSDT','DOGEUSDT','SOLUSDT'],
+#                  start_date='2018-10-01',
+#                  end_date='2024-11-15',
+#                  frequency=FrequencyType.WEEKLY,
+#                  )
 
 
 '''# data = DataInput(data_type=InputType.FROM_FILE,
@@ -48,8 +50,8 @@ data = DataInput(data_type=InputType.CRYPTO,
 backtest = Backtester(data_input=data)
 
 strategy_momentum = MomentumStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1, is_LS_strategy=True)
-strategy_mr = MeanRevertingStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1, is_LS_strategy=True)
-strategy_tf = TrendFollowingStrategy(rebalance_frequency=FrequencyType.MONTHLY, short_window_period=10, long_window_period=50, is_LS_strategy=True)
+strategy_mr = MeanRevertingStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1, is_LS_strategy=False)
+strategy_tf = TrendFollowingStrategy(rebalance_frequency=FrequencyType.MONTHLY, short_window_period=10, long_window_period=50, is_LS_strategy=False)
 strategy_low = LowVolatilityStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1)
 strategy_mkw = OptimalSharpeStrategy(rebalance_frequency=FrequencyType.MONTHLY, lookback_period=1)
 

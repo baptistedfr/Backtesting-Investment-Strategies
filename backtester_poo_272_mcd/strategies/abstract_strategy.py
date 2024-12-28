@@ -3,8 +3,9 @@ from abc import ABC, abstractmethod
 import numpy as np
 import pandas as pd
 from typing import Optional
-
 from ..tools import FrequencyType
+from typing import Optional, Callable
+from functools import wraps
 
 @dataclass
 class AbstractStrategy(ABC):
@@ -23,7 +24,6 @@ class AbstractStrategy(ABC):
     rebalance_frequency: FrequencyType = FrequencyType.MONTHLY
     lookback_period: float = 1.00  # 1 year of data
     adjusted_lookback_period: Optional[int] = None
-    is_LS_strategy: Optional[bool] = False
 
     """---------------------------------------------------------------------------------------
     -                                 Class methods                                       -
@@ -67,3 +67,33 @@ class AbstractStrategy(ABC):
         """
         valid_assets = ~np.any(np.isnan(data), axis=0)
         return data[:, valid_assets], valid_assets
+
+
+@dataclass 
+class AbstractLongShortStrategy(AbstractStrategy, ABC):
+    """
+    Abstract class for Long/Short strategies.
+    """
+    is_LS_strategy: Optional[bool] = False
+
+
+# Decorator to create a simple strategy
+def simple_strategy(func: Callable) -> AbstractStrategy:
+    """
+    Decorator to transform a function into a strategy compatible with AbstractStrategy.
+
+    Args:
+        func: A function implementing the logic for `get_position`.
+
+    Returns:
+        An instance of AbstractStrategy with the provided `get_position` logic.
+    """
+    class DecoratedStrategy(AbstractStrategy):
+        def get_position(self, historical_data: np.ndarray, current_position: np.ndarray) -> np.ndarray:
+            return func(historical_data, current_position)
+    
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return DecoratedStrategy(*args, **kwargs)
+    
+    return wrapper
