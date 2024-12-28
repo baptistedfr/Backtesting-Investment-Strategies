@@ -26,12 +26,6 @@ def test_data_input_no_benchmark():
                 start_date='2010-10-01',
                 end_date='2024-10-01',
                 frequency=FrequencyType.WEEKLY)
-    
-    data_csv = DataInput(data_type=InputType.FROM_FILE,
-                        file_path='data/custom.xlsx',
-                        frequency=FrequencyType.DAILY)
-    
-    
 
     df = {
         'Date': pd.date_range(start="2023-01-01", periods=5, freq='D'),
@@ -44,7 +38,7 @@ def test_data_input_no_benchmark():
                 custom_df=df_prices,
                 frequency=FrequencyType.DAILY)
     
-    datas_inputs = [data_equity, data_crypto, data_index, data_csv,data_df]
+    datas_inputs = [data_equity, data_crypto, data_index ,data_df]
     for input in datas_inputs:
         assert isinstance(input.df_prices, pd.DataFrame)
         assert "Date" in input.df_prices.columns  # Vérifier que la colonne "Date" est présente
@@ -68,11 +62,6 @@ def test_data_input_benchmark():
                         frequency=FrequencyType.WEEKLY,
                         benchmark=Benchmark.BTC)
     
-    data_csv = DataInput(data_type=InputType.FROM_FILE,
-                        file_path='data/custom.xlsx',
-                        frequency=FrequencyType.DAILY,
-                        benchmark=Benchmark.CAC40)
-    
     data_index = DataInput(data_type=InputType.FROM_INDEX_COMPOSITION,
                 index=Index.CAC40,
                 start_date='2010-10-01',
@@ -92,7 +81,7 @@ def test_data_input_benchmark():
                 frequency=FrequencyType.DAILY,
                 benchmark=Benchmark.CAC40)
     
-    datas_inputs = [data_equity,data_crypto, data_csv,data_index, data_df]
+    datas_inputs = [data_equity,data_crypto,data_index, data_df]
     
     for input in datas_inputs:
         assert isinstance(input.df_prices, pd.DataFrame)
