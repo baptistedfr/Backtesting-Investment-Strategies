@@ -54,11 +54,6 @@ class TrendFollowingStrategy(AbstractLongShortStrategy):
         if self.is_LS_strategy:
             short_signal = ~long_signal
 
-            '''# If no assets have a positive/negative trend, return an array of zeros
-            for signal in [long_signal, short_signal]:
-                if np.sum(signal) == 0:
-                    return new_weights'''
-
             # Compute the long and short weights
             long_weights = long_signal / np.sum(long_signal) if np.sum(long_signal) > 0 else np.zeros(len(long_signal))
             short_weights = -short_signal.astype(int) / np.sum(short_signal) if np.sum(short_signal) > 0 else np.zeros(len(short_signal))
