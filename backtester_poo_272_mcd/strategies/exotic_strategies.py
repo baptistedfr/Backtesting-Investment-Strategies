@@ -41,6 +41,15 @@ class KernelSkewStrategy(AbstractStrategy):
         Returns:
             np.ndarray: New portfolio weights.
         """
+        historical_data = historical_data[-self.adjusted_lookback_period-1:]
+        
+        new_weights = self.fit(historical_data, current_position)
+        
+        return new_weights
+    
+    def fit(self, historical_data: np.ndarray, current_position: np.ndarray):
+        
+
         returns = np.diff(historical_data, axis=0) / historical_data[:-1]  # Calculate daily returns
         num_assets = returns.shape[1]
         
@@ -58,5 +67,5 @@ class KernelSkewStrategy(AbstractStrategy):
         # Allocate weights equally among selected assets
         new_weights = np.zeros(num_assets)
         new_weights[selected_indices] = 1.0 / num_selected
-        
+
         return new_weights
