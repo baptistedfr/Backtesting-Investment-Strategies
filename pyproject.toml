@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "backtester_poo_272_mcd"
-version = "0.1.0"
+version = "0.1.1"
 description = "POO Project for backtesting investment strategies"
 authors = ["Baptiste DUFOUR <bapdufo@gmail.com>", "Thibault CHARBONNIER <thibault.charbonnier@edu.devinci.fr>", "Yann MERAKEB <yann.merakeb@dauphine.eu>"]
 readme = "README.md"
@@ -24,7 +24,7 @@ matplotlib = "^3.9.2"
 plotly = "^5.24.1"
 scipy = "^1.14.1"
 numpy = "^2.2.1"
-
+nbformat = ">=5.10.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
