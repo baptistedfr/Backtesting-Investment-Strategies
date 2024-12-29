@@ -77,8 +77,8 @@ class AbstractLongShortStrategy(AbstractStrategy, ABC):
     is_LS_strategy: Optional[bool] = False
 
 
-# Decorator to create a simple strategy
-def simple_strategy(func: Callable) -> AbstractStrategy:
+# Decorator definition
+def build_strategy(func: Callable) -> AbstractStrategy:
     """
     Decorator to transform a function into a strategy compatible with AbstractStrategy.
 
@@ -86,7 +86,7 @@ def simple_strategy(func: Callable) -> AbstractStrategy:
         func: A function implementing the logic for `get_position`.
 
     Returns:
-        An instance of AbstractStrategy with the provided `get_position` logic.
+        A callable AbstractStrategy instance with the provided `get_position` logic.
     """
     class DecoratedStrategy(AbstractStrategy):
         def get_position(self, historical_data: np.ndarray, current_position: np.ndarray) -> np.ndarray:
@@ -94,6 +94,6 @@ def simple_strategy(func: Callable) -> AbstractStrategy:
     
     @wraps(func)
     def wrapper(*args, **kwargs):
-        return DecoratedStrategy(*args, **kwargs)
+        return DecoratedStrategy()  # Return an instance of the decorated strategy
     
-    return wrapper
+    return wrapper()

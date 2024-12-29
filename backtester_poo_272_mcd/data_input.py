@@ -1,10 +1,10 @@
 from typing import *
 from datetime import datetime
 import pandas as pd
+import importlib.resources as pkg_resources
 from .tools import InputType, FrequencyType, Index, Benchmark
 from .data_inputs import BinanceDataInput, CustomDataInput, DataFrameDataInput, YahooDataInput
 from .exceptions import InputTypeError, BadInput
-import importlib.resources as pkg_resources
 
 class DataInput:
     """

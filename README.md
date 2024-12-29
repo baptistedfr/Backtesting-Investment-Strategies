@@ -1,14 +1,8 @@
-# Backtesting-Investment-Strategies
+# Backtester_POO_272_MCD
 
-Python POO project on backtesting Investment strategies
+Backtester_POO_272_MCD est un package Python conçu pour effectuer des backtests efficaces et flexibles sur des stratégies quantitatives. 
 
-https://github.com/BenjaminMat/oop_272_dauphine_2024
-https://remigenet.github.io/OOP_Python/content/Projets/m2_EIF_2024.html#groupes-et-remise-du-projet
+Ce projet vise à fournir un cadre structurel orienté objet permettant d’évaluer des stratégies financières sur des données historiques, tout en facilitant l'analyse et l'adaptation des paramètres.
 
-Strategies
+Un manuel détaillé est disponible dans le notebook `manual.ipynb`
 
-- Trend Following
-- Value
-- Momentum
-- Low vol
-- Mean reverting

@@ -1,14 +1,15 @@
-from .strategies import AbstractStrategy
-from .data_input import DataInput
 from dataclasses import dataclass
-from .results import Results
 from datetime import datetime
-from .tools import timer, FrequencyType
-from typing import Optional
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
 from functools import cached_property
+import warnings
+warnings.filterwarnings("ignore")
+from .strategies import AbstractStrategy
+from .data_input import DataInput
+from .results import Results
+from .tools import timer, FrequencyType
 
 @dataclass
 class Backtester:
