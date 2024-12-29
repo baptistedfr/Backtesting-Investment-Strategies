@@ -6,3 +6,5 @@ Ce projet vise à fournir un cadre structurel orienté objet permettant d’éva
 
 Un manuel détaillé est disponible dans le notebook `manual.ipynb`
 
+Le package peut-être télécharger sous : `pip install backtester_poo_272_mcd`
+
