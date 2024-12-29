@@ -2,14 +2,17 @@
 name = "backtester_poo_272_mcd"
 version = "0.1.0"
 description = "POO Project for backtesting investment strategies"
-authors = ["baptistedfr <bapdufo@gmail.com>"]
+authors = ["Baptiste DUFOUR <bapdufo@gmail.com>", "Thibault CHARBONNIER <thibault.charbonnier@edu.devinci.fr>", "Yann MERAKEB <yann.merakeb@dauphine.eu>"]
 readme = "README.md"
 packages = [
     { include = "backtester_poo_272_mcd" }
 ]
+repository = "https://github.com/baptistedfr/Backtesting-Investment-Strategies"
+keywords = ["backtest", "finance", "trading", "investment", "strategies"]
+license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.12"
 yfinance = "^0.2.46"
 ipykernel = "^6.29.5"
 yahoo-fin = "^0.8.9.1"
